@@ -2,45 +2,34 @@ import * as PIXI from "pixi.js";
 import { Globals } from "./Globals";
 
 export class Background {
-    constructor() {
-        this.speed = 2;
+    constructor(width, height, fxId = null) {
         this.container = new PIXI.Container();
-        this.createSprites();
+
+        this.width = width;
+        this.height = height;
+
+        this.createSprite();
+        if(fxId != null)
+            this.createBgFx(fxId);
     }
 
-    createSprites() {
-        this.sprites = [];
-
-        for (let i = 0; i < 3; i++) {
-            this.createSprite(i);
-        }
-    }
-
-    createSprite(i) {
+    
+    createSprite() {
         const sprite = new PIXI.Sprite(Globals.resources["background"].texture);
-        sprite.x = sprite.width * i;
-        sprite.y = 0;
+        sprite.width = this.width;
+        sprite.height = this.height;
         this.container.addChild(sprite);
-        this.sprites.push(sprite);
     }
 
-    move(sprite, offset) {
-        const spriteRightX = sprite.x + sprite.width;
+    createBgFx(id)
+    {
+        const fxSprite = new PIXI.Sprite(Globals.resources[`bgFx${id}`].texture);
+        fxSprite.width = this.width;
+        fxSprite.height = this.height;
 
-        const screenLeftX  = 0;
-
-        if (spriteRightX <= screenLeftX) {
-            sprite.x += sprite.width * this.sprites.length;
-        }
-        
-        sprite.x -= offset;
+        this.container.addChild(fxSprite);
     }
 
-    update(dt) {
-        const offset = this.speed * dt;
+    
 
-        this.sprites.forEach(sprite => {
-            this.move(sprite, offset);
-        });
-    }
 }
