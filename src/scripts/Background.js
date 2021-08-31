@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 
 export class Background {
@@ -11,22 +12,19 @@ export class Background {
         this.createSprite();
         if(fxId != null)
             this.createBgFx(fxId);
+
+        this.container.scale.set(gameConfig.currentResolutionRatio);
     }
 
     
     createSprite() {
         const sprite = new PIXI.Sprite(Globals.resources["background"].texture);
-        sprite.width = this.width;
-        sprite.height = this.height;
         this.container.addChild(sprite);
     }
 
     createBgFx(id)
     {
         const fxSprite = new PIXI.Sprite(Globals.resources[`bgFx${id}`].texture);
-        fxSprite.width = this.width;
-        fxSprite.height = this.height;
-
         this.container.addChild(fxSprite);
     }
 
