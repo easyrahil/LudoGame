@@ -1,10 +1,9 @@
 
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
-import { outerPath } from "./boardConfig";
-import { DebugText } from "./DebugText";
+import { houseData, outerPath } from "./boardConfig";
 import { Globals } from "./Globals";
-import { LabelScore } from "./LabelScore";
+import { Point } from "./Point";
 
 export class LudoBoard
 {
@@ -16,15 +15,17 @@ export class LudoBoard
         this.container.x = x;
         this.container.y = y;
         this.container.sortableChildren = true;
-        
-        
 
         this.createBoardSprite();
         
         this.createGrid();
-        //this.createHouse();
+
 
         this.container.scale.set(gameConfig.currentResolutionRatio);
+
+        this.container.angle = 90;
+
+        
     }
 
     createBoardSprite()
@@ -34,19 +35,8 @@ export class LudoBoard
         this.container.addChild(boardSprite);
     }
 
-    createHouse()
-    {
-        //this.houses.push("");
-    }
-
     createGrid()
     {
-        // for (let x = -462 ; x < 528; x+=66) {
-        //     for (let y = -462; y < 528; y+=66) {
-        //         this.container.addChild(new DebugText("0", x, y));
-        //     }
-        // }
-
         let x = -462;
         let y = -462;
 
@@ -65,9 +55,14 @@ export class LudoBoard
 
     createGridPoint(id, xPos, yPos)
     {
-        this.container.addChild(new DebugText(id, xPos, yPos));
-        return {position : {x : xPos, y :  yPos}}
+        const point = new Point(id, xPos, yPos);
+       // this.container.addChild(point);
+        return point;
     }
+
+    
+
+ 
 
     
 }
