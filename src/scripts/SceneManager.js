@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import TWEEN from "@tweenjs/tween.js";
 
 export class SceneManager {
     constructor() {
@@ -16,6 +17,7 @@ export class SceneManager {
     }
 
     update(dt) {
+        TWEEN.update();
         if (this.scene && this.scene.update) {
             this.scene.update(dt);
         }

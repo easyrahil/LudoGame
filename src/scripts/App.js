@@ -22,7 +22,7 @@ export class App {
         // load sprites
         this.loader = new Loader(this.app.loader);
         this.loader.preload().then(() => {
-            Globals.scene.start(new GameScene());
+            Globals.scene.start(new MainScene());
         });
     }
 }

@@ -3,29 +3,22 @@ import { gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 
 export class Background {
-    constructor(width, height, fxId = null) {
+    constructor(topImage, backImage) {
         this.container = new PIXI.Container();
 
-        this.width = width;
-        this.height = height;
-
-        this.createSprite();
-        if(fxId != null)
-            this.createBgFx(fxId);
-
         this.container.scale.set(gameConfig.currentResolutionRatio);
+
+
+        this.createSprite(topImage);
+        this.createSprite(backImage);
+
+        
     }
 
     
-    createSprite() {
-        const sprite = new PIXI.Sprite(Globals.resources["background"].texture);
+    createSprite(image) {
+        const sprite = new PIXI.Sprite(image);
         this.container.addChild(sprite);
-    }
-
-    createBgFx(id)
-    {
-        const fxSprite = new PIXI.Sprite(Globals.resources[`bgFx${id}`].texture);
-        this.container.addChild(fxSprite);
     }
 
     
