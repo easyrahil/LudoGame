@@ -23,14 +23,14 @@ export class MainScene {
 
     createBackground()
     {
-        this.background = new Background(Globals.resources.bgFx2.texture, Globals.resources.background.texture);
+        this.background = new Background(Globals.resources.background.texture, Globals.resources.background.texture);
         this.container.addChild(this.background.container);
     }
 
     createLogo()
     {
         this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
-        this.logo.scale.set(gameConfig.currentResolutionRatio);
+        //this.logo.scale.set(gameConfig.currentResolutionRatio);
         this.logo.anchor.set(0.5);
         this.logo.x = appConfig.width/2;
         this.logo.y = appConfig.height/2;

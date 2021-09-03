@@ -4,15 +4,23 @@ import { Loader } from "./Loader";
 import { MainScene } from "./MainScene";
 import { Globals } from "./Globals";
 import { SceneManager } from "./SceneManager";
-import { appConfig } from "./appConfig";
+import { appConfig, gameConfig } from "./appConfig";
 import { GameScene } from "./GameScene";
 
 export class App {
     run() {
         // create canvas
-        this.app = new PIXI.Application(appConfig);
+       // PIXI.settings.RESOLUTION = window.devicePixelRatio;
+        //{width : (window.innerWidth > gameConfig.maxWidth) ? gameConfig.maxWidth : window.innerWidth, height : window.innerHeight}
+        this.app = new PIXI.Application({width : (window.innerWidth > gameConfig.maxWidth) ? gameConfig.maxWidth : window.innerWidth, height : window.innerHeight});
         document.body.appendChild(this.app.view);
+        appConfig.width = this.app.screen.width;
+        appConfig.height = this.app.screen.height;
+        console.log(appConfig.width);
+        console.log(window.innerWidth);
+        //this.app.raenderer.resolution = window.devicePixelRatio;
 
+        
         
 
         Globals.scene = new SceneManager();
@@ -22,7 +30,34 @@ export class App {
         // load sprites
         this.loader = new Loader(this.app.loader);
         this.loader.preload().then(() => {
-            Globals.scene.start(new MainScene());
+            Globals.scene.start(new GameScene());
+            //Globals.scene.start(new MainScene());
         });
+
+        
+        
+    }
+
+    addOrientationCheck()
+    {
+        if(PIXI.utils.isMobile)
+        {
+            console.log(window.orientation);
+
+            
+
+            window.addEventListener("orientationchange", function() {
+                if (window.orientation == 90 || window.orientation == -90) {
+                    Globals.scene.drawImageAbove();
+                } else {
+                    Globals.scene.removeImageAbove();
+                }
+                });
+        }
+    }
+
+    drawImageAbove()
+    {
+        
     }
 }

@@ -49,11 +49,11 @@ export class GameScene
 
             for (let x = 1; x <= 4; x++) {
 
-                const pawn = new Pawn(`${pawnId}${x}`, "pawn"+(y+1));
+                const pawn = new Pawn(`${pawnId}${x}`, "pawn"+(y+1), this.ludoBoard);
                 this.pawns[`${pawnId}${x}`] = pawn;
-                pawn.sprite.x = (x * 50);
-                pawn.sprite.y = y*20 + 50;
-                this.container.addChild(pawn.sprite);
+                pawn.x = (x * 50);
+                pawn.y = y*20 + 50;
+                this.container.addChild(pawn);
             }
         }
     }

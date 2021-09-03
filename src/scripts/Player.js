@@ -8,13 +8,13 @@ export class Player
     constructor(horizontalIndex = 0, verticalIndex = 0, ludoBoard)
     {
         this.container = new PIXI.Container();
-        this.container.x = (horizontalIndex == 0) ? 0 : appConfig.width;
+        this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
         if(verticalIndex == 0)
-            this.container.y = (appConfig.height/2) + (ludoBoard.container.height/2 + 25 );
+            this.container.y = (appConfig.height/2) + (ludoBoard.container.height/2 + ludoBoard.container.height * 0.065);
         else
-            this.container.y = (appConfig.height/2) - (ludoBoard.container.height/2 + 20 );
+            this.container.y = (appConfig.height/2) - (ludoBoard.container.height/2 + ludoBoard.container.height * 0.06);
 
-        this.container.scale.set(gameConfig.currentResolutionRatio);
+        this.container.scale.set(gameConfig.widthRatio);
         
         this.playerSide = horizontalIndex;
 

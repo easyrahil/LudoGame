@@ -1,7 +1,7 @@
 export const LoaderConfig = {
     background: require("../sprites/Background.png"),
+    cover: require("../sprites/cover.png"),
     bgFx1 : require("../sprites/bgFx.png"),
-    bgFx2 : require("../sprites/bgFx2.png"),
     board1 : require("../sprites/Board1.png"),
     pawn1 : require("../sprites/pawnYellow.png"),
     pawn2 : require("../sprites/pawnBlue.png"),
@@ -26,6 +26,5 @@ export const LoaderConfig = {
 
 
     click : require("../sounds/click.mp3"),
-    music : require("../sounds/music.mp3"),
     dice :  require("../sounds/dice-5.mp3")
 };
