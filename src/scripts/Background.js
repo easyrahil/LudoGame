@@ -3,14 +3,15 @@ import { appConfig, gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 
 export class Background {
-    constructor(topImage, backImage) {
+    constructor(topImage, backImage = null) {
         this.container = new PIXI.Container();
 
         //this.container.scale.set(gameConfig.currentResolutionRatio);
 
 
         this.createSprite(topImage);
-        this.createSprite(backImage);
+        if(backImage)
+            this.createSprite(backImage);
 
         
     }

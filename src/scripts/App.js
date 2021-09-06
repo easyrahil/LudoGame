@@ -28,9 +28,16 @@ export class App {
         this.app.ticker.add(dt => Globals.scene.update(dt));
 
         // load sprites
-        this.loader = new Loader(this.app.loader);
+        const loaderContainer = new PIXI.Container();
+        this.app.stage.addChild(loaderContainer);
+        this.loader = new Loader(this.app.loader, loaderContainer);
+        
         this.loader.preload().then(() => {
-            Globals.scene.start(new GameScene());
+            setTimeout(() => {
+                loaderContainer.destroy();
+                Globals.scene.start(new GameScene());
+            }, 1000);
+            
             //Globals.scene.start(new MainScene());
         });
 
@@ -56,8 +63,4 @@ export class App {
         }
     }
 
-    drawImageAbove()
-    {
-        
-    }
 }
