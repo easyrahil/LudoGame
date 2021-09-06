@@ -25,7 +25,7 @@ export class LudoBoard
         this.container.scale.set(gameConfig.widthRatio);
         console.log("Width Ratio : " + gameConfig.widthRatio);
         console.log("Width : " + this.container.width);
-        this.container.angle = 90;
+        
        
 
       
@@ -64,7 +64,7 @@ export class LudoBoard
        // this.container.addChild(point.debugText);
     }
 
-    
+       
 
  
 

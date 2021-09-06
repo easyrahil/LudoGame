@@ -1,12 +1,17 @@
 import TWEEN from "@tweenjs/tween.js";
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
+import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 
 export class Player
 {
-    constructor(horizontalIndex = 0, verticalIndex = 0, ludoBoard)
+    constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard)
     {
+        this.playerID = id;
+        this.squeezeAnchor = {};
+        this.pawnsID = [];
+
         this.container = new PIXI.Container();
         this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
         if(verticalIndex == 0)
@@ -23,11 +28,17 @@ export class Player
         this.setDice(5);
         //this.playDiceAnimation();
     }
+    
+    setStartIndex(index)
+    {
+        this.startIndex = index;
+    }
 
     createAvatar()
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
         
+
         if(this.playerSide == 1)
         {
             this.avatar.anchor.set(1, 0.5);
@@ -40,6 +51,16 @@ export class Player
 
         
         this.container.addChild(this.avatar);
+
+        this.container.addChild(new DebugText(this.playerID, this.avatar.x, this.avatar.y, "#fff"));
+    }
+
+    resetPawns()
+    {
+        this.pawnsID.forEach(element => {
+            Globals.pawns[element].setPointIndex(this.startIndex);
+            Globals.pawns[element].setSqueezeAnchor(this.squeezeAnchor);
+        });
     }
 
     createDice()

@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
+import { boardData, playerData } from "./boardConfig";
 import { Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
 import { Pawn } from "./Pawn";
@@ -13,18 +14,21 @@ export class GameScene
     {
         this.container = new PIXI.Container();
         
-        this.pawns = {};
+        
+
+        this.players = {};
         
         this.createBackground();
         this.createBoard();
-        this.createPawns();
-        this.createPlayers();
+       this.createPawns();
+        this.createPlayers(2);
+        this.assignPawns();
         
         
-        this.setPawnPointIndex("Y1", 1);
-        this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]);
-        this.setPawnPointIndex("B3", 45);
-        this.moveBackPawnTo("B3", 14);
+       // this.setPawnPointIndex("Y1", 1);
+        this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+        //this.setPawnPointIndex("B3", 45);
+        //this.moveBackPawnTo("B3", 14);
     }
 
     createBackground()
@@ -50,7 +54,7 @@ export class GameScene
             for (let x = 1; x <= 4; x++) {
 
                 const pawn = new Pawn(`${pawnId}${x}`, "pawn"+(y+1), this.ludoBoard);
-                this.pawns[`${pawnId}${x}`] = pawn;
+                Globals.pawns[`${pawnId}${x}`] = pawn;
                 pawn.x = (x * 50);
                 pawn.y = y*20 + 50;
                 this.container.addChild(pawn);
@@ -58,20 +62,42 @@ export class GameScene
         }
     }
 
-    createPlayers()
+    createPlayers(playerId)
     {
-        
-        for (let index = 0; index < 2; index++) {
-            for (let upIndex = 0; upIndex < 2; upIndex++) {
-                const player1 = new Player(index,upIndex,this.ludoBoard);
-                this.container.addChild(player1.container);
+        this.ludoBoard.container.angle = boardData[playerId].angle;
+
+        Object.keys(playerData).forEach(key => {
+            const data = playerData[key];
+            const player1 = new Player(playerId, data.h,data.v,this.ludoBoard);
+            player1.setStartIndex(boardData[playerId].startIndex);
+            player1.squeezeAnchor = data.anchor;
+            this.players[playerId] = player1;
+            this.container.addChild(player1.container);
+            playerId++;
+            if(playerId > 4)
+                playerId = 1;
+        });
+
+ 
+    }
+
+    assignPawns()
+    {
+        const pawnIds = ["Y", "B", "R", "G"];
+
+        Object.keys(this.players).forEach(key => {
+            
+            for (let i = 1; i <= 4; i++) {
+                this.players[key].pawnsID.push(`${pawnIds[key - 1]}${i}`);
+                
             }
-        }
+            this.players[key].resetPawns();
+        });
     }
 
     setPawnPointIndex(pawnIndex, pointIndex)
     {
-        this.pawns[pawnIndex].setPointIndex(pointIndex);
+        Globals.pawns[pawnIndex].setPointIndex(pointIndex);
     }
 
     movePawnTo(pawnId, pointsArray)
@@ -79,17 +105,17 @@ export class GameScene
         if(pointsArray.length == 0)
             return;
         
-        this.pawns[pawnId].move(pointsArray.shift()).then(() => {
+        Globals.pawns[pawnId].move(pointsArray.shift()).then(() => {
             this.movePawnTo(pawnId, pointsArray);
         });
     }
 
     moveBackPawnTo(pawnId, pointToCompare)
     {
-        if(this.pawns[pawnId].currentPointIndex == pointToCompare)
+        if(Globals.pawns[pawnId].currentPointIndex == pointToCompare)
             return; 
         
-        this.pawns[pawnId].move(this.pawns[pawnId].currentPointIndex - 1, false).then(() => {
+        Globals.pawns[pawnId].move(Globals.pawns[pawnId].currentPointIndex - 1, false).then(() => {
             this.moveBackPawnTo(pawnId, pointToCompare);
         });
     }

@@ -17,3 +17,32 @@ export const outerPath =
 	[0,0,0,0,0,0,	    24, 25, 26	    ,0,0,0,0,0,0]
 ]
 
+export const boardData = 
+{
+	1 : {
+		angle : -90,
+		startIndex : 1
+	},
+	2 : {
+		angle : -180,
+		startIndex : 14
+	},
+	3 : {
+		angle : 90,
+		startIndex : 27
+	},
+	4 : {
+		angle : 0,
+		startIndex : 40
+	}
+}
+
+export const playerData = 
+[
+	{h : 0, v : 0, anchor : { x : 0.2, y : 0.8}},
+	{h : 0, v : 1, anchor : { x : 0.5, y : 1}},
+	{h : 1, v : 1, anchor : { x : 0.8, y : 0}},
+	{h : 1, v : 0, anchor : { x : 0.8, y : 0.8}}
+]
+
+
