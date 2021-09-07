@@ -76,7 +76,12 @@ export class GameScene
                 playerId = 1;
         });
 
- 
+        
+    }
+
+    addPlayers(playerData)
+    {
+        
     }
 
     assignPawns()

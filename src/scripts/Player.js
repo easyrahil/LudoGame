@@ -9,6 +9,7 @@ export class Player
     constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard)
     {
         this.playerID = id;
+        this.playerDataUpdated = false;
         this.squeezeAnchor = {};
         this.pawnsID = [];
 

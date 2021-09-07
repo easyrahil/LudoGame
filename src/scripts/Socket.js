@@ -15,9 +15,9 @@ export class Socket
 
             const distmsg = {
                 t : "connect",
-                gid : 230869,
-                tableTypeID : 2,
-                entryFee : 80
+                gid : "230869",
+                tableTypeID : "2",
+                entryFee : "6"
             }
 
             this.sendMessage(distmsg);
@@ -26,16 +26,27 @@ export class Socket
         this.socket.onmessage = e => {
             let type;
 
-            const msg = JSON.parse(e.data);
+            console.log("Message Recieved : "  + e.data);
 
+            const msg = JSON.parse(e.data);
             if(msg.t == "joined")
             {
-                Globals.gameData.plId = msg.data.plId;
-                Globals.gameData.players[msg.data.plId] = {
+                Globals.gameData.plId = msg.data;
+                Globals.gameData.players[msg.data] = {
                     balance : msg.bal
                 };
 
-                Globals.gameData.snap = msg.snap;
+                Object.keys(msg.snap).forEach(key => {
+                    const data = msg.snap[key];
+                    if(!(data.plId in Globals.gameData.players))
+                    {
+                        Globals.gameData.players[data.plId] = data;
+                    } else
+                    {
+                        const mergeData = {...Globals.gameData.players[data.plId], ...data};
+                        Globals.gameData.players[data.plId] = mergeData;
+                    }
+                });
                 
                 Globals.emitter.emit("gameStart");
 
@@ -44,6 +55,21 @@ export class Socket
             } else if (msg.t == "pAdd")
             {
                 Globals.gameData.players[msg.data.plId] = msg.data;
+
+
+                Object.keys(msg.snap).forEach(key => {
+                    const data = msg.snap[key];
+                    if(!(data.plId in Globals.gameData.players))
+                    {
+                        Globals.gameData.players[data.plId] = data;
+                    } else
+                    {
+                        const mergeData = {...Globals.gameData.players[data.plId], ...data};
+                        Globals.gameData.players[data.plId] = mergeData;
+                    }
+                });
+
+                Globals.emitter.emit("gameStart");
                 //Update Board with Players
 
             } else if (msg.t == "pLeft")
