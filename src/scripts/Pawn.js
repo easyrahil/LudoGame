@@ -22,15 +22,11 @@ export class Pawn extends PIXI.Sprite
         this.width = this.currentWidth;
         this.height = this.currentHeight;
 
-        this.anchor.set(0.5, 0.8);
+        this.anchor.set(1, 0.8);
         
     }
 
-    setSqueezeAnchor(data)
-    {
-        console.log(data);
-        this.squeezeAnchor = data;
-    }
+    
 
     reset()
     {
@@ -39,11 +35,12 @@ export class Pawn extends PIXI.Sprite
         this.anchor.set(0.5, 0.8);
     }
 
-    squeeze()
+    squeeze(anchor)
     {
       //  console.log(this.squeezeAnchor.x);
+        this.anchor = anchor;
         const tween1 =  new TWEEN.Tween(this)
-                                .to({width: this.currentWidth * 0.5, height : this.currentHeight * 0.5}, 100)
+                                .to({width: this.currentWidth * 0.4, height : this.currentHeight * 0.4}, 100)
                                 .start();
     }
 

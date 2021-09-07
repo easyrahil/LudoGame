@@ -8,7 +8,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://35d6-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
+        this.socket = new WebSocket("ws://8184-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
 
         this.socket.onopen = e => {
             console.log("Connection with socket made");
@@ -19,7 +19,8 @@ export class Socket
                 tableTypeID : "2",
                 entryFee : "6",
                 pName : "Abhishek",
-                pImage : "https://cdn.freelogovectors.net/wp-content/uploads/2015/06/Cool-Male-Avatars-07.png"
+                pImage : "../src/sprites/68.png"
+                //pImage : "https://sguru.org/wp-content/uploads/2017/06/steam-avatar-profile-picture-1974.jpg"
             }
 
             this.sendMessage(distmsg);
@@ -57,8 +58,8 @@ export class Socket
                 Globals.gameData.players[msg.plId] = {
                     balance : msg.bal,
                     plId : msg.plId,
-                    plName : msg.pName,
-                    plImage : msg.pImage
+                    pName : msg.pName,
+                    pImage : msg.pImage
                 };
 
                 console.log(Globals.gameData.players);

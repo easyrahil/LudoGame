@@ -12,7 +12,6 @@ export class Player
         this.playerDataUpdated = false;
         this.squeezeAnchor = {};
         this.pawnsID = [];
-
         this.container = new PIXI.Container();
         this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
         if(verticalIndex == 0)
@@ -23,6 +22,7 @@ export class Player
         this.container.scale.set(gameConfig.widthRatio);
         
         this.playerSide = horizontalIndex;
+        this.playerVerticalSide = verticalIndex;
 
         this.createAvatar();
         this.createDice();
@@ -38,22 +38,54 @@ export class Player
     createAvatar()
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-       // this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].plImage);
+        console.log("Texture url : " + Globals.gameData.players[this.playerID].pImage);
+        this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].pImage);
+
+        this.playerName = new PIXI.Text(Globals.gameData.players[this.playerID].pName);
+        this.playerName.zIndex = 1;
+        this.playerName.anchor.set(0.5);
+        this.playerName.style = {
+            fontFamily: "Verdana",
+            fontWeight: "bold",
+            fontSize: 44,
+            fill: ["#000"]
+        };
 
         if(this.playerSide == 1)
         {
             this.avatar.anchor.set(1, 0.5);
+            this.avatarImage.anchor.set(1, 0.5);
+            this.playerName.anchor.set(1, 0.5);
+            this.avatarImage.x -= 40;
             this.avatar.x -= 40;
+            this.playerName.x -= 60;
         } else
         {
             this.avatar.anchor.set(0, 0.5);
+            this.avatarImage.anchor.set(0, 0.5);
+            this.playerName.anchor.set(0, 0.5);
             this.avatar.x += 40;
+            this.avatarImage.x += 40;
+            this.playerName.x += 60;
         }
 
-        
-        this.container.addChild(this.avatar);
+        if(this.playerVerticalSide == 1)
+        {
+            this.playerName.anchor.y = 0;
+            this.playerName.y += 115;
+        } else
+        {
+            this.playerName.anchor.y = 1;
+            this.playerName.y -= 120;
+        }
 
-        this.container.addChild(new DebugText(this.playerID, this.container.x, this.container.y, "#000", 44));
+        this.container.addChild(this.avatar);
+        this.container.addChild(this.avatarImage);
+        console.log(this.avatarImage);
+
+        this.container.addChild(this.playerName);
+
+        
     }
 
     resetPawns()
@@ -62,7 +94,7 @@ export class Player
         
         this.pawnsID.forEach(element => {
             Globals.pawns[element].setPointIndex(this.startIndex);
-            Globals.pawns[element].setSqueezeAnchor(this.squeezeAnchor);
+           // Globals.pawns[element].setSqueezeAnchor(this.squeezeAnchor);
         });
     }
 

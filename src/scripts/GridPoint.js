@@ -16,7 +16,12 @@ export class GridPoint extends PIXI.DisplayObject
 
         Globals.gridPoints[this.pointID] = this;
 
-        
+        this.gridAnchorPoints = [
+            {x : 1, y : 1},
+            {x : 0, y : 1},
+            {x : 0, y : 0.1},
+            {x : 1, y : 0.1}
+        ];
     }
 
     render()
@@ -33,7 +38,7 @@ export class GridPoint extends PIXI.DisplayObject
             if(this.pawnsOnIt.length > 1)
             {   
                 this.pawnsOnIt.forEach(item => {
-                    item.squeeze();
+                    item.squeeze(this.gridAnchorPoints[this.pawnsOnIt.indexOf(item)]);
                 });
                 
             }
