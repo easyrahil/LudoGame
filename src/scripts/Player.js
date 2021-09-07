@@ -58,6 +58,8 @@ export class Player
 
     resetPawns()
     {
+        console.log(this.pawnsID);
+        
         this.pawnsID.forEach(element => {
             Globals.pawns[element].setPointIndex(this.startIndex);
             Globals.pawns[element].setSqueezeAnchor(this.squeezeAnchor);

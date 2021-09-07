@@ -38,11 +38,32 @@ export const boardData =
 }
 
 export const playerData = 
-[
-	{h : 0, v : 0, anchor : { x : 0.2, y : 0.8}},
-	{h : 0, v : 1, anchor : { x : 0.5, y : 1}},
-	{h : 1, v : 1, anchor : { x : 0.8, y : 0}},
-	{h : 1, v : 0, anchor : { x : 0.8, y : 0.8}}
-]
+{
+	"-90" :{
+		0 : {h : 0, v : 0, anchor : { x : 0.2, y : 0.8}},
+		1 : {h : 0, v : 1, anchor : { x : 0.5, y : 1}},
+		2 : {h : 1, v : 1, anchor : { x : 0.8, y : 0}},
+		3 : {h : 1, v : 0, anchor : { x : 0.8, y : 0.8}}
+	},
+	"-180" :{
+		0 : {h : 1, v : 0, anchor : { x : 0.2, y : 0.8}},
+		1 : {h : 0, v : 0, anchor : { x : 0.5, y : 1}},
+		2 : {h : 0, v : 1, anchor : { x : 0.8, y : 0}},
+		3 : {h : 1, v : 1, anchor : { x : 0.8, y : 0.8}}
+	},
+	"90" :{
+		0 : {h : 1, v : 1, anchor : { x : 0.2, y : 0.8}},
+		1 : {h : 1, v : 0, anchor : { x : 0.5, y : 1}},
+		2 : {h : 0, v : 0, anchor : { x : 0.8, y : 0}},
+		3 : {h : 0, v : 1, anchor : { x : 0.8, y : 0.8}}
+	},
+	"0" :{
+		0 : {h : 0, v : 1, anchor : { x : 0.2, y : 0.8}},
+		1 : {h : 1, v : 1, anchor : { x : 0.5, y : 1}},
+		2 : {h : 1, v : 0, anchor : { x : 0.8, y : 0}},
+		3 : {h : 0, v : 0, anchor : { x : 0.8, y : 0.8}}
+	}
+
+}
 
 

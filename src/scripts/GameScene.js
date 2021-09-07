@@ -86,16 +86,16 @@ export class GameScene
             
             this.createPawns(key);
 
-            const data = playerData[key];
+            const data = playerData[this.ludoBoard.container.angle][key];
 
-            const player1 = new Player(playerId, data.h,data.v,this.ludoBoard);
-            player1.setStartIndex(boardData[playerId].startIndex);
+            const player1 = new Player(key, data.h,data.v,this.ludoBoard);
+            player1.setStartIndex(boardData[key].startIndex);
             player1.squeezeAnchor = data.anchor;
-            this.players[playerId] = player1;
+            this.players[key] = player1;
             this.container.addChild(player1.container);
-            playerId++;
-            if(playerId > 3)
-                playerId = 0;
+            // playerId++;
+            // if(playerId > 3)
+            //     playerId = 0;
         }); 
     }
 
