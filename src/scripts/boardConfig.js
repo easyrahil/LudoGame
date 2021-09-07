@@ -19,19 +19,19 @@ export const outerPath =
 
 export const boardData = 
 {
-	1 : {
+	0 : {
 		angle : -90,
 		startIndex : 1
 	},
-	2 : {
+	1 : {
 		angle : -180,
 		startIndex : 14
 	},
-	3 : {
+	2 : {
 		angle : 90,
 		startIndex : 27
 	},
-	4 : {
+	3 : {
 		angle : 0,
 		startIndex : 40
 	}

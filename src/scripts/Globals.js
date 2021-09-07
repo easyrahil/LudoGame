@@ -3,6 +3,6 @@ export const Globals = {
     gridPoints : {},
     pawns : {},
     gameData : {
-        player : {}
+        players : {}
     }
 };

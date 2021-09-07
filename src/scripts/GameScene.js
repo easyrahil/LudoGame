@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, playerData } from "./boardConfig";
+import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
 import { Pawn } from "./Pawn";
@@ -17,9 +18,10 @@ export class GameScene
         this.players = {};
         
         this.createBackground();
+        this.createTimer();
         this.createBoard();
-        this.createPawns();
-        this.createPlayers(Globals.gameData.plID);
+        
+        this.createPlayers(Globals.gameData.plId);
         this.assignPawns();
 
         
@@ -27,6 +29,10 @@ export class GameScene
         //  this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
         //  this.setPawnPointIndex("B3", 45);
         //  this.moveBackPawnTo("B3", 14);
+
+        Globals.emitter.on("timer", (time) => {
+            this.updateTimer(time);
+        }, this);
     }
 
     createBackground()
@@ -35,53 +41,62 @@ export class GameScene
         this.container.addChild(this.bg.container);
     }
 
+    createTimer()
+    {
+        this.timer = new DebugText("Timer : 0", appConfig.width/2 , 0, "#fff", 30);
+        this.timer.y = this.timer.height;
+        this.container.addChild(this.timer);
+    }
+
+    updateTimer(time)
+    {
+        this.timer.text = "Timer :" +time;
+    }
+
     createBoard()
     {
         this.ludoBoard = new LudoBoard(appConfig.width/2, appConfig.height/2);
         this.container.addChild(this.ludoBoard.container);
     }
 
-    createPawns()
+    createPawns(y)
     {
         const pawnIds = ["Y", "B", "R", "G"]
 
-
-        for (let y = 0; y < pawnIds.length; y++) {
             const pawnId = pawnIds[y];
 
             for (let x = 1; x <= 4; x++) {
 
-                const pawn = new Pawn(`${pawnId}${x}`, "pawn"+(y+1), this.ludoBoard);
+                const pawn = new Pawn(`${pawnId}${x}`, "pawn"+(parseInt(y)+1), this.ludoBoard);
                 Globals.pawns[`${pawnId}${x}`] = pawn;
                 pawn.x = (x * 50);
                 pawn.y = y*20 + 50;
                 this.container.addChild(pawn);
             }
-        }
     }
 
     createPlayers(playerId)
     {
+        console.log("Player ID :" + playerId);
         this.ludoBoard.container.angle = boardData[playerId].angle;
 
-        Object.keys(playerData).forEach(key => {
+        
+        Object.keys(Globals.gameData.players).forEach(key => {
+            console.log("KEY " + key);
+            
+            this.createPawns(key);
+
             const data = playerData[key];
+
             const player1 = new Player(playerId, data.h,data.v,this.ludoBoard);
             player1.setStartIndex(boardData[playerId].startIndex);
             player1.squeezeAnchor = data.anchor;
             this.players[playerId] = player1;
             this.container.addChild(player1.container);
             playerId++;
-            if(playerId > 4)
-                playerId = 1;
-        });
-
-        
-    }
-
-    addPlayers(playerData)
-    {
-        
+            if(playerId > 3)
+                playerId = 0;
+        }); 
     }
 
     assignPawns()
@@ -91,7 +106,7 @@ export class GameScene
         Object.keys(this.players).forEach(key => {
             
             for (let i = 1; i <= 4; i++) {
-                this.players[key].pawnsID.push(`${pawnIds[key - 1]}${i}`);
+                this.players[key].pawnsID.push(`${pawnIds[key]}${i}`);
                 
             }
             this.players[key].resetPawns();

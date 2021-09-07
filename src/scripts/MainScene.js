@@ -5,6 +5,7 @@ import { GameScene } from "./GameScene";
 import { Globals } from "./Globals";
 import TWEEN from "@tweenjs/tween.js";
 import { MatchmakingScene } from "./MatchmakingScene";
+import { DebugText } from "./DebugText";
 
 export class MainScene {
     constructor() {
@@ -16,8 +17,13 @@ export class MainScene {
       
 
         this.createBackground();
-        this.createLogo();
-        this.createPlayBtn();
+        this.showWaitingTime();
+        //this.createLogo();
+        //this.createPlayBtn();
+
+        Globals.emitter.once("gameStart", () =>{
+            Globals.scene.start(new GameScene());
+        }, this);
         
     }
 
@@ -25,6 +31,12 @@ export class MainScene {
     {
         this.background = new Background(Globals.resources.background.texture, Globals.resources.background.texture);
         this.container.addChild(this.background.container);
+    }
+    
+    showWaitingTime()
+    {
+        this.waitingTime = new DebugText("Looking For Players", appConfig.width/2, appConfig.height/2, "#000");
+        this.container.addChild(this.waitingTime);
     }
 
     createLogo()

@@ -38,7 +38,7 @@ export class Player
     createAvatar()
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-        
+       // this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].plImage);
 
         if(this.playerSide == 1)
         {
@@ -53,7 +53,7 @@ export class Player
         
         this.container.addChild(this.avatar);
 
-        this.container.addChild(new DebugText(this.playerID, this.avatar.x, this.avatar.y, "#fff"));
+        this.container.addChild(new DebugText(this.playerID, this.container.x, this.container.y, "#000", 44));
     }
 
     resetPawns()

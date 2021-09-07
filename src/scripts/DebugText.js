@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
 export class DebugText extends PIXI.Text {
-    constructor(text, x = 10, y = 10, color = "#000") {
+    constructor(text, x = 10, y = 10, color = "#000", size = 20) {
         super();
         this.x = x;
         this.y = y;
@@ -10,7 +10,7 @@ export class DebugText extends PIXI.Text {
         this.style = {
             fontFamily: "Verdana",
             fontWeight: "bold",
-            fontSize: 20,
+            fontSize: size,
             fill: [color]
         };
         this.text = text;

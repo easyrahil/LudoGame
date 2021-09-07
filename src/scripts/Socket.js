@@ -8,7 +8,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://2407-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
+        this.socket = new WebSocket("ws://35d6-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
 
         this.socket.onopen = e => {
             console.log("Connection with socket made");
@@ -18,7 +18,7 @@ export class Socket
                 gid : "230869",
                 tableTypeID : "2",
                 entryFee : "6",
-                pName : "Guest1",
+                pName : "Abhishek",
                 pImage : "https://cdn.freelogovectors.net/wp-content/uploads/2015/06/Cool-Male-Avatars-07.png"
             }
 
@@ -50,31 +50,24 @@ export class Socket
                     }
                 });
                 
-                Globals.emitter.emit("gameStart");
-
-                //Call GameStart and Update Board with Players
+                console.log(Globals.gameData.players);
 
             } else if (msg.t == "pAdd")
             {
-                Globals.gameData.players[msg.data.plId] = msg.data;
+                Globals.gameData.players[msg.plId] = {
+                    balance : msg.bal,
+                    plId : msg.plId,
+                    plName : msg.pName,
+                    plImage : msg.pImage
+                };
 
+                console.log(Globals.gameData.players);
 
-                Object.keys(msg.snap).forEach(key => {
-                    const data = msg.snap[key];
-                    if(!(data.plId in Globals.gameData.players))
-                    {
-                        Globals.gameData.players[data.plId] = data;
-                    } else
-                    {
-                        const mergeData = {...Globals.gameData.players[data.plId], ...data};
-                        Globals.gameData.players[data.plId] = mergeData;
-                    }
-                });
-
+            } else if(msg.t == "gameStart")
+            {
                 Globals.emitter.emit("gameStart");
-                //Update Board with Players
-
-            } else if (msg.t == "pLeft")
+            } 
+            else if (msg.t == "pLeft")
             {
                 delete Globals.gameData.players[msg.data.plId];
 
@@ -95,7 +88,7 @@ export class Socket
 
             } else if (msg.t = "timer")
             {
-
+                Globals.emitter.emit("timer", msg.data);
             }
         };
 
