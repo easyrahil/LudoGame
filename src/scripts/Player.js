@@ -81,11 +81,13 @@ export class Player
         this.diceContainer = new PIXI.Container();
         this.diceContainer.sortableChildren = true;
         this.diceContainer.position = new PIXI.Point(this.diceBG.x + (this.diceBG.width * 0.1 * (this.playerSide ? -1 : 1) ), this.diceBG.y);
-        this.diceContainer.interactive = true;
+        this.diceContainer.alpha = 0.5;
+
         this.diceContainer.on("pointerdown", () => {
             Globals.resources.click.sound.play();
             this.playDiceAnimation();
         }, this);
+
         this.dices = []
 
         for (let i = 1; i <= 6; i++) {
@@ -123,6 +125,13 @@ export class Player
         this.diceContainer.addChild(this.animatedDice);
         this.container.addChild(this.diceBG);
         this.container.addChild(this.diceContainer);
+    }
+
+    setDiceInteractive(value)
+    {
+        this.diceContainer.alpha = value ? 1 : 0.5;
+        this.diceContainer.interactive = value;
+
     }
 
     setDice(index)

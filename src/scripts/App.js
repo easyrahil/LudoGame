@@ -6,6 +6,7 @@ import { Globals } from "./Globals";
 import { SceneManager } from "./SceneManager";
 import { appConfig, gameConfig } from "./appConfig";
 import { GameScene } from "./GameScene";
+import { MyEmitter } from "./MyEmitter";
 
 export class App {
     run() {
@@ -21,6 +22,7 @@ export class App {
         //this.app.raenderer.resolution = window.devicePixelRatio;
 
         
+        Globals.emitter = new MyEmitter();
         
 
         Globals.scene = new SceneManager();
@@ -35,10 +37,11 @@ export class App {
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-                Globals.scene.start(new GameScene());
+                Globals.scene.start(new MainScene());
+                //Globals.scene.start(new GameScene());
             }, 1000);
             
-            //Globals.scene.start(new MainScene());
+            
         });
 
         

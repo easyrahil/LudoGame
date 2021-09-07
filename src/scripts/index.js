@@ -2,6 +2,7 @@ import "pixi-sound";
 
 import { App } from "./App";
 import { Globals } from "./Globals";
+import { Socket } from "./Socket";
 
 
 
@@ -11,7 +12,7 @@ app.run();
 app.addOrientationCheck();
 
 
-
+Globals.socket = new Socket();
 
 
 

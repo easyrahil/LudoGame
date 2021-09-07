@@ -30,7 +30,7 @@ export class MainScene {
     createLogo()
     {
         this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
-        //this.logo.scale.set(gameConfig.currentResolutionRatio);
+        this.logo.scale.set(gameConfig.widthRatio);
         this.logo.anchor.set(0.5);
         this.logo.x = appConfig.width/2;
         this.logo.y = appConfig.height/2;
@@ -43,13 +43,13 @@ export class MainScene {
 
         this.logo.on("pointerover", () => {
             const tween = new TWEEN.Tween(this.logo)
-                                    .to({scale : {x : gameConfig.currentResolutionRatio * 1.2, y : gameConfig.currentResolutionRatio * 1.2} }, 300)
+                                    .to({scale : {x : gameConfig.widthRatio * 1.2, y : gameConfig.widthRatio * 1.2} }, 300)
                                     .start();
         }, this);
 
         this.logo.on("pointerout", () => {
             const tween = new TWEEN.Tween(this.logo)
-                                    .to({scale : {x : gameConfig.currentResolutionRatio, y : gameConfig.currentResolutionRatio} }, 100)
+                                    .to({scale : {x : gameConfig.widthRatio, y : gameConfig.widthRatio} }, 100)
                                     .start();
         }, this);
 

@@ -1,0 +1,92 @@
+import { Globals } from "./Globals";
+
+export class Socket
+{
+    constructor()
+    {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const servAddress = urlParams.get('debug');
+
+        this.socket = new WebSocket("ws://"+ servAddress+":4500");
+
+        this.socket.onopen = e => {
+            console.log("Connection with socket made");
+
+            const distmsg = {
+                t : "force",
+                data : [1, 50]
+            }
+
+            sendMessage(distmsg);
+        };
+
+        this.socket.onmessage = e => {
+            let type;
+
+            const msg = JSON.parse(e.data);
+
+            if(msg.t == "joined")
+            {
+                Globals.gameData.plId = msg.data.plId;
+                Globals.gameData.players[msg.data.plId] = {
+                    balance : msg.bal
+                };
+
+                Globals.gameData.snap = msg.snap;
+                
+                Globals.emitter.emit("gameStart");
+                
+                //Call GameStart and Update Board with Players
+
+            } else if (msg.t == "pAdd")
+            {
+                Globals.gameData.players[msg.data.plId] = msg.data;
+                //Update Board with Players
+
+            } else if (msg.t == "pLeft")
+            {
+                delete Globals.gameData.players[msg.data.plId];
+
+                //Update Board with Player Left if game is running
+            } else if (msg.t == "RollDiceResult")
+            {   
+                //stop dice rolling animation
+
+                //
+            } else if (msg.t == "moveToken")
+            {
+                
+            } else if (msg.t == "turnSkipped")
+            {
+
+            } else if (msg.t == "turnTimer")
+            {
+
+            } else if (msg.t = "timer")
+            {
+
+            }
+        };
+
+        this.socket.onclose = e => {
+            if(e.wasClean)
+            {
+                console.log(`[close] Connection closed cleanly, code=${e.code} reason=${e.reason}`);
+            } else
+            {
+                console.log(`[close] Connection Died`);
+            }
+        };
+
+        this.socket.onerror = e => {
+            console.log(`[error] ${e.message}`);
+        };
+    }
+
+
+    sendMessage(msg)
+    {
+        this.socket.send(JSON.stringify(msg));
+    }
+}

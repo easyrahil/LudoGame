@@ -13,22 +13,20 @@ export class GameScene
     constructor()
     {
         this.container = new PIXI.Container();
-        
-        
 
         this.players = {};
         
         this.createBackground();
         this.createBoard();
-       this.createPawns();
-        this.createPlayers(2);
+        this.createPawns();
+        this.createPlayers(Globals.gameData.plID);
         this.assignPawns();
+
         
-        
-       // this.setPawnPointIndex("Y1", 1);
-        this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-        //this.setPawnPointIndex("B3", 45);
-        //this.moveBackPawnTo("B3", 14);
+        //  this.setPawnPointIndex("Y1", 1);
+        //  this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+        //  this.setPawnPointIndex("B3", 45);
+        //  this.moveBackPawnTo("B3", 14);
     }
 
     createBackground()
@@ -118,5 +116,10 @@ export class GameScene
         Globals.pawns[pawnId].move(Globals.pawns[pawnId].currentPointIndex - 1, false).then(() => {
             this.moveBackPawnTo(pawnId, pointToCompare);
         });
+    }
+
+    activateDiceRolling()
+    {
+
     }
 }

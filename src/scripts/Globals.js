@@ -1,5 +1,8 @@
 export const Globals = {
     resources: {},
     gridPoints : {},
-    pawns : {}
+    pawns : {},
+    gameData : {
+        player : {}
+    }
 };

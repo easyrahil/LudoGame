@@ -11,13 +11,15 @@ export class MatchmakingScene {
         //     loop: true,
         //     volume: 0.2
         // });
-        
-        
 
         this.createBackground();
         this.createLogo();
         this.createPlayBtn();
         
+        Globals.emitter.once("gameStart", () => {
+            this.logoTween.stop();
+            Globals.scene.start(new GameScene());
+        });
     }
 
     createBackground()
@@ -29,19 +31,16 @@ export class MatchmakingScene {
     createLogo()
     {
         this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
-        //this.logo.scale.set(gameConfig.currentResolutionRatio);
+        this.logo.scale.set(gameConfig.widthRatio);
         this.logo.anchor.set(0.5);
         this.logo.x = appConfig.width/2;
         this.logo.y = appConfig.height/2;
 
         this.logo.interactive = true;
         
-        const tween = new TWEEN.Tween(this.logo)
+        this.logoTween = new TWEEN.Tween(this.logo)
                                     .to({angle : 360 * 8 }, 4000)
-                                    //.repeat(5)
-                                    .onComplete(() => {
-                                        Globals.scene.start(new GameScene()); 
-                                    })
+                                    .repeat(10)
                                     .start();
         
 
