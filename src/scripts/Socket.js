@@ -17,7 +17,9 @@ export class Socket
                 t : "connect",
                 gid : "230869",
                 tableTypeID : "2",
-                entryFee : "6"
+                entryFee : "6",
+                pName : "Guest1",
+                pImage : "https://cdn.freelogovectors.net/wp-content/uploads/2015/06/Cool-Male-Avatars-07.png"
             }
 
             this.sendMessage(distmsg);
