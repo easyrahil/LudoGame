@@ -39,7 +39,14 @@ export class Player
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
         console.log("Texture url : " + Globals.gameData.players[this.playerID].pImage);
+        
+        
         this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].pImage);
+       //this.avatarImage.renderable = false;
+
+        
+
+        
 
         this.playerName = new PIXI.Text(Globals.gameData.players[this.playerID].pName);
         this.playerName.zIndex = 1;
@@ -79,11 +86,21 @@ export class Player
             this.playerName.y -= 120;
         }
 
+        const graphics = new PIXI.Graphics();
+        graphics.beginFill(0xFF3300);
+        graphics.drawRect(this.avatar.x + (this.avatar.width * 0.1), this.avatar.y - (this.avatar.height*0.9)/2, this.avatar.width*0.8, this.avatar.height*0.8);
+        graphics.endFill();
+        
+        this.avatarImage.mask = graphics;
         this.container.addChild(this.avatar);
         this.container.addChild(this.avatarImage);
         console.log(this.avatarImage);
+        this.container.addChild(graphics);
 
         this.container.addChild(this.playerName);
+
+
+        
 
         
     }
@@ -171,22 +188,24 @@ export class Player
 
     setDice(index)
     {
+        this.animatedDice.renderable  = false;
         this.dices.forEach(dice => {
-            if(!dice.renderable)
-                dice.renderable = true;
 
             if(this.dices.indexOf(dice) == index)
             {
                 dice.zIndex = 1;
+                dice.renderable = true;
             } else
             {
                 dice.zIndex = 0;
+                dice.renderable = false;
             }
         });
     }
 
     playDiceAnimation()
     {
+        this.animatedDice.renderable  = true;
         Globals.resources.dice.sound.play();
         this.diceContainer.interactive = false;
         this.dices.forEach(dice => {
