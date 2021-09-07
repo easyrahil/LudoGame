@@ -8,17 +8,19 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://"+ servAddress+":4500");
+        this.socket = new WebSocket("ws://2407-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
 
         this.socket.onopen = e => {
             console.log("Connection with socket made");
 
             const distmsg = {
-                t : "force",
-                data : [1, 50]
+                t : "connect",
+                gid : 230869,
+                tableTypeID : 2,
+                entryFee : 80
             }
 
-            sendMessage(distmsg);
+            this.sendMessage(distmsg);
         };
 
         this.socket.onmessage = e => {
@@ -36,7 +38,7 @@ export class Socket
                 Globals.gameData.snap = msg.snap;
                 
                 Globals.emitter.emit("gameStart");
-                
+
                 //Call GameStart and Update Board with Players
 
             } else if (msg.t == "pAdd")
@@ -87,6 +89,7 @@ export class Socket
 
     sendMessage(msg)
     {
+        console.log("Message Sent : " + JSON.stringify(msg));
         this.socket.send(JSON.stringify(msg));
     }
 }
