@@ -52,7 +52,7 @@ export class App {
     {
         if(PIXI.utils.isMobile)
         {
-            console.log(window.orientation);
+           // console.log(window.orientation);
 
             
 

@@ -76,7 +76,7 @@ export class Socket
             } else if (msg.t == "RollDiceResult")
             {   
                 //stop dice rolling animation
-
+                Globals.emitter.emit("rollDiceResult", {id : msg.plId, value : msg.dice});
                 //
             } else if (msg.t == "moveToken")
             {

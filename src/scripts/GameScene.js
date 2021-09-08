@@ -38,13 +38,27 @@ export class GameScene
 
         Globals.emitter.on("turnTimer", (time) => 
         {
-            console.log("Timer");
-            // if(Globals.gameData.players[Globals.gameData.plId].hasTurn)
-            // {
+            // console.log("Timer");
+            //  if(this.players[Globals.gameData.plId].hasTurn)
+            //  {
                 
-            //     this.updateProgress((10 - time) / 10);
-            // }
+            //      this.updateProgress((10 - time) / 10);
+            //  }
         });
+
+        Globals.emitter.on("rollDiceResult", (data) => {
+            
+            this.players[data.id].setDice(data.value);
+            
+            if(this.players[Globals.gameData.plId].hasTurn)
+            {
+                this.stopDiceAnimation();
+                console.log(this);
+               // console.log("")
+               // this.players[Globals.gameData.plId].ActivatePointerChoose();
+            }
+        }, this);
+        
     }
 
     createBackground()
@@ -140,6 +154,10 @@ export class GameScene
         
 
         this.interactiveDiceContainer.on("pointerdown", () => {
+            const distmsg = {
+                t : "pDiceRoll"
+            }
+            Globals.socket.sendMessage(distmsg);
             Globals.resources.click.sound.play();
             //Send Message to server
             this.playDiceAnimation();
@@ -191,22 +209,7 @@ export class GameScene
 
     }
 
-    setDice(index)
-    {
-        this.animatedDice.renderable  = false;
-        this.dices.forEach(dice => {
-
-            if(this.dices.indexOf(dice) == index)
-            {
-                dice.zIndex = 1;
-                dice.renderable = true;
-            } else
-            {
-                dice.zIndex = 0;
-                dice.renderable = false;
-            }
-        });
-    }
+    
 
     playDiceAnimation()
     {
@@ -219,12 +222,15 @@ export class GameScene
 
         this.animatedDice.play();
         this.animatedDice.tween.start();
+
+        
     }
 
     stopDiceAnimation(diceValue)
     {
+        this.animatedDice.stop();
         this.animatedDice.tween.stop();
-        this.setDice(diceValue);
+        
         //this.interactiveDiceContainer.interactive = false;
     }
 
@@ -236,7 +242,7 @@ export class GameScene
             
             for (let i = 1; i <= 4; i++) {
                 this.players[key].pawnsID.push(`${pawnIds[key]}${i}`);
-                
+                Globals.pawns[`${pawnIds[key]}${i}`].on("pawnSelected", (pId) => this.players[key].pawnSelected(pId), this);
             }
             this.players[key].resetPawns();
         });

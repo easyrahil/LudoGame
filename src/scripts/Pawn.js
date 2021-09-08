@@ -23,6 +23,10 @@ export class Pawn extends PIXI.Sprite
         this.height = this.currentHeight;
 
         this.anchor.set(1, 0.8);
+
+        this.on('pointerdown', () => {
+            this.emit("pawnSelected", this.pawnID);
+        }, this);
         
     }
 
@@ -90,6 +94,15 @@ export class Pawn extends PIXI.Sprite
         });
     }
 
+    setInteractive()
+    {
+        this.interactive = true;
+    }
+
+    removeInteractive()
+    {
+        this.interactive = false;
+    }
 
 
     

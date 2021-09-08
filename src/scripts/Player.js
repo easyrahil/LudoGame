@@ -154,6 +154,23 @@ export class Player
         this.container.addChild(this.diceContainer);
     }
 
+    setDice(index)
+    {
+        index--;
+        this.dices.forEach(dice => {
+
+            if(this.dices.indexOf(dice) == index)
+            {
+                dice.zIndex = 1;
+                dice.renderable = true;
+            } else
+            {
+                dice.zIndex = 0;
+                dice.renderable = false;
+            }
+        });
+    }
+
     assignTurn()
     {
         this.diceContainer.alpha = 1;
@@ -167,6 +184,33 @@ export class Player
     }
 
     
+    ActivatePointerChoose()
+    {
+        const gridPoint = Globals.pawns[this.pawnsID[0]].currentPointIndex;
+        const pawnAtSamePlace = this.pawnsID.filter(id => Globals.pawns[id].currentPointIndex == gridPoint);
 
+        if(pawnAtSamePlace.length == this.pawnsID.length)
+        {
+            this.pawnSelected(this.pawnsID[0]);
+        } else
+        {
+            this.pawnsID.forEach((id) => {
+                Globals.pawns[id].setInteractive();
+            });
+        }
+
+        
+    }
     
+    pawnSelected(id)
+    {
+        this.pawnsID.forEach((id) => {
+            Globals.pawns[id].removeInteractive();
+        });
+        const distmsg = {
+            t: "pTokenSelect",
+            token : id
+        }
+        Globals.socket.sendMessage(distmsg);
+    }
 }
