@@ -20,8 +20,8 @@ export class GameScene
         this.createBackground();
         this.createTimer();
         this.createBoard();
-        
         this.createPlayers(Globals.gameData.plId);
+        this.createInteractiveDice();
         this.assignPawns();
 
         
@@ -97,6 +97,126 @@ export class GameScene
             // if(playerId > 3)
             //     playerId = 0;
         }); 
+    }
+
+    createInteractiveDice()
+    {
+        this.interactiveDiceContainer = new PIXI.Container();
+        this.interactiveDiceContainer.sortableChildren = true;
+        
+        
+        const background = new PIXI.Graphics();
+        background.lineStyle(10, 0xc3c3c3, 0.8);
+        background.beginFill(0x650a5a, 0);
+        background.drawCircle(0, 0, 120);
+        background.endFill();
+
+        this.circleGraphic = new PIXI.Graphics();
+        this.circleGraphic.lineStyle(10, 0x00FF00, 1);
+        this.circleGraphic.beginFill(0x650a5a, 0);
+        this.circleGraphic.drawCircle(0, 0, 120);
+        this.circleGraphic.endFill();
+
+
+        this.radialGraphic = new PIXI.Graphics();
+        this.radialGraphic.lineStyle(100, 0x00FF00, 1);
+        this.radialGraphic.angle = -90;
+        this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2), true);
+
+
+        this.circleGraphic.mask = this.radialGraphic;
+        
+
+        this.interactiveDiceContainer.on("pointerdown", () => {
+            Globals.resources.click.sound.play();
+            this.playDiceAnimation();
+        }, this);
+
+
+        // this.dices = []
+
+        // for (let i = 1; i <= 6; i++) {
+        //     const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
+        //      dice.position = this.circleGraphic.position;
+        //     dice.width = this.circleGraphic.width;
+        //     dice.height = this.circleGraphic.height;            
+        //     //Set width and Height
+        //     this.dices.push(dice);
+        //     this.interactiveDiceContainer.addChild(dice);
+        // }
+
+        const textureArrayOfAnimation = []
+
+        for (let x = 1; x <= 6; x++) {
+            textureArrayOfAnimation.push(Globals.resources[`diceEdge${x}`].texture);
+        }
+
+        this.animatedDice = new PIXI.AnimatedSprite(textureArrayOfAnimation);
+        
+        this.animatedDice.anchor.set(0.5, 0.5);
+        this.animatedDice.width = this.circleGraphic.width * 0.7;
+        this.animatedDice.height = this.circleGraphic.height * 0.7;
+        this.animatedDice.loop = true;
+        this.animatedDice.animationSpeed = 0.2;
+
+        this.animatedDice.tween = new TWEEN.Tween(this.animatedDice)
+                                    .to({angle : 360}, 800)
+                                    .onComplete(animatedDice => {
+                                        this.setDice(5);
+                                        this.diceContainer.interactive = true;
+                                    });
+
+        this.interactiveDiceContainer.addChild(this.animatedDice);
+        this.interactiveDiceContainer.addChild(background);
+        this.interactiveDiceContainer.addChild(this.circleGraphic);
+        this.interactiveDiceContainer.addChild(this.radialGraphic);
+
+        this.interactiveDiceContainer.x = appConfig.width /2;
+        this.interactiveDiceContainer.y = appConfig.height * 0.7;
+        this.interactiveDiceContainer.scale.set(gameConfig.widthRatio);
+        this.container.addChild(this.interactiveDiceContainer);
+    }
+
+    updateProgress(value)
+    {
+        this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2) * (value), true);
+    }
+
+    setDiceInteractive(value)
+    {
+        this.interactiveDiceContainer.alpha = value ? 1 : 0.5;
+        this.interactiveDiceContainer.interactive = value;
+
+    }
+
+    setDice(index)
+    {
+        this.animatedDice.renderable  = false;
+        this.dices.forEach(dice => {
+
+            if(this.dices.indexOf(dice) == index)
+            {
+                dice.zIndex = 1;
+                dice.renderable = true;
+            } else
+            {
+                dice.zIndex = 0;
+                dice.renderable = false;
+            }
+        });
+    }
+
+    playDiceAnimation()
+    {
+        this.animatedDice.renderable  = true;
+        Globals.resources.dice.sound.play();
+        this.interactiveDiceContainer.interactive = false;
+        this.dices.forEach(dice => {
+            dice.renderable = false;
+        });
+
+        this.animatedDice.play();
+        this.animatedDice.tween.start();
     }
 
     assignPawns()

@@ -18,6 +18,7 @@ export class MainScene {
 
         this.createBackground();
         this.showWaitingTime();
+        //this.createInteractiveDice();
         //this.createLogo();
         //this.createPlayBtn();
 
@@ -38,6 +39,8 @@ export class MainScene {
         this.waitingTime = new DebugText("Looking For Players", appConfig.width/2, appConfig.height/2, "#000");
         this.container.addChild(this.waitingTime);
     }
+    
+    
 
     createLogo()
     {
