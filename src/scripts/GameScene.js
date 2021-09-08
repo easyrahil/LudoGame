@@ -41,11 +41,11 @@ export class GameScene
         Globals.emitter.on("turnTimer", (time) => 
         {
             // console.log("Timer");
-            //  if(this.players[Globals.gameData.plId].hasTurn)
-            //  {
+              if(this.players[Globals.gameData.plId].hasTurn)
+              {
                 
-            //      this.updateProgress((10 - time) / 10);
-            //  }
+                  this.updateProgress((1000 - time) / 1000);
+              }
         });
 
         Globals.emitter.on("rollDiceResult", (data) => {
@@ -62,7 +62,9 @@ export class GameScene
         }, this);
         
         Globals.emitter.on("movePawn", (data) => {
-            console.log(data.moveArr);
+            
+            //Globals.gameData.cutPawnData = {id : data.cutId, moveArr : data.cutMoveArr};
+            
             this.movePawnTo(data.id, data.moveArr);
         },this);
     }
@@ -203,6 +205,7 @@ export class GameScene
 
     updateProgress(value)
     {
+        console.log("Timer Update : " + value);
         this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2) * (value), true);
     }
 
@@ -263,8 +266,20 @@ export class GameScene
     movePawnTo(pawnId, pointsArray)
     {
         if(pointsArray.length == 0)
-        {
-            this.turnChanged(Globals.gameData.currentTurn);
+        {   
+            if(Globals.gameData.isCut)
+            {
+                const pawnId = Globals.gameData.cutPawn["tokenId"];
+                const pointToCompare = Globals.gameData.cutPawn.pos[0];
+                this.moveBackPawnTo(pawnId, pointToCompare);
+            }
+                
+            else
+            {
+                console.log("Turn Changed : " + Globals.gameData.currentTurn);
+                this.turnChanged(Globals.gameData.currentTurn);
+            }
+            
             return;
         }
             
@@ -276,8 +291,14 @@ export class GameScene
 
     moveBackPawnTo(pawnId, pointToCompare)
     {
+        
         if(Globals.pawns[pawnId].currentPointIndex == pointToCompare)
-            return; 
+        {
+                console.log("Turn Changed : " + Globals.gameData.currentTurn);
+                this.turnChanged(Globals.gameData.currentTurn);
+                return;
+        }
+             
         
         Globals.pawns[pawnId].move(Globals.pawns[pawnId].currentPointIndex - 1, false).then(() => {
             this.moveBackPawnTo(pawnId, pointToCompare);
@@ -287,6 +308,9 @@ export class GameScene
 
     turnChanged(turnValue)
     {
+        Globals.gameData.isCut = false;
+        Globals.gameData.cutPawn = null;
+
         Object.keys(this.players).forEach(key => 
         {
             if(key == turnValue)

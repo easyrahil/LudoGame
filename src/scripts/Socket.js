@@ -2,23 +2,23 @@ import { Globals } from "./Globals";
 
 export class Socket
 {
-    constructor()
+    constructor(uuid, name)
     {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://4dd6-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io");
+        this.socket = new WebSocket("ws://2d8e-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io/");
         console.log("Socket Created");
         this.socket.onopen = e => {
             console.log("Connection with socket made");
 
             const distmsg = {
                 t : "connect",
-                gid : "230869",
+                gid : uuid,
                 tableTypeID : "2",
                 entryFee : "6",
-                pName : "Abhishek",
+                pName : name,
                 pImage : "../src/sprites/68.png"
                 //pImage : "https://sguru.org/wp-content/uploads/2017/06/steam-avatar-profile-picture-1974.jpg"
             }
@@ -80,9 +80,19 @@ export class Socket
                 //
             } else if (msg.t == "moveToken")
             {
-              
-                Globals.emitter.emit("movePawn", {id: msg.data[0].tokenId, moveArr : msg.data[0].pos, nextTurn : msg.data[0].nextroll});
+              //cutId: msg.data[1].tokenId, cutMoveArr : msg.data[1].moveArr
+                const cutData = msg.data.filter(data => data["isCut"] == true);
+                Globals.emitter.emit("movePawn", {id: msg.data[(cutData.length > 0) ? 1 : 0].tokenId, moveArr : msg.data[(cutData.length > 0) ? 1 : 0].pos});
                 Globals.gameData.currentTurn = msg.nextroll;
+                Globals.gameData.isCut = (cutData.length > 0)
+                if(Globals.gameData.isCut)
+                {
+                    Globals.gameData.cutPawn = cutData;
+                    console.log(Globals.gameData.cutPawn);
+                }
+                    
+
+                
 
             } else if (msg.t == "turnSkipped")
             {
@@ -110,7 +120,6 @@ export class Socket
             console.log(`[error] ${e.message}`);
         };
     }
-
 
 
     sendMessage(msg)

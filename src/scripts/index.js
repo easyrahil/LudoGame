@@ -10,7 +10,7 @@ app.run();
 app.addOrientationCheck();
 
 
-Globals.socket = new Socket();
+//Globals.socket = new Socket();
 
 
 

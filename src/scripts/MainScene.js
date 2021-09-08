@@ -6,6 +6,7 @@ import { Globals } from "./Globals";
 import TWEEN from "@tweenjs/tween.js";
 import { MatchmakingScene } from "./MatchmakingScene";
 import { DebugText } from "./DebugText";
+import { Socket } from "./Socket";
 
 export class MainScene {
     constructor() {
@@ -27,7 +28,38 @@ export class MainScene {
             console.log("Turn :" + Globals.gameData.currentTurn);
             Globals.scene.start(new GameScene());
         }, this);
+
+
+        this.createButton();
         
+    }
+
+    createButton()
+    {
+        const button1 = new PIXI.Graphics();
+
+        button1.beginFill(0xDE3249);
+        button1.drawRect(appConfig.leftX, 50, 100, 100);
+        button1.endFill();
+
+        button1.interactive = true;
+        button1.on("pointerdown", () => {
+            Globals.socket = new Socket("230869", "Player1");
+        }, this);
+
+        const button2 = new PIXI.Graphics();
+        
+        button2.beginFill(0xDE3249);
+        button2.drawRect(appConfig.rightX, 50, 100, 100);
+        button2.endFill();
+
+        button2.interactive = true;
+        button2.on("pointerdown", () => {
+            Globals.socket = new Socket("230870", "Player2");
+        }, this);
+
+        this.container.addChild(button1);
+        this.container.addChild(button2);
     }
 
     createBackground()
