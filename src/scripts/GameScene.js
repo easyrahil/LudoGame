@@ -25,6 +25,8 @@ export class GameScene
         this.createInteractiveDice();
         this.assignPawns();
 
+
+
         this.turnChanged(Globals.gameData.currentTurn);
         
         //  this.setPawnPointIndex("Y1", 1);
@@ -53,12 +55,16 @@ export class GameScene
             if(this.players[Globals.gameData.plId].hasTurn)
             {
                 this.stopDiceAnimation();
-                console.log(this);
-               // console.log("")
-               // this.players[Globals.gameData.plId].ActivatePointerChoose();
+
+               
+                this.players[Globals.gameData.plId].ActivatePointerChoose();
             }
         }, this);
         
+        Globals.emitter.on("movePawn", (data) => {
+            console.log(data.moveArr);
+            this.movePawnTo(data.id, data.moveArr);
+        },this);
     }
 
     createBackground()
@@ -257,7 +263,11 @@ export class GameScene
     movePawnTo(pawnId, pointsArray)
     {
         if(pointsArray.length == 0)
+        {
+            this.turnChanged(Globals.gameData.currentTurn);
             return;
+        }
+            
         
         Globals.pawns[pawnId].move(pointsArray.shift()).then(() => {
             this.movePawnTo(pawnId, pointsArray);
@@ -292,6 +302,9 @@ export class GameScene
         {
             
             this.activateDiceRolling();
+        } else
+        {
+            this.deactivateDiceRolling();
         }
         
     }
@@ -303,6 +316,13 @@ export class GameScene
         this.updateProgress(0.01);
 
         
+    }
+
+    deactivateDiceRolling()
+    {
+        this.setDiceInteractive(false);
+
+        this.updateProgress(1);
     }
 
 }

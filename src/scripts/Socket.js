@@ -8,7 +8,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://0aa3-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io");
+        this.socket = new WebSocket("ws://4dd6-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io");
         console.log("Socket Created");
         this.socket.onopen = e => {
             console.log("Connection with socket made");
@@ -80,7 +80,10 @@ export class Socket
                 //
             } else if (msg.t == "moveToken")
             {
-                
+              
+                Globals.emitter.emit("movePawn", {id: msg.data[0].tokenId, moveArr : msg.data[0].pos, nextTurn : msg.data[0].nextroll});
+                Globals.gameData.currentTurn = msg.nextroll;
+
             } else if (msg.t == "turnSkipped")
             {
 
@@ -107,6 +110,7 @@ export class Socket
             console.log(`[error] ${e.message}`);
         };
     }
+
 
 
     sendMessage(msg)
