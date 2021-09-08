@@ -1,4 +1,4 @@
-import TWEEN from "@tweenjs/tween.js";
+
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { DebugText } from "./DebugText";
@@ -12,6 +12,7 @@ export class Player
         this.playerDataUpdated = false;
         this.squeezeAnchor = {};
         this.pawnsID = [];
+        this.hasTurn = false;
         this.container = new PIXI.Container();
         this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
         if(verticalIndex == 0)
@@ -26,7 +27,7 @@ export class Player
 
         this.createAvatar();
         this.createDice();
-        this.setDice(5);
+        //this.setDice(5);
         //this.playDiceAnimation();
     }
     
@@ -141,12 +142,28 @@ export class Player
             dice.anchor.set((this.playerSide == 1) ? 1 : 0, 0.5);
             dice.width = this.diceBG.width * 0.8;
             dice.height = this.diceBG.height * 0.8;
+            if(i != 6)
+                dice.renderable = false;
             this.dices.push(dice);
             this.diceContainer.addChild(dice);
+
+        
         }
 
         this.container.addChild(this.diceBG);
         this.container.addChild(this.diceContainer);
+    }
+
+    assignTurn()
+    {
+        this.diceContainer.alpha = 1;
+        this.hasTurn = true;
+    }
+
+    removeTurn()
+    {
+        this.diceContainer.alpha = 0.5;
+        this.hasTurn = false;
     }
 
     

@@ -22,7 +22,9 @@ export class MainScene {
         //this.createLogo();
         //this.createPlayBtn();
 
-        Globals.emitter.once("gameStart", () =>{
+        Globals.emitter.once("gameStart", (turn) =>{
+            Globals.gameData.currentTurn = turn;
+            console.log("Turn :" + Globals.gameData.currentTurn);
             Globals.scene.start(new GameScene());
         }, this);
         

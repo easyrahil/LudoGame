@@ -8,8 +8,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://8184-2405-201-5006-10c7-c9ca-3b5-d321-d04f.ngrok.io");
-
+        this.socket = new WebSocket("ws://0aa3-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io");
+        console.log("Socket Created");
         this.socket.onopen = e => {
             console.log("Connection with socket made");
 
@@ -66,7 +66,7 @@ export class Socket
 
             } else if(msg.t == "gameStart")
             {
-                Globals.emitter.emit("gameStart");
+                Globals.emitter.emit("gameStart", msg.turn);
             } 
             else if (msg.t == "pLeft")
             {
@@ -86,7 +86,7 @@ export class Socket
 
             } else if (msg.t == "turnTimer")
             {
-
+                Globals.emitter.emit("turnTimer", msg.data);
             } else if (msg.t = "timer")
             {
                 Globals.emitter.emit("timer", msg.data);

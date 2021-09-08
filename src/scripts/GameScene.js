@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import TWEEN from "@tweenjs/tween.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, playerData } from "./boardConfig";
@@ -24,6 +25,7 @@ export class GameScene
         this.createInteractiveDice();
         this.assignPawns();
 
+        this.turnChanged(Globals.gameData.currentTurn);
         
         //  this.setPawnPointIndex("Y1", 1);
         //  this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
@@ -33,6 +35,16 @@ export class GameScene
         Globals.emitter.on("timer", (time) => {
             this.updateTimer(time);
         }, this);
+
+        Globals.emitter.on("turnTimer", (time) => 
+        {
+            console.log("Timer");
+            // if(Globals.gameData.players[Globals.gameData.plId].hasTurn)
+            // {
+                
+            //     this.updateProgress((10 - time) / 10);
+            // }
+        });
     }
 
     createBackground()
@@ -129,21 +141,10 @@ export class GameScene
 
         this.interactiveDiceContainer.on("pointerdown", () => {
             Globals.resources.click.sound.play();
+            //Send Message to server
             this.playDiceAnimation();
         }, this);
 
-
-        // this.dices = []
-
-        // for (let i = 1; i <= 6; i++) {
-        //     const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
-        //      dice.position = this.circleGraphic.position;
-        //     dice.width = this.circleGraphic.width;
-        //     dice.height = this.circleGraphic.height;            
-        //     //Set width and Height
-        //     this.dices.push(dice);
-        //     this.interactiveDiceContainer.addChild(dice);
-        // }
 
         const textureArrayOfAnimation = []
 
@@ -159,12 +160,11 @@ export class GameScene
         this.animatedDice.loop = true;
         this.animatedDice.animationSpeed = 0.2;
 
+    
+
         this.animatedDice.tween = new TWEEN.Tween(this.animatedDice)
                                     .to({angle : 360}, 800)
-                                    .onComplete(animatedDice => {
-                                        this.setDice(5);
-                                        this.diceContainer.interactive = true;
-                                    });
+                                    .repeat(10);
 
         this.interactiveDiceContainer.addChild(this.animatedDice);
         this.interactiveDiceContainer.addChild(background);
@@ -172,7 +172,7 @@ export class GameScene
         this.interactiveDiceContainer.addChild(this.radialGraphic);
 
         this.interactiveDiceContainer.x = appConfig.width /2;
-        this.interactiveDiceContainer.y = appConfig.height * 0.7;
+        this.interactiveDiceContainer.y = appConfig.height/2 + this.ludoBoard.container.height/2 + this.ludoBoard.container.height * 0.3;
         this.interactiveDiceContainer.scale.set(gameConfig.widthRatio);
         this.container.addChild(this.interactiveDiceContainer);
     }
@@ -182,8 +182,10 @@ export class GameScene
         this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2) * (value), true);
     }
 
+    
     setDiceInteractive(value)
     {
+        console.log("Dice Interactive : " + value);
         this.interactiveDiceContainer.alpha = value ? 1 : 0.5;
         this.interactiveDiceContainer.interactive = value;
 
@@ -211,12 +213,19 @@ export class GameScene
         this.animatedDice.renderable  = true;
         Globals.resources.dice.sound.play();
         this.interactiveDiceContainer.interactive = false;
-        this.dices.forEach(dice => {
-            dice.renderable = false;
-        });
+        // this.dices.forEach(dice => {
+        //     dice.renderable = false;
+        // });
 
         this.animatedDice.play();
         this.animatedDice.tween.start();
+    }
+
+    stopDiceAnimation(diceValue)
+    {
+        this.animatedDice.tween.stop();
+        this.setDice(diceValue);
+        //this.interactiveDiceContainer.interactive = false;
     }
 
     assignPawns()
@@ -232,6 +241,7 @@ export class GameScene
             this.players[key].resetPawns();
         });
     }
+    
 
     setPawnPointIndex(pawnIndex, pointIndex)
     {
@@ -258,8 +268,35 @@ export class GameScene
         });
     }
 
+
+    turnChanged(turnValue)
+    {
+        Object.keys(this.players).forEach(key => 
+        {
+            if(key == turnValue)
+            {
+                this.players[turnValue].assignTurn();
+            } else
+            {
+                this.players[key].removeTurn();
+            }
+        });
+
+        if(turnValue == Globals.gameData.plId)
+        {
+            
+            this.activateDiceRolling();
+        }
+        
+    }
+
     activateDiceRolling()
     {
+        this.setDiceInteractive(true);
 
+        this.updateProgress(0.01);
+
+        
     }
+
 }
