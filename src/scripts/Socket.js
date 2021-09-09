@@ -105,6 +105,9 @@ export class Socket
             } else if (msg.t = "timer")
             {
                 Globals.emitter.emit("timer", msg.data);
+            } else if (msg.t == "threeSix")
+            {
+                Globals.emitter.emit("turnChanged", msg.nextRoll);
             }
         };
 

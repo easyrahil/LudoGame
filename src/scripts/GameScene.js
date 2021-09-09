@@ -67,6 +67,10 @@ export class GameScene
         Globals.emitter.on("movePawn", (data) => {
             this.movePawnTo(data.id, data.moveArr);
         },this);
+
+        Globals.emitter.on("turnChanged", (data) => {
+            this.turnChanged(data);
+        });
     }
 
     createBackground()
@@ -298,7 +302,7 @@ export class GameScene
             
             for (let i = 1; i <= 4; i++) {
                 this.players[key].pawnsID.push(`${pawnIds[key]}${i}`);
-                
+
                 Globals.pawns[`${pawnIds[key]}${i}`].on("pawnSelected", (pId) => this.players[key].pawnSelected(pId), this);
             }
             this.players[key].resetPawns();
