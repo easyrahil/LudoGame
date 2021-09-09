@@ -132,7 +132,7 @@ export class Player
         this.diceContainer = new PIXI.Container();
         this.diceContainer.sortableChildren = true;
         this.diceContainer.position = new PIXI.Point(this.diceBG.x + (this.diceBG.width * 0.1 * (this.playerSide ? -1 : 1) ), this.diceBG.y);
-        this.diceContainer.alpha = 0.5;
+        this.diceContainer.alpha = 0.3;
 
         this.dices = []
 
@@ -179,7 +179,7 @@ export class Player
 
     removeTurn()
     {
-        this.diceContainer.alpha = 0.5;
+        this.diceContainer.alpha = 0.2;
         this.hasTurn = false;
     }
 

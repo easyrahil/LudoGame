@@ -25,10 +25,7 @@ export class LudoBoard
         this.container.scale.set(gameConfig.widthRatio);
         console.log("Width Ratio : " + gameConfig.widthRatio);
         console.log("Width : " + this.container.width);
-        
-       
 
-      
     }
 
     createBoardSprite()
@@ -63,10 +60,4 @@ export class LudoBoard
         this.container.addChild(point);
        // this.container.addChild(point.debugText);
     }
-
-       
-
- 
-
-    
 }

@@ -3,6 +3,8 @@ export const Globals = {
     gridPoints : {},
     pawns : {},
     gameData : {
-        players : {}
+        players : {},
+        isCut : false,
+        cutPawn : {}
     }
 };

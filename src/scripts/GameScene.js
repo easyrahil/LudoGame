@@ -54,7 +54,7 @@ export class GameScene
             
             if(this.players[Globals.gameData.plId].hasTurn)
             {
-                this.stopDiceAnimation();
+                this.stopDiceAnimation(data.value);
 
                
                 this.players[Globals.gameData.plId].ActivatePointerChoose();
@@ -62,8 +62,7 @@ export class GameScene
         }, this);
         
         Globals.emitter.on("movePawn", (data) => {
-            
-            //Globals.gameData.cutPawnData = {id : data.cutId, moveArr : data.cutMoveArr};
+
             
             this.movePawnTo(data.id, data.moveArr);
         },this);
@@ -172,6 +171,20 @@ export class GameScene
         }, this);
 
 
+        this.dices = []
+
+        for (let i = 1; i <= 6; i++) {
+            const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
+             
+            dice.anchor.set(0.5, 0.5);
+            dice.width = this.circleGraphic.width * 0.6;
+            dice.height = this.circleGraphic.height * 0.6;
+            dice.renderable = false;
+            this.dices.push(dice);
+            this.interactiveDiceContainer.addChild(dice);
+        }
+
+
         const textureArrayOfAnimation = []
 
         for (let x = 1; x <= 6; x++) {
@@ -206,6 +219,7 @@ export class GameScene
     updateProgress(value)
     {
         console.log("Timer Update : " + value);
+        //this.interactiveDiceContainer.renderable = true;
         this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2) * (value), true);
     }
 
@@ -213,6 +227,17 @@ export class GameScene
     setDiceInteractive(value)
     {
         console.log("Dice Interactive : " + value);
+
+        if(value)
+        {
+            this.animatedDice.renderable  = true;
+            this.dices.forEach(dice => {
+                dice.renderable = false;
+            });
+        }
+
+
+        this.interactiveDiceContainer.renderable = value;
         this.interactiveDiceContainer.alpha = value ? 1 : 0.5;
         this.interactiveDiceContainer.interactive = value;
 
@@ -225,9 +250,10 @@ export class GameScene
         this.animatedDice.renderable  = true;
         Globals.resources.dice.sound.play();
         this.interactiveDiceContainer.interactive = false;
-        // this.dices.forEach(dice => {
-        //     dice.renderable = false;
-        // });
+        
+        this.dices.forEach(dice => {
+            dice.renderable = false;
+        });
 
         this.animatedDice.play();
         this.animatedDice.tween.start();
@@ -239,8 +265,27 @@ export class GameScene
     {
         this.animatedDice.stop();
         this.animatedDice.tween.stop();
+        this.animatedDice.renderable  = false;
         
+        this.setDice(diceValue);
         //this.interactiveDiceContainer.interactive = false;
+    }
+
+    setDice(index)
+    {
+        index--;
+        this.dices.forEach(dice => {
+
+            if(this.dices.indexOf(dice) == index)
+            {
+                dice.zIndex = 1;
+                dice.renderable = true;
+            } else
+            {
+                dice.zIndex = 0;
+                dice.renderable = false;
+            }
+        });
     }
 
     assignPawns()
@@ -269,7 +314,7 @@ export class GameScene
         {   
             if(Globals.gameData.isCut)
             {
-                const pawnId = Globals.gameData.cutPawn["tokenId"];
+                const pawnId = Globals.gameData.cutPawn.tokenId;
                 const pointToCompare = Globals.gameData.cutPawn.pos[0];
                 this.moveBackPawnTo(pawnId, pointToCompare);
             }
@@ -324,7 +369,6 @@ export class GameScene
 
         if(turnValue == Globals.gameData.plId)
         {
-            
             this.activateDiceRolling();
         } else
         {
@@ -345,7 +389,7 @@ export class GameScene
     deactivateDiceRolling()
     {
         this.setDiceInteractive(false);
-
+    
         this.updateProgress(1);
     }
 

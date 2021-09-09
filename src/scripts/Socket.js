@@ -8,7 +8,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://2d8e-2405-201-5006-10c7-e17a-df0-d2a2-9691.ngrok.io/");
+        this.socket = new WebSocket("ws://e686-2405-201-5006-10c7-46e-70c5-ff46-4533.ngrok.io/");
         console.log("Socket Created");
         this.socket.onopen = e => {
             console.log("Connection with socket made");
@@ -82,16 +82,18 @@ export class Socket
             {
               //cutId: msg.data[1].tokenId, cutMoveArr : msg.data[1].moveArr
                 const cutData = msg.data.filter(data => data["isCut"] == true);
-                Globals.emitter.emit("movePawn", {id: msg.data[(cutData.length > 0) ? 1 : 0].tokenId, moveArr : msg.data[(cutData.length > 0) ? 1 : 0].pos});
+                console.log("Filtered Data : ");
+                console.log(cutData);
+                
                 Globals.gameData.currentTurn = msg.nextroll;
-                Globals.gameData.isCut = (cutData.length > 0)
+                Globals.gameData.isCut = (cutData.length > 0);
                 if(Globals.gameData.isCut)
                 {
-                    Globals.gameData.cutPawn = cutData;
+                    Globals.gameData.cutPawn = cutData[0];
                     console.log(Globals.gameData.cutPawn);
                 }
                     
-
+                Globals.emitter.emit("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos});
                 
 
             } else if (msg.t == "turnSkipped")
