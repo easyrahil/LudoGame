@@ -8,7 +8,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://e686-2405-201-5006-10c7-46e-70c5-ff46-4533.ngrok.io/");
+        this.socket = new WebSocket("ws://5f37-2405-201-5006-10c7-28af-c138-cc6-bece.ngrok.io");
         console.log("Socket Created");
         this.socket.onopen = e => {
             console.log("Connection with socket made");

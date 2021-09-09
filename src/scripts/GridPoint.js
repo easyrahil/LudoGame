@@ -16,12 +16,6 @@ export class GridPoint extends PIXI.DisplayObject
 
         Globals.gridPoints[this.pointID] = this;
 
-        this.gridAnchorPoints = [
-            {x : 1, y : 1},
-            {x : 0, y : 1},
-            {x : 0, y : 0.1},
-            {x : 1, y : 0.1}
-        ];
     }
 
     render()
@@ -31,34 +25,77 @@ export class GridPoint extends PIXI.DisplayObject
 
     reached(pawn)
     {
+
         if(this.pawnsOnIt.indexOf(pawn) == -1)
         {
             this.pawnsOnIt.push(pawn);
 
             if(this.pawnsOnIt.length > 1)
-            {   
-                this.pawnsOnIt.forEach(item => {
-                    item.squeeze(this.gridAnchorPoints[this.pawnsOnIt.indexOf(item)]);
-                });
-                
+            {
+               this.resemablePawns();
             }
-        } else
-        {
-            console.error("Pawn is already in list.");
-        }
-
-        
+        }   
     }
 
-    left(pawn)
+    leave(pawn)
     {
-        if(this.pawnsOnIt.indexOf(pawn) != -1)
+        
+        this.pawnsOnIt = this.pawnsOnIt.filter(item => item !== pawn);
+        
+        if(this.pawnsOnIt.length > 1)
         {
-            this.pawnsOnIt = this.pawnsOnIt.filter(item => item !== pawn);
-            pawn.reset();
+            this.resemablePawns();
+        } else if (this.pawnsOnIt.length == 1)
+        {
+            this.pawnsOnIt[0].reset(true);
+        }
+        pawn.reset();
+    }
+
+
+    resemablePawns()
+    {
+        for (let i = 0; i < this.pawnsOnIt.length; i++) {
+            const pawn = this.pawnsOnIt[i];
+            
+            switch(i)
+            {
+                case 0:
+                    pawn.squeeze(this.leftX, 2);
+                    break;
+                case 1: 
+                    pawn.squeeze(this.rightX, 2);
+                    break;
+                case 2: 
+                    pawn.squeeze(this.downY, 3);
+                    break;
+                case 3:
+                    pawn.squeeze(this.upY, 1);
+                    break;
+            }
         }
     }
 
+    get leftX()
+    {
+        return new PIXI.Point(this.globalPosition.x - 5, this.globalPosition.y);
+    }
+
+    get rightX()
+    {
+        return new PIXI.Point(this.globalPosition.x + 5, this.globalPosition.y);
+    }
+
+    get upY()
+    {
+        return new PIXI.Point(this.globalPosition.x, this.globalPosition.y - 5);
+    }
+
+    get downY()
+    {
+        return new PIXI.Point(this.globalPosition.x, this.globalPosition.y + 6);
+    }
+    
     get globalPosition()
     {
         let point = new PIXI.Point();

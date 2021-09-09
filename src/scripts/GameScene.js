@@ -16,6 +16,8 @@ export class GameScene
     {
         this.container = new PIXI.Container();
 
+        this.container.sortableChildren = true;
+
         this.players = {};
         
         this.createBackground();
@@ -24,6 +26,7 @@ export class GameScene
         this.createPlayers(Globals.gameData.plId);
         this.createInteractiveDice();
         this.assignPawns();
+        
 
 
 
@@ -62,8 +65,6 @@ export class GameScene
         }, this);
         
         Globals.emitter.on("movePawn", (data) => {
-
-            
             this.movePawnTo(data.id, data.moveArr);
         },this);
     }
@@ -104,6 +105,7 @@ export class GameScene
                 Globals.pawns[`${pawnId}${x}`] = pawn;
                 pawn.x = (x * 50);
                 pawn.y = y*20 + 50;
+                
                 this.container.addChild(pawn);
             }
     }
@@ -296,6 +298,7 @@ export class GameScene
             
             for (let i = 1; i <= 4; i++) {
                 this.players[key].pawnsID.push(`${pawnIds[key]}${i}`);
+                
                 Globals.pawns[`${pawnIds[key]}${i}`].on("pawnSelected", (pId) => this.players[key].pawnSelected(pId), this);
             }
             this.players[key].resetPawns();
@@ -312,6 +315,9 @@ export class GameScene
     {
         if(pointsArray.length == 0)
         {   
+
+            Globals.pawns[pawnId].reachedFinalPosition();
+
             if(Globals.gameData.isCut)
             {
                 const pawnId = Globals.gameData.cutPawn.tokenId;
@@ -339,6 +345,7 @@ export class GameScene
         
         if(Globals.pawns[pawnId].currentPointIndex == pointToCompare)
         {
+                Globals.pawns[pawnId].reachedFinalPosition();
                 console.log("Turn Changed : " + Globals.gameData.currentTurn);
                 this.turnChanged(Globals.gameData.currentTurn);
                 return;

@@ -112,6 +112,7 @@ export class Player
         
         this.pawnsID.forEach(element => {
             Globals.pawns[element].setPointIndex(this.startIndex);
+            Globals.pawns[element].reachedFinalPosition();
            // Globals.pawns[element].setSqueezeAnchor(this.squeezeAnchor);
         });
     }
