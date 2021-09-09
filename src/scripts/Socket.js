@@ -4,12 +4,16 @@ export class Socket
 {
     constructor(uuid, name)
     {
+       
+
+        
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
         this.socket = new WebSocket("ws://5f37-2405-201-5006-10c7-28af-c138-cc6-bece.ngrok.io");
-        console.log("Socket Created");
+        
+        
         this.socket.onopen = e => {
             console.log("Connection with socket made");
 
@@ -98,10 +102,10 @@ export class Socket
 
             } else if (msg.t == "turnSkipped")
             {
-
+                Globals.emitter.emit("turnChanged", msg.nextRoll);
             } else if (msg.t == "turnTimer")
             {
-                Globals.emitter.emit("turnTimer", msg.data);
+                Globals.emitter.emit("turnTimer", {time : msg.data, id : msg.currPlTurn});
             } else if (msg.t = "timer")
             {
                 Globals.emitter.emit("timer", msg.data);

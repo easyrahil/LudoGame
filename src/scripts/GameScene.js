@@ -23,11 +23,12 @@ export class GameScene
         this.createBackground();
         this.createTimer();
         this.createBoard();
-        this.createPlayers(Globals.gameData.plId);
+       this.createPlayers(Globals.gameData.plId);
         this.createInteractiveDice();
         this.assignPawns();
         
-
+        
+        
 
 
         this.turnChanged(Globals.gameData.currentTurn);
@@ -41,13 +42,12 @@ export class GameScene
             this.updateTimer(time);
         }, this);
 
-        Globals.emitter.on("turnTimer", (time) => 
+        Globals.emitter.on("turnTimer", (data) => 
         {
             // console.log("Timer");
-              if(this.players[Globals.gameData.plId].hasTurn)
+              if(Globals.gameData.plId == data.id)
               {
-                
-                  this.updateProgress((1000 - time) / 1000);
+                  this.updateProgress(1 - (data.time / 15));
               }
         });
 
@@ -71,6 +71,8 @@ export class GameScene
         Globals.emitter.on("turnChanged", (data) => {
             this.turnChanged(data);
         });
+
+        //this.updateProgress(1 - (7 / 15));
     }
 
     createBackground()
@@ -160,7 +162,7 @@ export class GameScene
         this.radialGraphic = new PIXI.Graphics();
         this.radialGraphic.lineStyle(100, 0x00FF00, 1);
         this.radialGraphic.angle = -90;
-        this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2), true);
+        this.radialGraphic.arc(0, 0, 160, 0, (Math.PI * 2), true);
 
 
         this.circleGraphic.mask = this.radialGraphic;
@@ -224,9 +226,10 @@ export class GameScene
 
     updateProgress(value)
     {
-        console.log("Timer Update : " + value);
+        //console.log("Timer Update : " + value);
         //this.interactiveDiceContainer.renderable = true;
-        this.radialGraphic.arc(0, 0, 140, 0, (Math.PI * 2) * (value), true);
+        console.log(value);
+        this.radialGraphic.arc(0, 0, 160, 0, (Math.PI * 2) * (value), true);
     }
 
     
@@ -392,7 +395,7 @@ export class GameScene
     {
         this.setDiceInteractive(true);
 
-        this.updateProgress(0.01);
+        
 
         
     }
@@ -401,7 +404,7 @@ export class GameScene
     {
         this.setDiceInteractive(false);
     
-        this.updateProgress(1);
+       
     }
 
 }
