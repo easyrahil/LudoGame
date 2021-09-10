@@ -16,6 +16,14 @@ export class DebugText extends PIXI.Text {
         this.text = text;
     }
 
+    get textBound()
+    {
+        const bounds = new PIXI.Rectangle();
+
+        this.getBounds(false, bounds);
+
+        return bounds;
+    }
 
 
 }

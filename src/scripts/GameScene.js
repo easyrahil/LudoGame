@@ -22,12 +22,12 @@ export class GameScene {
 		this.createBackground();
 		this.createTimer();
 		this.createBoard();
+		
 		this.createPlayers(Globals.gameData.plId);
 		this.createInteractiveDice();
 		this.assignPawns();
 
-
-
+		
 
 
 		this.turnChanged(Globals.gameData.currentTurn);
@@ -70,8 +70,17 @@ export class GameScene {
 
         Globals.emitter.on("threeSix", (data) => {
             
-            const prompt = new Prompt("Skippd", {x : appConfig.width, y : appConfig.height}, "23", "#fff");
+            const prompt = new Prompt("Three Six", {x : appConfig.leftX,
+                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+                30,
+                "#fff");
+
+            setTimeout(() => {
+                prompt.container.destroy();
+            }, 2000);
+                
             this.container.addChild(prompt.container);
+            
             console.log("Inside Three Six");
             this.players[data.id].setDice(6);
             
@@ -88,6 +97,8 @@ export class GameScene {
     {
 
     }
+
+    
 
 	createBackground() {
 		this.bg = new Background(Globals.resources.background.texture, Globals.resources.bgFx1.texture);

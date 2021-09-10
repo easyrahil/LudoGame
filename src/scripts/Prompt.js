@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 import TWEEN from "@tweenjs/tween.js";
+import { DebugText } from "./DebugText";
 
 export class Prompt
 {
@@ -14,8 +15,11 @@ export class Prompt
         this.createForegroundText(text, size, color);
 
         this.container.scale.set(gameConfig.widthRatio);
-        this.finalPosition = new PIXI.Point(position);
-        this.container.position = new PIXI.Point(this.finalPosition.x - this.container.width, this.finalPosition.y);
+        console.log(position);
+        this.finalPosition = new PIXI.Point(position.x, position.y);
+        this.container.position = this.finalPosition // new PIXI.Point(this.finalPosition.x - this.container.width, this.finalPosition.y);
+
+        console.log(this.container);
 
         // const fallBackTween = new TWEEN.Tween(this.container)
         //                     .to({x : this.finalPosition.x - this.container.width}, 100)
@@ -23,10 +27,10 @@ export class Prompt
         //                     .start();
             
 
-        const tween = new TWEEN.Tween(this.container)
-                    .to({x : this.finalPosition.x}, 100)
-                    .onComplete()
-                    .start();
+        // const tween = new TWEEN.Tween(this.container)
+        //             .to({x : this.finalPosition.x}, 300)
+        //             .onComplete()
+        //             .start();
     }
 
 
@@ -34,21 +38,14 @@ export class Prompt
     {
         this.background = new PIXI.Sprite(Globals.resources.promptBG.texture);
         this.background.anchor.set(0, 0.5);
+
+        this.container.addChild(this.background);
     }
 
     createForegroundText(text, size, color)
     {
-        this.text = new PIXI.Text(text,{
-
-        });
-        
-        this.text.style = {
-            fontFamily: "Verdana",
-            fontWeight: "bold",
-            fontSize: size,
-            fill: [color]
-        };
-        this.text.text = text;
-        this.text.anchor.set(0.5);
+        this.debugText  = new DebugText(text, 45, 0, color, size);
+        this.debugText.anchor.set(0, 0.5);
+        this.container.addChild(this.debugText);
     }
 }

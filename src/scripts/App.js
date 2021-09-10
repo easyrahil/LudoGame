@@ -34,11 +34,13 @@ export class App {
         this.app.stage.addChild(loaderContainer);
         this.loader = new Loader(this.app.loader, loaderContainer);
         
+        this.pushSampleData();
+
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-                Globals.scene.start(new MainScene());
-                //Globals.scene.start(new GameScene());
+                //Globals.scene.start(new MainScene());
+                Globals.scene.start(new GameScene());
             }, 1000);
             
             
@@ -46,6 +48,23 @@ export class App {
 
         
         
+    }
+
+    pushSampleData()
+    {
+        Globals.gameData.plId = 0;
+        for (let i = 0; i < 4; i++) {
+            
+            Globals.gameData.players[i] = {
+                balance : "12",
+                plId : i,
+                pName : "Player " + i,
+                pImage : "../src/sprites/68.png"
+            };
+        }
+
+        
+
     }
 
     addOrientationCheck()

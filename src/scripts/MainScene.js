@@ -7,6 +7,7 @@ import TWEEN from "@tweenjs/tween.js";
 import { MatchmakingScene } from "./MatchmakingScene";
 import { DebugText } from "./DebugText";
 import { Socket } from "./Socket";
+import { Prompt } from "./Prompt";
 
 export class MainScene {
     constructor() {
@@ -30,8 +31,10 @@ export class MainScene {
         }, this);
 
 
+       
+
         this.createButton();
-        
+
     }
 
     createButton()

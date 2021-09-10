@@ -27,6 +27,9 @@ export class Player
 
         this.createAvatar();
         this.createDice();
+        this.createScore();
+        
+        
         //this.setDice(5);
         //this.playDiceAnimation();
     }
@@ -100,10 +103,27 @@ export class Player
 
         this.container.addChild(this.playerName);
 
-
+        
         
 
         
+    }
+
+    createScore()
+    {
+        this.scoreText = new PIXI.Container();
+        this.scoreText.textElement = new DebugText("0", 0, 0, "#000", 100);
+        
+
+        const score = new DebugText("SCORE", 0, this.scoreText.textElement.textBound.height/2, "#000", 40);
+        this.scoreText.addChild(score);
+        this.scoreText.addChild(this.scoreText.textElement);
+        this.container.addChild(this.scoreText);
+    }
+
+    updateScore(score)
+    {
+        this.scoreText.textElement.text = score;
     }
 
     resetPawns()
