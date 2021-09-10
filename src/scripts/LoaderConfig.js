@@ -23,6 +23,7 @@ export const LoaderConfig = {
     diceEdge6 : require("../sprites/diceEdge6.png"),
     logo : require("../sprites/Logo.png"),
     playBtn : require("../sprites/PlayBtn.png"),
+    promptBG : require("../sprites/promptBG.png"),
 
 
     click : require("../sounds/click.mp3"),

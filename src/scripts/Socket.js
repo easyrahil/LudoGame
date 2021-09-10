@@ -5,13 +5,13 @@ export class Socket
     constructor(uuid, name)
     {
        
-
+        console.log("Socket Created");
         
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://5f37-2405-201-5006-10c7-28af-c138-cc6-bece.ngrok.io");
+        this.socket = new WebSocket("ws://aded-2405-201-5006-10c7-b556-fe05-835-e120.ngrok.io");
         
         
         this.socket.onopen = e => {

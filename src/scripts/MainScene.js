@@ -44,6 +44,7 @@ export class MainScene {
 
         button1.interactive = true;
         button1.on("pointerdown", () => {
+            console.log("Clicked 1");
             Globals.socket = new Socket("230869", "Player1");
         }, this);
 
@@ -55,6 +56,7 @@ export class MainScene {
 
         button2.interactive = true;
         button2.on("pointerdown", () => {
+            console.log("Clicked 2");
             Globals.socket = new Socket("230870", "Player2");
         }, this);
 

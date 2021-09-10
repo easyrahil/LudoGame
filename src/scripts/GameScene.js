@@ -152,20 +152,20 @@ export class GameScene
         background.drawCircle(0, 0, 120);
         background.endFill();
 
-        this.circleGraphic = new PIXI.Graphics();
-        this.circleGraphic.lineStyle(10, 0x00FF00, 1);
-        this.circleGraphic.beginFill(0x650a5a, 0);
-        this.circleGraphic.drawCircle(0, 0, 120);
-        this.circleGraphic.endFill();
+        // this.circleGraphic = new PIXI.Graphics();
+        // this.circleGraphic.lineStyle(10, 0x00FF00, 1);
+        // this.circleGraphic.beginFill(0x650a5a, 0);
+        // this.circleGraphic.drawCircle(0, 0, 120);
+        // this.circleGraphic.endFill();
 
 
         this.radialGraphic = new PIXI.Graphics();
         this.radialGraphic.lineStyle(100, 0x00FF00, 1);
         this.radialGraphic.angle = -90;
-        this.radialGraphic.arc(0, 0, 160, 0, (Math.PI * 2), true);
+        this.radialGraphic.arc(0, 0, 10, 0, (Math.PI * 2), true);
 
 
-        this.circleGraphic.mask = this.radialGraphic;
+        //this.circleGraphic.mask = this.radialGraphic;
         
 
         this.interactiveDiceContainer.on("pointerdown", () => {
@@ -185,8 +185,8 @@ export class GameScene
             const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
              
             dice.anchor.set(0.5, 0.5);
-            dice.width = this.circleGraphic.width * 0.6;
-            dice.height = this.circleGraphic.height * 0.6;
+            dice.width = background.width * 0.6;
+            dice.height = background.height * 0.6;
             dice.renderable = false;
             this.dices.push(dice);
             this.interactiveDiceContainer.addChild(dice);
@@ -202,8 +202,8 @@ export class GameScene
         this.animatedDice = new PIXI.AnimatedSprite(textureArrayOfAnimation);
         
         this.animatedDice.anchor.set(0.5, 0.5);
-        this.animatedDice.width = this.circleGraphic.width * 0.7;
-        this.animatedDice.height = this.circleGraphic.height * 0.7;
+        this.animatedDice.width = background.width * 0.7;
+        this.animatedDice.height = background.height * 0.7;
         this.animatedDice.loop = true;
         this.animatedDice.animationSpeed = 0.2;
 
@@ -215,7 +215,7 @@ export class GameScene
 
         this.interactiveDiceContainer.addChild(this.animatedDice);
         this.interactiveDiceContainer.addChild(background);
-        this.interactiveDiceContainer.addChild(this.circleGraphic);
+        //this.interactiveDiceContainer.addChild(this.circleGraphic);
         this.interactiveDiceContainer.addChild(this.radialGraphic);
 
         this.interactiveDiceContainer.x = appConfig.width /2;
