@@ -8,6 +8,7 @@ import { Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
 import { Pawn } from "./Pawn";
 import { Player } from "./Player";
+import { Prompt } from "./Prompt";
 
 
 export class GameScene {
@@ -67,8 +68,26 @@ export class GameScene {
 			this.turnChanged(data);
 		});
 
+        Globals.emitter.on("threeSix", (data) => {
+            
+            const prompt = new Prompt("Skippd", {x : appConfig.width, y : appConfig.height}, "23", "#fff");
+            this.container.addChild(prompt.container);
+            console.log("Inside Three Six");
+            this.players[data.id].setDice(6);
+            
+            if(data.id == Globals.gameData.plId)
+                this.stopDiceAnimation(6);
+            //this.players[data.id].ActivatePointerChoose();
+            this.turnChanged(data.nextRoll);
+        });
+
 		//this.updateProgress(1 - (7 / 15));
 	}
+
+    RecievedMessage()
+    {
+
+    }
 
 	createBackground() {
 		this.bg = new Background(Globals.resources.background.texture, Globals.resources.bgFx1.texture);

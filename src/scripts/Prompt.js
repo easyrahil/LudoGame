@@ -17,10 +17,10 @@ export class Prompt
         this.finalPosition = new PIXI.Point(position);
         this.container.position = new PIXI.Point(this.finalPosition.x - this.container.width, this.finalPosition.y);
 
-        const fallBackTween = new TWEEN.Tween(this.container)
-                            .to({x : this.finalPosition.x - this.container.width}, 100)
-                            .onComplete()
-                            .start();
+        // const fallBackTween = new TWEEN.Tween(this.container)
+        //                     .to({x : this.finalPosition.x - this.container.width}, 100)
+        //                     .onComplete()
+        //                     .start();
             
 
         const tween = new TWEEN.Tween(this.container)
@@ -48,7 +48,7 @@ export class Prompt
             fontSize: size,
             fill: [color]
         };
-        this.text = text;
+        this.text.text = text;
         this.text.anchor.set(0.5);
     }
 }

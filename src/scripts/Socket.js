@@ -106,12 +106,13 @@ export class Socket
             } else if (msg.t == "turnTimer")
             {
                 Globals.emitter.emit("turnTimer", {time : msg.data, id : msg.currPlTurn});
-            } else if (msg.t = "timer")
+            } else if (msg.t == "timer")
             {
                 Globals.emitter.emit("timer", msg.data);
             } else if (msg.t == "threeSix")
-            {
-                Globals.emitter.emit("turnChanged", msg.nextRoll);
+            {   
+                    console.log("EMIT THREE SIX");
+                    Globals.emitter.emit("threeSix",{id : msg.plId, nextRoll :  msg.nextRoll});
             }
         };
 

@@ -202,6 +202,13 @@ export class Player
 
         
     }
+
+    DeactivatePointerChoose()
+    {
+        this.pawnsID.forEach((id) => {
+            Globals.pawns[id].removeInteractive();
+        });
+    }
     
     pawnSelected(id)
     {
