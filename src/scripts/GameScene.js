@@ -23,11 +23,9 @@ export class GameScene {
 		this.createTimer();
 		this.createBoard();
 		
-		this.createPlayers(Globals.gameData.plId);
+		this.createPlayers(Globals.gameData.plId, true);
 		this.createInteractiveDice();
 		this.assignPawns();
-
-		
 
 
 		this.turnChanged(Globals.gameData.currentTurn);
@@ -37,40 +35,44 @@ export class GameScene {
 		//  this.setPawnPointIndex("B3", 45);
 		//  this.moveBackPawnTo("B3", 14);
 
-		Globals.emitter.on("timer", (time) => {
-			this.updateTimer(time);
-		}, this);
+		//this.updateProgress(1 - (7 / 15));
+	}
 
-		Globals.emitter.on("turnTimer", (data) => {
-			// console.log("Timer");
-			if (Globals.gameData.plId == data.id) {
-				this.updateProgress(data.time / 15);
+    recievedMessage(msgType, msgParams)
+    {
+		
+
+		if(msgType == "timer")
+		{
+			this.updateTimer(msgParams.time);	
+		} else if (msgType == "turnTimer")
+		{
+			if(Globals.gameData.plId == msgParams.id)
+			{
+				this.updateProgress(msgParams.time / 15);
 			}
-		});
+		} else if (msgType == "rollDiceResult")
+		{
+			
+			this.players[msgParams.id].setDice(msgParams.value);
 
-		Globals.emitter.on("rollDiceResult", (data) => {
-
-			this.players[data.id].setDice(data.value);
-
-			if (this.players[Globals.gameData.plId].hasTurn) {
-				this.stopDiceAnimation(data.value);
-
+			if(this.players[msgParams.id].hasTurn)
+			{
+				this.stopDiceAnimation(msgParams.value);
 
 				this.players[Globals.gameData.plId].ActivatePointerChoose();
 			}
-		}, this);
+		} else if (msgType == "movePawn")
+		{
+			this.movePawnTo(msgParams.id, msgParams.moveArr);
 
-		Globals.emitter.on("movePawn", (data) => {
-			this.movePawnTo(data.id, data.moveArr);
-		}, this);
-
-		Globals.emitter.on("turnChanged", (data) => {
-			this.turnChanged(data);
-		});
-
-        Globals.emitter.on("threeSix", (data) => {
-            
-            const prompt = new Prompt("Three Six", {x : appConfig.leftX,
+			this.updateScore(msgParams.scoreObj);
+		} else if (msgType == "turnChanged")
+		{
+			this.turnChanged(msgParams.nextRoll);
+		} else if (msgType == "threeSix")
+		{
+			const prompt = new Prompt("Three Six", {x : appConfig.leftX,
                 y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
                 30,
                 "#fff");
@@ -82,20 +84,16 @@ export class GameScene {
             this.container.addChild(prompt.container);
             
             console.log("Inside Three Six");
-            this.players[data.id].setDice(6);
+            this.players[msgParams.id].setDice(6);
             
-            if(data.id == Globals.gameData.plId)
+            if(msgParams.id == Globals.gameData.plId)
                 this.stopDiceAnimation(6);
             //this.players[data.id].ActivatePointerChoose();
-            this.turnChanged(data.nextRoll);
-        });
-
-		//this.updateProgress(1 - (7 / 15));
-	}
-
-    RecievedMessage()
-    {
-
+            this.turnChanged(msgParams.nextRoll);
+		} else if (msgType == "choosePawnAgain")
+		{
+			this.players[Globals.gameData.plId].ActivatePointerChoose();
+		}
     }
 
     
@@ -136,7 +134,7 @@ export class GameScene {
 		}
 	}
 
-	createPlayers(playerId) {
+	createPlayers(playerId, hasAutomation) {
 		console.log("Player ID :" + playerId);
 		this.ludoBoard.container.angle = boardData[playerId].angle;
 
@@ -147,8 +145,16 @@ export class GameScene {
 			this.createPawns(key);
 
 			const data = playerData[this.ludoBoard.container.angle][key];
-
-			const player1 = new Player(key, data.h, data.v, this.ludoBoard);
+			let player1;
+			if (Globals.gameData.plId == key && hasAutomation)
+			{
+				player1 = new Player(key, data.h, data.v, this.ludoBoard, hasAutomation);
+			} 	
+			else
+			{
+				player1 = new Player(key, data.h, data.v, this.ludoBoard);
+			}
+				
 			player1.setStartIndex(boardData[key].startIndex);
 			player1.squeezeAnchor = data.anchor;
 			this.players[key] = player1;
@@ -252,6 +258,14 @@ export class GameScene {
 
 	}
 
+	updateScore(scoreObj)
+	{
+		Object.keys(scoreObj).forEach(key => {
+			if(key in this.players)
+				this.players[key].updateScore(scoreObj[key]);
+		});
+	}
+
 
 	setDiceInteractive(value) {
 		console.log("Dice Interactive : " + value);
@@ -267,6 +281,8 @@ export class GameScene {
 		this.interactiveDiceContainer.renderable = value;
 		this.interactiveDiceContainer.alpha = value ? 1 : 0.5;
 		this.interactiveDiceContainer.interactive = value;
+
+		
 
 	}
 
@@ -391,7 +407,10 @@ export class GameScene {
 	activateDiceRolling() {
 		this.setDiceInteractive(true);
 
-
+		if(this.players[Globals.gameData.plId].hasAutomation)
+		{
+			this.players[Globals.gameData.plId].automation.RollDice(this);
+		}
 
 
 	}

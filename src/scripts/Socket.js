@@ -11,7 +11,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://d5d0-2405-201-5006-10c7-b556-fe05-835-e120.ngrok.io");
+        this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
         this.socket.onopen = e => {
@@ -23,8 +23,8 @@ export class Socket
                 tableTypeID : "2",
                 entryFee : "6",
                 pName : name,
-                pImage : "../src/sprites/68.png"
-                //pImage : "https://sguru.org/wp-content/uploads/2017/06/steam-avatar-profile-picture-1974.jpg"
+                //pImage : "../src/sprites/68.png"
+                pImage : "https://sguru.org/wp-content/uploads/2017/06/steam-avatar-profile-picture-1974.jpg"
             }
 
             this.sendMessage(distmsg);
@@ -70,17 +70,18 @@ export class Socket
 
             } else if(msg.t == "gameStart")
             {
-                Globals.emitter.emit("gameStart", msg.turn);
+                Globals.emitter.Call("gameStart", {turn : msg.turn});
             } 
             else if (msg.t == "pLeft")
             {
                 delete Globals.gameData.players[msg.data.plId];
-
+                
                 //Update Board with Player Left if game is running
             } else if (msg.t == "RollDiceResult")
             {   
                 //stop dice rolling animation
-                Globals.emitter.emit("rollDiceResult", {id : msg.plId, value : msg.dice});
+        
+                Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice});
                 //
             } else if (msg.t == "moveToken")
             {
@@ -97,22 +98,25 @@ export class Socket
                     console.log(Globals.gameData.cutPawn);
                 }
                     
-                Globals.emitter.emit("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos});
+                Globals.emitter.Call("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos, scoreObj : msg.gState.score});
                 
 
             } else if (msg.t == "turnSkipped")
             {
-                Globals.emitter.emit("turnChanged", msg.nextRoll);
+                Globals.emitter.Call("turnChanged", {nextRoll : msg.nextRoll});
             } else if (msg.t == "turnTimer")
             {
-                Globals.emitter.emit("turnTimer", {time : msg.data, id : msg.currPlTurn});
+                Globals.emitter.Call("turnTimer", {time : msg.data, id : msg.currPlTurn});
             } else if (msg.t == "timer")
             {
-                Globals.emitter.emit("timer", msg.data);
-            } else if (msg.t == "threeSix")
+                Globals.emitter.Call("timer", {time : msg.data});
+            } else if (msg.t == "threeSix")     
             {   
-                    console.log("EMIT THREE SIX");
-                    Globals.emitter.emit("threeSix",{id : msg.plId, nextRoll :  msg.nextRoll});
+                
+                    Globals.emitter.Call("threeSix",{id : msg.plId, nextRoll :  msg.nextRoll});
+            } else if (msg.t == "invalidMove")
+            {
+                Globals.emitter.Call("choosePawnAgain", {});
             }
         };
 

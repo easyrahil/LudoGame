@@ -34,6 +34,14 @@ export class SceneManager {
         }
     }
 
+    recievedMessage(msgType, msgParams)
+    {
+		if(this.scene && this.scene.recievedMessage)
+        {
+            this.scene.recievedMessage(msgType, msgParams);
+        }
+    }
+
     drawImageAbove()
     {
         this.aboveBackground = new Background(Globals.resources.cover.texture,Globals.resources.cover.texture);

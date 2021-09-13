@@ -1,12 +1,13 @@
 
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
+import { Automation } from "./Automation";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 
 export class Player
 {
-    constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard)
+    constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard, hasAutomation)
     {
         this.playerID = id;
         this.playerDataUpdated = false;
@@ -28,6 +29,10 @@ export class Player
         this.createAvatar();
         this.createDice();
         this.createScore();
+
+        this.hasAutomation = hasAutomation;
+        if(this.hasAutomation)
+            this.createAutomation();
         
         
         //this.setDice(5);
@@ -207,6 +212,9 @@ export class Player
     
     ActivatePointerChoose()
     {
+
+        
+
         const gridPoint = Globals.pawns[this.pawnsID[0]].currentPointIndex;
         const pawnAtSamePlace = this.pawnsID.filter(id => Globals.pawns[id].currentPointIndex == gridPoint);
 
@@ -218,7 +226,14 @@ export class Player
             this.pawnsID.forEach((id) => {
                 Globals.pawns[id].setInteractive();
             });
+
+            if(this.hasAutomation)
+            {
+                this.automation.selectPawn();
+            }
         }
+
+        
 
         
     }
@@ -240,5 +255,10 @@ export class Player
             token : id
         }
         Globals.socket.sendMessage(distmsg);
+    }
+
+    createAutomation()
+    {
+        this.automation = new Automation(this);
     }
 }

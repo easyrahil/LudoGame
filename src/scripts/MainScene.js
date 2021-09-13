@@ -24,17 +24,19 @@ export class MainScene {
         //this.createLogo();
         //this.createPlayBtn();
 
-        Globals.emitter.once("gameStart", (turn) =>{
-            Globals.gameData.currentTurn = turn;
-            console.log("Turn :" + Globals.gameData.currentTurn);
-            Globals.scene.start(new GameScene());
-        }, this);
-
-
-       
-
         this.createButton();
 
+    }
+
+
+    recievedMessage(msgType, msgParams)
+    {
+        if(msgType == "gameStart")
+        {
+            Globals.gameData.currentTurn = msgParams.turn;
+            console.log("Turn :" + Globals.gameData.currentTurn);
+            Globals.scene.start(new GameScene());
+        }
     }
 
     createButton()
