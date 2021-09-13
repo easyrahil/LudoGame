@@ -93,7 +93,8 @@ export class MainScene {
 
         this.logo.interactive = true;
         this.logo.on("pointerdown", () => {
-            Globals.resources.click.sound.play();
+            Globals.soundResources.click.play();
+            
             Globals.scene.start(new MatchmakingScene());
         }, this);
 

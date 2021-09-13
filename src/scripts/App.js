@@ -46,7 +46,7 @@ export class App {
             
         });
 
-        
+        this.loader.preloadSounds();
         
     }
 

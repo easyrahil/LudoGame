@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js';
-import { LoaderConfig, preloaderConfig } from "./LoaderConfig";
+import { LoaderConfig, LoaderSoundConfig, preloaderConfig } from "./LoaderConfig";
 import { Globals } from "./Globals";
 import { appConfig, gameConfig } from './appConfig';
 import {DebugText} from './DebugText';
 import {Background} from './Background';
+import {Howl, Howler} from 'howler';
 
 export class Loader {
     constructor(loader, container) {
@@ -81,11 +82,23 @@ export class Loader {
             }
     
             this.loader.load((loader, resources) => {
-                Globals.resources = resources;
-                
-                
+                Globals.resources = resources;  
                 resolve();
             });
         });
+    }
+
+    preloadSounds()
+    {
+        for (let key in LoaderSoundConfig)
+        {
+            const sound = new Howl({
+                src : [LoaderSoundConfig[key]]
+            });
+
+            sound.on("load",() => {
+                Globals.soundResources[key] = sound;
+            }, this);
+        }
     }
 }

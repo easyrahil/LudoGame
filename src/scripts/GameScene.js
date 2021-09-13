@@ -92,6 +92,18 @@ export class GameScene {
             this.turnChanged(msgParams.nextRoll);
 		} else if (msgType == "choosePawnAgain")
 		{
+			
+			const prompt = new Prompt("Choose Token Again", {x : appConfig.leftX,
+                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+                30,
+                "#fff");
+
+            setTimeout(() => {
+                prompt.container.destroy();
+            }, 2000);
+                
+            this.container.addChild(prompt.container);
+
 			this.players[Globals.gameData.plId].ActivatePointerChoose();
 		}
     }
@@ -199,7 +211,7 @@ export class GameScene {
 				t: "pDiceRoll"
 			}
 			Globals.socket.sendMessage(distmsg);
-			Globals.resources.click.sound.play();
+			Globals.soundResources.click.play();
 			//Send Message to server
 			this.playDiceAnimation();
 		}, this);
@@ -290,7 +302,7 @@ export class GameScene {
 
 	playDiceAnimation() {
 		this.animatedDice.renderable = true;
-		Globals.resources.dice.sound.play();
+		Globals.soundResources.dice.play();
 		this.interactiveDiceContainer.interactive = false;
 
 		this.dices.forEach(dice => {

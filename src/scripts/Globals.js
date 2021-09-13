@@ -1,5 +1,6 @@
 export const Globals = {
     resources: {},
+    soundResources : {},
     gridPoints : {},
     pawns : {},
     gameData : {

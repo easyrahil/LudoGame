@@ -112,7 +112,7 @@ export class Pawn extends PIXI.Sprite
                 .yoyo(true)
                 .easing(TWEEN.Easing.Back.In)
                 .onComplete(() => {
-                    Globals.resources.click.sound.play();
+                    Globals.soundResources.click.play();
                 })
                 .repeat(1)
                 .start();

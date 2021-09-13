@@ -1,4 +1,4 @@
-import "pixi-sound";
+
 
 import { App } from "./App";
 import { Globals } from "./Globals";
