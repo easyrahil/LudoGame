@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import TWEEN from "@tweenjs/tween.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
-import { boardData, playerData } from "./boardConfig";
+import { boardData, playerData, starsPosition } from "./boardConfig";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
@@ -22,6 +22,7 @@ export class GameScene {
 		this.createBackground();
 		this.createTimer();
 		this.createBoard();
+		this.addBoardOverlays();
 		
 		this.createPlayers(Globals.gameData.plId, true);
 		this.createInteractiveDice();
@@ -59,8 +60,8 @@ export class GameScene {
 			if(this.players[msgParams.id].hasTurn)
 			{
 				this.stopDiceAnimation(msgParams.value);
-
-				this.players[Globals.gameData.plId].ActivatePointerChoose();
+				
+				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr);
 			}
 		} else if (msgType == "movePawn")
 		{
@@ -111,7 +112,12 @@ export class GameScene {
     
 
 	createBackground() {
-		this.bg = new Background(Globals.resources.background.texture, Globals.resources.bgFx1.texture);
+		const fullbg = new Background(Globals.resources.background.texture);
+
+		this.container.addChild(fullbg.container);
+
+		this.bg = new Background(Globals.resources.gameBg.texture, null, appConfig.innerWidth, appConfig.innerHeight);
+		this.bg.container.x = appConfig.leftX;
 		this.container.addChild(this.bg.container);
 	}
 
@@ -128,6 +134,18 @@ export class GameScene {
 	createBoard() {
 		this.ludoBoard = new LudoBoard(appConfig.width / 2, appConfig.height / 2);
 		this.container.addChild(this.ludoBoard.container);
+	}
+
+	addBoardOverlays()
+	{
+		const house = new PIXI.Sprite(Globals.resources.house.texture);
+		house.anchor.set(0.5);
+		house.scale.set(gameConfig.widthRatio);
+		house.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+		this.container.addChild(house);
+
+
+	
 	}
 
 	createPawns(y) {
@@ -148,7 +166,7 @@ export class GameScene {
 
 	createPlayers(playerId, hasAutomation) {
 		console.log("Player ID :" + playerId);
-		this.ludoBoard.container.angle = boardData[playerId].angle;
+		this.ludoBoard.rotateBoard(boardData[playerId].angle);
 
 
 		Object.keys(Globals.gameData.players).forEach(key => {

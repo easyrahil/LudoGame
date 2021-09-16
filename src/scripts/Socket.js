@@ -11,7 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
+        this.socket = new WebSocket("ws://d8d9-2405-201-5006-10c7-7404-11ce-7ecf-40f0.ngrok.io");
+        //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
         this.socket.onopen = e => {
@@ -81,7 +82,7 @@ export class Socket
             {   
                 //stop dice rolling animation
         
-                Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice});
+                Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice, pawnArr : msg.movable});
                 //
             } else if (msg.t == "moveToken")
             {

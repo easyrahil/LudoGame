@@ -1,7 +1,7 @@
 
 import * as PIXI from "pixi.js";
 import { gameConfig } from "./appConfig";
-import { outerPath } from "./boardConfig";
+import { outerPath, starsPosition } from "./boardConfig";
 import { Globals } from "./Globals";
 import { GridPoint } from "./GridPoint";
 
@@ -21,11 +21,23 @@ export class LudoBoard
         this.createBoardSprite();
         
         this.createGrid();
+
+        this.addStars();
         //console.log("Ratio :" + gameConfig.widthRatio);
         this.container.scale.set(gameConfig.widthRatio);
         console.log("Width Ratio : " + gameConfig.widthRatio);
         console.log("Width : " + this.container.width);
 
+        
+    }
+
+    rotateBoard(angleToRotateTo)
+    {
+        this.container.angle = angleToRotateTo;
+
+        this.stars.forEach(star => {
+            star.angle = -angleToRotateTo;
+        });
     }
 
     createBoardSprite()
@@ -54,10 +66,34 @@ export class LudoBoard
         });
     }
 
+    addStars()
+    {
+
+        this.stars = [];
+
+        starsPosition.forEach(element => {
+        const houseStar = new PIXI.Sprite(Globals.resources.houseStar.texture);
+        const laneStar = new PIXI.Sprite(Globals.resources.laneStar.texture);
+        houseStar.anchor.set(0.5);
+        laneStar.anchor.set(0.5);
+        houseStar.scale.set(0.9);
+        laneStar.scale.set(0.9);
+
+        houseStar.position = Globals.gridPoints[element.housePosition];
+        laneStar.position = Globals.gridPoints[element.lanePosition];
+
+        this.container.addChild(houseStar);
+        this.container.addChild(laneStar);
+
+        this.stars.push(houseStar);
+        this.stars.push(laneStar);
+		});
+    }
+
     createGridPoint(id, xPos, yPos)
     {
         const point = new GridPoint(id, xPos, yPos);
         this.container.addChild(point);
-       // this.container.addChild(point.debugText);
+        //this.container.addChild(point.debugText);
     }
 }

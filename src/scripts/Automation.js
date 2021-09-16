@@ -25,7 +25,10 @@ export class Automation
 
     selectPawn()
     {
-        this.player.pawnSelected(this.player.pawnsID[Math.ceil(Math.random() * this.player.pawnsID.length) - 1]);
+
+        //const selectableArr = Globals.pawns.filter(item => item.interactive == true);
+        //this.player.pawnSelected(selectableArr[Math.ceil(Math.random() * selectableArr.length) - 1]);
+        this.player.pawnSelected(this.player.activePawnsId[Math.ceil(Math.random() * this.player.activePawnsId.length) - 1]);
     }
 
 

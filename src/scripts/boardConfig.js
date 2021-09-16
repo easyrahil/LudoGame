@@ -66,4 +66,23 @@ export const playerData =
 
 }
 
+export const starsPosition = [
+	{
+		housePosition : 1,
+		lanePosition : 48
+	},
+	{
+		housePosition : 14,
+		lanePosition : 9
+	},
+	{
+		housePosition : 27,
+		lanePosition : 22
+	},
+	{
+		housePosition : 40,
+		lanePosition : 35
+	}
+];
+
 

@@ -13,6 +13,7 @@ export class Player
         this.playerDataUpdated = false;
         this.squeezeAnchor = {};
         this.pawnsID = [];
+        this.activePawnsId = [];
         this.hasTurn = false;
         this.container = new PIXI.Container();
         this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
@@ -210,22 +211,27 @@ export class Player
     }
 
     
-    ActivatePointerChoose()
+    ActivatePointerChoose(pawnsArr)
     {
-
+        this.activePawnsId = [];
         
 
         const gridPoint = Globals.pawns[this.pawnsID[0]].currentPointIndex;
         const pawnAtSamePlace = this.pawnsID.filter(id => Globals.pawns[id].currentPointIndex == gridPoint);
 
-        if(pawnAtSamePlace.length == this.pawnsID.length)
+        if(pawnAtSamePlace.length == this.pawnsID.length || pawnsArr.length == 1)
         {
-            this.pawnSelected(this.pawnsID[0]);
+            this.pawnSelected(pawnsArr[0]);
         } else
         {
-            this.pawnsID.forEach((id) => {
+            pawnsArr.forEach((id) => {
                 Globals.pawns[id].setInteractive();
+                this.activePawnsId.push(id);
             });
+
+            // this.pawnsID.forEach((id) => {
+            //     Globals.pawns[id].setInteractive();
+            // });
 
             if(this.hasAutomation)
             {
