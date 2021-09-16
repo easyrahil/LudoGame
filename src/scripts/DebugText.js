@@ -1,14 +1,14 @@
 import * as PIXI from "pixi.js";
 
 export class DebugText extends PIXI.Text {
-    constructor(text, x = 10, y = 10, color = "#000", size = 20) {
+    constructor(text, x = 10, y = 10, color = "#000", size = 20, font = "Verdana") {
         super();
         this.x = x;
         this.y = y;
         this.zIndex = 1;
         this.anchor.set(0.5);
         this.style = {
-            fontFamily: "Verdana",
+            fontFamily: font,
             fontWeight: "bold",
             fontSize: size,
             fill: [color]

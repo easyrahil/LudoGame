@@ -28,6 +28,12 @@ export const LoaderConfig = {
     house : require("../sprites/New/house.png"),
     houseStar : require("../sprites/New/houseStar.png"),
     laneStar : require("../sprites/New/laneStar.png"),
+    timerIcon : require("../sprites/New/timerIcon.png"),
+    timerBlock : require("../sprites/New/timerBlock.png"),
+
+
+    luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")
+
 };
 
 export const LoaderSoundConfig = {

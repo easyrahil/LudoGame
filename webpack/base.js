@@ -23,6 +23,17 @@ module.exports = {
       {
         test: /\.(gif|png|mp3|jpe?g|svg|xml)$/i,
         use: "file-loader"
+      },
+      {
+        test: /\.ttf$/,
+          use: [
+            {
+              loader: 'ttf-loader',
+              options: {
+                name: './font/[hash].[ext]',
+              },
+            }
+          ]
       }
     ]
   },

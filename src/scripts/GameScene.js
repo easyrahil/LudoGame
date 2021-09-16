@@ -122,13 +122,33 @@ export class GameScene {
 	}
 
 	createTimer() {
-		this.timer = new DebugText("Timer : 0", appConfig.width / 2, 0, "#fff", 30);
-		this.timer.y = this.timer.height;
+
+		const timerBlock = new PIXI.Sprite(Globals.resources.timerBlock.texture);
+		const timerIcon = new PIXI.Sprite(Globals.resources.timerIcon.texture);
+		
+		timerBlock.anchor.set(0.5, 0);
+		timerBlock.scale.set(gameConfig.widthRatio);
+		timerBlock.x = appConfig.width/2;
+		timerBlock.y = timerBlock.height;
+
+		timerIcon.anchor.set(0.5);
+		timerIcon.scale.set(gameConfig.widthRatio);
+		timerIcon.x = appConfig.width/2 - timerBlock.width/2;
+		timerIcon.y = timerBlock.y + timerBlock.height * 0.4;
+		
+
+		this.timer = new DebugText("56:23", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, Globals.resources.luckiestGuyFont.name);
+		this.timer.anchor.set(1, 0.5);
+		this.container.addChild(timerBlock);
+		this.container.addChild(timerIcon);
 		this.container.addChild(this.timer);
 	}
 
 	updateTimer(time) {
-		this.timer.text = "Timer :" + time;
+		seconds = time % 60;
+		minutes = time / 60;
+		timeString = minutes + ":" + seconds;
+		this.timer.text = timeString;
 	}
 
 	createBoard() {
@@ -311,9 +331,6 @@ export class GameScene {
 		this.interactiveDiceContainer.renderable = value;
 		this.interactiveDiceContainer.alpha = value ? 1 : 0.5;
 		this.interactiveDiceContainer.interactive = value;
-
-		
-
 	}
 
 
