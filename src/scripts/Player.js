@@ -16,17 +16,22 @@ export class Player
         this.activePawnsId = [];
         this.hasTurn = false;
         this.container = new PIXI.Container();
-        this.container.x = (horizontalIndex == 0) ? appConfig.leftX : appConfig.rightX;
+
+        let ludoBoardPos = new PIXI.Point();
+        //ludoBoard.getGlo
+
+        this.container.x = (horizontalIndex == 0) ? appConfig.leftX + appConfig.innerWidth * 0.22: appConfig.rightX - appConfig.innerWidth * 0.22;
         if(verticalIndex == 0)
-            this.container.y = (appConfig.height/2) + (ludoBoard.container.height/2 + ludoBoard.container.height * 0.065);
+            this.container.y = (appConfig.height/2) + (ludoBoard.container.height/3);
         else
-            this.container.y = (appConfig.height/2) - (ludoBoard.container.height/2 + ludoBoard.container.height * 0.06);
+            this.container.y = (appConfig.height/2) - (ludoBoard.container.height/3);
 
         this.container.scale.set(gameConfig.widthRatio);
         
         this.playerSide = horizontalIndex;
         this.playerVerticalSide = verticalIndex;
 
+        this.createHeartBlock();
         this.createAvatar();
         this.createDice();
         this.createScore();
@@ -45,18 +50,19 @@ export class Player
         this.startIndex = index;
     }
 
+    createHeartBlock()
+    {
+        const heartBlock = new PIXI.Sprite(Globals.resources.heartBlock.texture);
+
+       // this.container.addChild(heartBlock);
+    }
+
     createAvatar()
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-        console.log("Texture url : " + Globals.gameData.players[this.playerID].pImage);
-        
         
         this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].pImage);
        //this.avatarImage.renderable = false;
-
-        
-
-        
 
         this.playerName = new PIXI.Text(Globals.gameData.players[this.playerID].pName);
         this.playerName.zIndex = 1;
@@ -74,14 +80,14 @@ export class Player
             this.avatarImage.anchor.set(1, 0.5);
             this.playerName.anchor.set(1, 0.5);
             this.avatarImage.x -= 40;
-            this.avatar.x -= 40;
+            this.avatar.x -= 80;
             this.playerName.x -= 60;
         } else
         {
             this.avatar.anchor.set(0, 0.5);
             this.avatarImage.anchor.set(0, 0.5);
             this.playerName.anchor.set(0, 0.5);
-            this.avatar.x += 40;
+            this.avatar.x += 80;
             this.avatarImage.x += 40;
             this.playerName.x += 60;
         }
@@ -96,18 +102,23 @@ export class Player
             this.playerName.y -= 120;
         }
 
-        const graphics = new PIXI.Graphics();
-        graphics.beginFill(0xFF3300);
-        graphics.drawRect(this.avatar.x + (this.avatar.width * 0.1), this.avatar.y - (this.avatar.height*0.9)/2, this.avatar.width*0.8, this.avatar.height*0.8);
-        graphics.endFill();
-        
-        this.avatarImage.mask = graphics;
-        this.container.addChild(this.avatar);
-        this.container.addChild(this.avatarImage);
-        console.log(this.avatarImage);
-        this.container.addChild(graphics);
+        this.avatar.anchor.set(0.5);
+        this.avatar.x = 0;
+        this.avatar.y = 0;
 
-        this.container.addChild(this.playerName);
+        // const graphics = new PIXI.Graphics();
+        // graphics.beginFill(0xFF3300);
+        // graphics.drawRect(this.avatar.x + (this.avatar.width * 0.1), this.avatar.y - (this.avatar.height*0.9)/2, this.avatar.width*0.8, this.avatar.height*0.8);
+        // graphics.endFill();
+        
+        //this.avatarImage.mask = graphics;
+        
+        this.container.addChild(this.avatar);
+        //this.container.addChild(this.avatarImage);
+        
+        //this.container.addChild(graphics);
+
+        //this.container.addChild(this.playerName);
 
         
         
@@ -124,7 +135,7 @@ export class Player
         const score = new DebugText("SCORE", 0, this.scoreText.textElement.textBound.height/2, "#000", 40);
         this.scoreText.addChild(score);
         this.scoreText.addChild(this.scoreText.textElement);
-        this.container.addChild(this.scoreText);
+        //this.container.addChild(this.scoreText);
     }
 
     updateScore(score)
@@ -173,12 +184,10 @@ export class Player
                 dice.renderable = false;
             this.dices.push(dice);
             this.diceContainer.addChild(dice);
-
-        
         }
 
-        this.container.addChild(this.diceBG);
-        this.container.addChild(this.diceContainer);
+        //this.container.addChild(this.diceBG);
+        //this.container.addChild(this.diceContainer);
     }
 
     setDice(index)

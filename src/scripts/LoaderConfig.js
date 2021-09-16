@@ -8,8 +8,8 @@ export const LoaderConfig = {
     pawn2 : require("../sprites/pawnBlue.png"),
     pawn3 : require("../sprites/pawnRed.png"),
     pawn4 : require("../sprites/pawnGreen.png"),
-    diceBG : require("../sprites/diceBG.png"),
-    avatar : require("../sprites/Avatar.png"),
+    diceBG : require("../sprites/New/diceSlot.png"),
+    avatar : require("../sprites/New/avatarSlot.png"),
     dice1 : require("../sprites/dice1.png"),
     dice2 : require("../sprites/dice2.png"),
     dice3 : require("../sprites/dice3.png"),
@@ -30,7 +30,14 @@ export const LoaderConfig = {
     laneStar : require("../sprites/New/laneStar.png"),
     timerIcon : require("../sprites/New/timerIcon.png"),
     timerBlock : require("../sprites/New/timerBlock.png"),
-
+    heartBlock : require("../sprites/New/healthBlock.png"),
+    heartFilled : require("../sprites/New/heartFilled.png"),
+    heartUnfilled : require("../sprites/New/heartUnfilled.png"),
+    info0: require("../sprites/New/info0.png"),
+    info1: require("../sprites/New/info1.png"),
+    info2: require("../sprites/New/info2.png"),
+    info3: require("../sprites/New/info3.png"),
+    scoreText : require("../sprites/New/score.png"),
 
     luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")
 

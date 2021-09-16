@@ -9,6 +9,7 @@ import { LudoBoard } from "./LudoBoard";
 import { Pawn } from "./Pawn";
 import { Player } from "./Player";
 import { Prompt } from "./Prompt";
+import { DebugCircle } from "./DebugCircle";
 
 
 export class GameScene {
@@ -208,7 +209,12 @@ export class GameScene {
 			player1.setStartIndex(boardData[key].startIndex);
 			player1.squeezeAnchor = data.anchor;
 			this.players[key] = player1;
+
+			//Debug Pivot
+			const debugPoint = new DebugCircle(player1.container.x, player1.container.y);
+
 			this.container.addChild(player1.container);
+			this.container.addChild(debugPoint);
 			// playerId++;
 			// if(playerId > 3)
 			//     playerId = 0;
