@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 
 export class DebugCircle extends PIXI.Graphics
 {
-    constructor(x, y, radius = 5)
+    constructor(x, y, radius = 5, container = null)
     {
         super();
 
@@ -11,5 +11,8 @@ export class DebugCircle extends PIXI.Graphics
         this.beginFill(0xDE3249, 1);
         this.drawCircle(x, y, radius);
         this.endFill();
+
+        if(container)
+            container.addChild(this);
     }
 }

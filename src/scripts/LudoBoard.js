@@ -38,13 +38,16 @@ export class LudoBoard
         this.stars.forEach(star => {
             star.angle = -angleToRotateTo;
         });
+
     }
 
-    createBoardSprite()
+    createBoardSprite(angleToRotateTo)
     {
         const boardSprite = new PIXI.Sprite(Globals.resources.board1.texture);
         boardSprite.anchor.set(0.5);
         
+        
+
         this.container.addChild(boardSprite);
     }
 

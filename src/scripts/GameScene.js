@@ -146,9 +146,9 @@ export class GameScene {
 	}
 
 	updateTimer(time) {
-		seconds = time % 60;
-		minutes = time / 60;
-		timeString = minutes + ":" + seconds;
+		const seconds = Math.floor(time % 60);
+		const minutes = Math.floor(time / 60);
+		const timeString = minutes + ":" + seconds;
 		this.timer.text = timeString;
 	}
 

@@ -38,6 +38,11 @@ export const LoaderConfig = {
     info2: require("../sprites/New/info2.png"),
     info3: require("../sprites/New/info3.png"),
     scoreText : require("../sprites/New/score.png"),
+    border0 : require("../sprites/New/border0.png"),
+    border1 : require("../sprites/New/border1.png"),
+    border2 : require("../sprites/New/border2.png"),
+    border3 : require("../sprites/New/border3.png"),
+
 
     luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")
 

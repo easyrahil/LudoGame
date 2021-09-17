@@ -2,6 +2,7 @@
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Automation } from "./Automation";
+import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 
@@ -20,11 +21,11 @@ export class Player
         let ludoBoardPos = new PIXI.Point();
         //ludoBoard.getGlo
 
-        this.container.x = (horizontalIndex == 0) ? appConfig.leftX + appConfig.innerWidth * 0.22: appConfig.rightX - appConfig.innerWidth * 0.22;
+        this.container.x = (horizontalIndex == 0) ? appConfig.leftX: appConfig.width/2 + ludoBoard.container.width * 0.07;
         if(verticalIndex == 0)
-            this.container.y = (appConfig.height/2) + (ludoBoard.container.height/3);
+            this.container.y = (appConfig.height/2) + (ludoBoard.container.height * 0.347);
         else
-            this.container.y = (appConfig.height/2) - (ludoBoard.container.height/3);
+            this.container.y = (appConfig.height/2) - (ludoBoard.container.height * 0.248);
 
         this.container.scale.set(gameConfig.widthRatio);
         
@@ -35,11 +36,13 @@ export class Player
         this.createAvatar();
         this.createDice();
         this.createScore();
+        
 
         this.hasAutomation = hasAutomation;
         if(this.hasAutomation)
             this.createAutomation();
         
+        this.updateHearts(2);
         
         //this.setDice(5);
         //this.playDiceAnimation();
@@ -53,8 +56,53 @@ export class Player
     createHeartBlock()
     {
         const heartBlock = new PIXI.Sprite(Globals.resources.heartBlock.texture);
+            
+        //heartBlock.anchor.set(0, 0);
+        heartBlock.x += 180;
+        heartBlock.y -= 20;
 
-       // this.container.addChild(heartBlock);
+        this.heartList = new PIXI.Container();
+        this.heartList.filledHeart = [];
+        this.heartList.unfilledHeart = [];
+
+        for (let i = -1; i <= 1; i++) {
+            const heartFilled = new PIXI.Sprite(Globals.resources.heartFilled.texture);
+            heartFilled.anchor.set(0.5);
+            heartFilled.x = i * (heartFilled.width + heartFilled.width * 0.1) + heartFilled.width * 0.2;
+
+            const heartUnfilled = new PIXI.Sprite(Globals.resources.heartUnfilled.texture);
+            heartUnfilled.anchor.set(0.5);
+            heartUnfilled.x = i * (heartUnfilled.width + heartUnfilled.width * 0.1) + heartUnfilled.width * 0.2;
+
+            this.heartList.filledHeart.push(heartFilled);
+            this.heartList.unfilledHeart.push(heartUnfilled);
+            
+            this.heartList.addChild(heartUnfilled);
+            this.heartList.addChild(heartFilled);
+            
+        }
+
+        
+        this.heartList.x = heartBlock.x + heartBlock.width/2 ;
+        this.heartList.y = heartBlock.y + heartBlock.height/2;
+        this.container.addChild(heartBlock);
+        this.container.addChild(this.heartList);
+    }
+
+    updateHearts(noOfHearts)
+    {
+        if(noOfHearts == 3)
+        {
+            this.heartList.filledHeart.forEach(heart => {
+                heart.renderable = true;
+            });
+        } else
+        {
+            for (let i = 3; i >= noOfHearts; i--) {
+           
+                //this.heartList.filledHeart[i]
+            }
+        }
     }
 
     createAvatar()
@@ -64,46 +112,44 @@ export class Player
         this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].pImage);
        //this.avatarImage.renderable = false;
 
+        this.playerBlock = new PIXI.Sprite(Globals.resources["border"+this.playerID].texture);
+        this.playerBlock.scale.set(0.98);
+        
+        this.playerBlock.y +=  80;
+
         this.playerName = new PIXI.Text(Globals.gameData.players[this.playerID].pName);
         this.playerName.zIndex = 1;
         this.playerName.anchor.set(0.5);
         this.playerName.style = {
-            fontFamily: "Verdana",
+            fontFamily: Globals.resources.luckiestGuyFont.name,
             fontWeight: "bold",
-            fontSize: 44,
-            fill: ["#000"]
+            stroke : "black",
+            strokeThickness : 4,
+            fontSize: 38,
+            fill: ["#fff"]
         };
 
+        this.avatar.anchor.set(0, 0.5);
+        this.avatarImage.anchor.set(0, 0.5);
+        
+        this.avatar.x += 60;
+        this.avatarImage.x += 40;
+        this.playerName.y = this.playerBlock.y + this.playerBlock.height/2;
+        this.playerName.x += 220;
         if(this.playerSide == 1)
         {
-            this.avatar.anchor.set(1, 0.5);
-            this.avatarImage.anchor.set(1, 0.5);
-            this.playerName.anchor.set(1, 0.5);
-            this.avatarImage.x -= 40;
-            this.avatar.x -= 80;
-            this.playerName.x -= 60;
+            this.playerBlock.x += 40;
+            //this.playerName.anchor.y = 0;
+            //this.playerName.y += 115;
         } else
         {
-            this.avatar.anchor.set(0, 0.5);
-            this.avatarImage.anchor.set(0, 0.5);
-            this.playerName.anchor.set(0, 0.5);
-            this.avatar.x += 80;
-            this.avatarImage.x += 40;
-            this.playerName.x += 60;
+            this.playerBlock.x += 43;
+            //this.playerName.anchor.y = 1;
+            //this.playerName.y -= 120;
         }
 
-        if(this.playerVerticalSide == 1)
-        {
-            this.playerName.anchor.y = 0;
-            this.playerName.y += 115;
-        } else
-        {
-            this.playerName.anchor.y = 1;
-            this.playerName.y -= 120;
-        }
-
-        this.avatar.anchor.set(0.5);
-        this.avatar.x = 0;
+        //this.avatar.anchor.set(0.5);
+        //this.avatar.x = 0;
         this.avatar.y = 0;
 
         // const graphics = new PIXI.Graphics();
@@ -114,11 +160,12 @@ export class Player
         //this.avatarImage.mask = graphics;
         
         this.container.addChild(this.avatar);
+        this.container.addChild(this.playerBlock);
         //this.container.addChild(this.avatarImage);
         
         //this.container.addChild(graphics);
 
-        //this.container.addChild(this.playerName);
+        this.container.addChild(this.playerName);
 
         
         
@@ -129,13 +176,37 @@ export class Player
     createScore()
     {
         this.scoreText = new PIXI.Container();
-        this.scoreText.textElement = new DebugText("0", 0, 0, "#000", 100);
+        this.scoreText.textElement = new DebugText("102", 0, 0, "#fff", 64);
+        this.scoreText.textElement.y += this.scoreText.textElement.height/2 + 20;
         
+        switch(parseInt(this.playerID))
+        {
+            case 0:
+                this.scoreText.textElement.style.stroke = "#988f40";
+                break;
+            case 1:
+                this.scoreText.textElement.style.stroke = "#2a7092";
+                break;
+            case 2:
+                this.scoreText.textElement.style.stroke = "#973a3b";
+                break;
+            case 3:
+                this.scoreText.textElement.style.stroke = "#307040";
+                break;
+        }
 
-        const score = new DebugText("SCORE", 0, this.scoreText.textElement.textBound.height/2, "#000", 40);
+        this.scoreText.textElement.style.strokeThickness = 10;
+        const score = new PIXI.Sprite(Globals.resources.scoreText.texture);
+        score.anchor.set(0.5);
         this.scoreText.addChild(score);
+
+        this.scoreText.x += (110 + this.scoreText.width/2);
+        this.scoreText.y -= 190;
+        
+        console.log("Text");
+        console.log(this.scoreText.textElement);
         this.scoreText.addChild(this.scoreText.textElement);
-        //this.container.addChild(this.scoreText);
+        this.container.addChild(this.scoreText);
     }
 
     updateScore(score)
@@ -157,19 +228,16 @@ export class Player
     createDice()
     {
         this.diceBG = new PIXI.Sprite(Globals.resources.diceBG.texture);
-        if(this.playerSide == 1)
-        {
-            this.diceBG.anchor.set(1, 0.5);
-            this.diceBG.x -= 300;
-        } else
-        {
-            this.diceBG.anchor.set(0, 0.5);
-            this.diceBG.x += 300;
-        }
+
+        this.diceBG.anchor.set(0, 1);
+        this.diceBG.x += 240;
+        this.diceBG.y -= 50;
+
+               
 
         this.diceContainer = new PIXI.Container();
         this.diceContainer.sortableChildren = true;
-        this.diceContainer.position = new PIXI.Point(this.diceBG.x + (this.diceBG.width * 0.1 * (this.playerSide ? -1 : 1) ), this.diceBG.y);
+        this.diceContainer.position = new PIXI.Point(this.diceBG.x + this.diceBG.width/2, this.diceBG.y - this.diceBG.height/2);
         this.diceContainer.alpha = 0.3;
 
         this.dices = []
@@ -177,17 +245,17 @@ export class Player
         for (let i = 1; i <= 6; i++) {
             const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
              
-            dice.anchor.set((this.playerSide == 1) ? 1 : 0, 0.5);
-            dice.width = this.diceBG.width * 0.8;
-            dice.height = this.diceBG.height * 0.8;
+            dice.anchor.set(0.5);
+            dice.width = this.diceBG.width * 0.6;
+            dice.height = this.diceBG.height * 0.6;
             if(i != 6)
                 dice.renderable = false;
             this.dices.push(dice);
             this.diceContainer.addChild(dice);
         }
 
-        //this.container.addChild(this.diceBG);
-        //this.container.addChild(this.diceContainer);
+        this.container.addChild(this.diceBG);
+        this.container.addChild(this.diceContainer);
     }
 
     setDice(index)

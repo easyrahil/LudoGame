@@ -11,7 +11,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://d8d9-2405-201-5006-10c7-7404-11ce-7ecf-40f0.ngrok.io");
+        this.socket = new WebSocket("ws://d06a-2405-201-5006-10c7-f002-c99e-aca9-a2d.ngrok.io");
         //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
