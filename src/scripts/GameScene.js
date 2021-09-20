@@ -22,12 +22,14 @@ export class GameScene {
 
 		this.createBackground();
 		this.createTimer();
+		this.createPot();
 		this.createBoard();
 		this.addBoardOverlays();
 		
 		this.createPlayers(Globals.gameData.plId, true);
 		this.createInteractiveDice();
 		this.assignPawns();
+		this.createSkipHeartBlock();
 
 
 		this.turnChanged(Globals.gameData.currentTurn);
@@ -71,6 +73,7 @@ export class GameScene {
 			this.updateScore(msgParams.scoreObj);
 		} else if (msgType == "turnChanged")
 		{
+			this.players[msgParams.plId].deductHealth();
 			this.turnChanged(msgParams.nextRoll);
 		} else if (msgType == "threeSix")
 		{
@@ -138,7 +141,7 @@ export class GameScene {
 		timerIcon.y = timerBlock.y + timerBlock.height * 0.4;
 		
 
-		this.timer = new DebugText("56:23", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, Globals.resources.luckiestGuyFont.name);
+		this.timer = new DebugText("56:23", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, "Luckiest Guy");
 		this.timer.anchor.set(1, 0.5);
 		this.container.addChild(timerBlock);
 		this.container.addChild(timerIcon);
@@ -152,6 +155,98 @@ export class GameScene {
 		this.timer.text = timeString;
 	}
 
+
+	createPot()
+	{
+		const container = new PIXI.Container();
+		const pot = new PIXI.Sprite(Globals.resources.pot.texture);
+		const potInfo = new PIXI.Sprite(Globals.resources.potInfo.texture);
+
+		potInfo.anchor.set(0.5);
+
+		this.potText = new DebugText("234", 0, 0, "#fff", 72, Globals.resources.luckiestGuyFont.name);		
+		pot.anchor.set(0.5);
+
+		pot.y = pot.height * 2;
+
+		container.x = appConfig.width/2;
+		
+		this.potText.anchor.set(0, 0.5);
+
+		this.potText.x += 50;
+		this.potText.y = pot.y;
+
+		potInfo.y = pot.y - pot.height/2;
+		potInfo.x += pot.width/2;
+
+		container.scale.set(gameConfig.widthRatio);
+		container.addChild(pot);
+		container.addChild(this.potText);
+		container.addChild(potInfo);
+		this.container.addChild(container);
+	}
+	
+	createSkipHeartBlock()
+    {
+		this.heartSkipContainers = [];
+
+
+		Object.keys(this.players).forEach(key => {
+			const player = this.players[key];
+
+			const skipContainer = new PIXI.Container();
+			//skipContainer.sortableChildren = true;
+
+			const heartSkipBlock = new PIXI.Sprite(Globals.resources.heartSkipBlock.texture);
+
+			heartSkipBlock.anchor.set(0.5, 1);
+			
+			
+			const heartClose = new PIXI.Sprite(Globals.resources.heartSkipClose.texture);
+			heartClose.anchor.set(0.5);
+
+			heartClose.x += heartSkipBlock.width/2 - 10;
+			heartClose.y -= heartSkipBlock.height - 10;
+
+			const heartText = new PIXI.Sprite(Globals.resources.heartSkipText.texture);
+			heartText.anchor.set(0.5, 0);
+
+			
+			heartText.y -= heartSkipBlock.height - heartText.height;
+			
+			skipContainer.addChild(heartSkipBlock);
+			skipContainer.addChild(heartClose);
+			skipContainer.addChild(heartText);
+
+			let xPos = -1;
+			for (let i = 1; i <= 3; i++) {
+				const heart = new PIXI.Sprite(Globals.resources["heartSkip"+i].texture);
+				heart.anchor.set(0.5);
+
+				heart.x = xPos * heart.width;
+				heart.y -= heartSkipBlock.height/2;
+
+				skipContainer.addChild(heart);
+				xPos++;
+			}
+
+
+			let point = new PIXI.Point();
+
+			player.infoButton.getGlobalPosition(point, false);
+
+			skipContainer.scale.set(gameConfig.widthRatio);
+			skipContainer.position =point;
+
+			skipContainer.zIndex= 3;
+
+			this.container.addChild(skipContainer);
+			this.heartSkipContainers.push(skipContainer);
+		});
+
+        
+    }
+
 	createBoard() {
 		this.ludoBoard = new LudoBoard(appConfig.width / 2, appConfig.height / 2);
 		this.container.addChild(this.ludoBoard.container);
@@ -164,9 +259,6 @@ export class GameScene {
 		house.scale.set(gameConfig.widthRatio);
 		house.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
 		this.container.addChild(house);
-
-
-	
 	}
 
 	createPawns(y) {
@@ -211,10 +303,10 @@ export class GameScene {
 			this.players[key] = player1;
 
 			//Debug Pivot
-			const debugPoint = new DebugCircle(player1.container.x, player1.container.y);
+			//const debugPoint = new DebugCircle(player1.container.x, player1.container.y);
 
 			this.container.addChild(player1.container);
-			this.container.addChild(debugPoint);
+			//this.container.addChild(debugPoint);
 			// playerId++;
 			// if(playerId > 3)
 			//     playerId = 0;

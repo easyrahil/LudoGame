@@ -18,8 +18,7 @@ export class Player
         this.hasTurn = false;
         this.container = new PIXI.Container();
 
-        let ludoBoardPos = new PIXI.Point();
-        //ludoBoard.getGlo
+       
 
         this.container.x = (horizontalIndex == 0) ? appConfig.leftX: appConfig.width/2 + ludoBoard.container.width * 0.07;
         if(verticalIndex == 0)
@@ -29,6 +28,8 @@ export class Player
 
         this.container.scale.set(gameConfig.widthRatio);
         
+        this.container.sortableChildren = true;
+
         this.playerSide = horizontalIndex;
         this.playerVerticalSide = verticalIndex;
 
@@ -42,8 +43,9 @@ export class Player
         if(this.hasAutomation)
             this.createAutomation();
         
-        this.updateHearts(2);
         
+
+        this.currentHealth = 3;
         //this.setDice(5);
         //this.playDiceAnimation();
     }
@@ -85,12 +87,29 @@ export class Player
         
         this.heartList.x = heartBlock.x + heartBlock.width/2 ;
         this.heartList.y = heartBlock.y + heartBlock.height/2;
+
+
+        this.infoButton = new PIXI.Sprite(Globals.resources["info"+this.playerID].texture);
+        
+        this.infoButton.zIndex = 1;
+
+        this.infoButton.anchor.set(0.5);
+        
+        this.infoButton.x = heartBlock.x + heartBlock.width;
+        this.infoButton.y = heartBlock.y;
+
+   
         this.container.addChild(heartBlock);
         this.container.addChild(this.heartList);
+        this.container.addChild(this.infoButton);
     }
+
+
 
     updateHearts(noOfHearts)
     {
+        console.log(this.heartList.filledHeart.length);
+
         if(noOfHearts == 3)
         {
             this.heartList.filledHeart.forEach(heart => {
@@ -98,12 +117,17 @@ export class Player
             });
         } else
         {
-            for (let i = 3; i >= noOfHearts; i--) {
+            for (let i = 2; i >= noOfHearts; i--) {
            
-                //this.heartList.filledHeart[i]
+            
+                this.heartList.filledHeart[i].renderable = false
+            
             }
         }
     }
+
+
+    
 
     createAvatar()
     {
@@ -212,6 +236,16 @@ export class Player
     updateScore(score)
     {
         this.scoreText.textElement.text = score;
+    }
+
+    deductHealth()
+    {
+        this.currentHealth--;
+
+        if(this.currentHealth < 0)
+            console.log("KICKED : "+this.playerID);//Kick Him
+        else
+            this.updateHearts(this.currentHealth);
     }
 
     resetPawns()

@@ -11,7 +11,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://d06a-2405-201-5006-10c7-f002-c99e-aca9-a2d.ngrok.io");
+        this.socket = new WebSocket("ws://0ce9-2405-201-5006-10c7-dc4a-8ca7-1125-64b8.ngrok.io");
         //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
@@ -104,7 +104,8 @@ export class Socket
 
             } else if (msg.t == "turnSkipped")
             {
-                Globals.emitter.Call("turnChanged", {nextRoll : msg.nextRoll});
+                
+                Globals.emitter.Call("turnChanged", {nextRoll : msg.nextRoll, plId : msg.plId});
             } else if (msg.t == "turnTimer")
             {
                 Globals.emitter.Call("turnTimer", {time : msg.data, id : msg.currPlTurn});

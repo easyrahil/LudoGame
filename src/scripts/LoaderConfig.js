@@ -42,6 +42,15 @@ export const LoaderConfig = {
     border1 : require("../sprites/New/border1.png"),
     border2 : require("../sprites/New/border2.png"),
     border3 : require("../sprites/New/border3.png"),
+    pot : require("../sprites/New/pot.png"),
+    potInfo : require("../sprites/New/potInfo.png"),
+    heartSkipBlock : require("../sprites/New/heartSkipBlock.png"),
+    heartSkipClose : require("../sprites/New/heartSkipClose.png"),
+    heartSkip1 : require("../sprites/New/heartSkip1.png"),
+    heartSkip2 : require("../sprites/New/heartSkip2.png"),
+    heartSkip3 : require("../sprites/New/heartSkip3.png"),
+    heartSkipText : require("../sprites/New/heartSkippedText.png"),
+
 
 
     luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")
