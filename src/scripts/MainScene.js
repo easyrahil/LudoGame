@@ -50,6 +50,7 @@ export class MainScene {
         button1.interactive = true;
         button1.on("pointerdown", () => {
             console.log("Clicked 1");
+            Globals.automationOn = false;
             Globals.socket = new Socket("230869", "Player1");
         }, this);
 
@@ -62,11 +63,43 @@ export class MainScene {
         button2.interactive = true;
         button2.on("pointerdown", () => {
             console.log("Clicked 2");
+            Globals.automationOn = false;
             Globals.socket = new Socket("230870", "Player2");
+        }, this);
+
+
+        const button3 = new PIXI.Graphics();
+
+        button3.beginFill(0x00FF00);
+        button3.drawRect(appConfig.leftX, 200, 100, 100);
+        button3.endFill();
+
+        button3.interactive = true;
+        button3.on("pointerdown", () => {
+            console.log("Clicked 1");
+            Globals.automationOn = true;
+            Globals.socket = new Socket("230869", "Player1");
+            
+        }, this);
+
+        const button4 = new PIXI.Graphics();
+        
+        button4.beginFill(0x00FF00);
+        button4.drawRect(appConfig.rightX, 200, 100, 100);
+        button4.endFill();
+
+        button4.interactive = true;
+        button4.on("pointerdown", () => {
+            console.log("Clicked 2");
+            Globals.automationOn = true;
+            Globals.socket = new Socket("230870", "Player2");
+            
         }, this);
 
         this.container.addChild(button1);
         this.container.addChild(button2);
+        this.container.addChild(button3);
+        this.container.addChild(button4);
     }
 
     createBackground()

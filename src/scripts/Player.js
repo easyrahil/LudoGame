@@ -46,6 +46,10 @@ export class Player
         
 
         this.currentHealth = 3;
+        
+        
+        //this.deactivateHeartSkipBlock();
+
         //this.setDice(5);
         //this.playDiceAnimation();
     }
@@ -90,7 +94,11 @@ export class Player
 
 
         this.infoButton = new PIXI.Sprite(Globals.resources["info"+this.playerID].texture);
-        
+        this.infoButton.interactive = true;
+
+        this.infoButton.on("pointerdown", () => {
+           this.activateHeartSkipBlock();
+        }, this);
         this.infoButton.zIndex = 1;
 
         this.infoButton.anchor.set(0.5);
@@ -126,7 +134,22 @@ export class Player
         }
     }
 
+    assignHeartSkipBlock(heartElement)
+    {
+        this.heartSkipBlock = heartElement;
+    }
 
+
+
+    deactivateHeartSkipBlock()
+    {
+        this.heartSkipBlock.renderable = false;
+    }
+
+    activateHeartSkipBlock()
+    {
+        this.heartSkipBlock.renderable = true;
+    }
     
 
     createAvatar()

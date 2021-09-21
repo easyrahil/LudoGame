@@ -2,11 +2,13 @@ import * as PIXI from "pixi.js";
 import TWEEN from "@tweenjs/tween.js";
 import { Loader } from "./Loader";
 import { MainScene } from "./MainScene";
+
 import { Globals } from "./Globals";
 import { SceneManager } from "./SceneManager";
 import { appConfig, gameConfig } from "./appConfig";
 import { GameScene } from "./GameScene";
 import { MyEmitter } from "./MyEmitter";
+
 
 export class App {
     run() {
@@ -32,15 +34,16 @@ export class App {
         // load sprites
         const loaderContainer = new PIXI.Container();
         this.app.stage.addChild(loaderContainer);
+        
         this.loader = new Loader(this.app.loader, loaderContainer);
         
-        this.pushSampleData();
+        //this.pushSampleData();
 
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-                //Globals.scene.start(new MainScene());
-                Globals.scene.start(new GameScene());
+                Globals.scene.start(new MainScene());
+                //Globals.scene.start(new GameScene());
             }, 1000);
             
             

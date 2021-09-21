@@ -10,7 +10,8 @@ import { Pawn } from "./Pawn";
 import { Player } from "./Player";
 import { Prompt } from "./Prompt";
 import { DebugCircle } from "./DebugCircle";
-
+import "pixi-spine";
+import { Spine } from "@pixi-spine/runtime-4.0";
 
 export class GameScene {
 	constructor() {
@@ -26,12 +27,12 @@ export class GameScene {
 		this.createBoard();
 		this.addBoardOverlays();
 		
-		this.createPlayers(Globals.gameData.plId, true);
+		this.createPlayers(Globals.gameData.plId, Globals.automationOn);
 		this.createInteractiveDice();
 		this.assignPawns();
 		this.createSkipHeartBlock();
 
-
+		//Globals.gameData.currentTurn = 0;
 		this.turnChanged(Globals.gameData.currentTurn);
 
 		//  this.setPawnPointIndex("Y1", 1);
@@ -40,6 +41,34 @@ export class GameScene {
 		//  this.moveBackPawnTo("B3", 14);
 
 		//this.updateProgress(1 - (7 / 15));
+
+
+
+		// { //Roll Dice
+
+		// 	const animation = new Spine(Globals.resources.spineAnim.spineData);
+
+		// 	animation.scale.set(gameConfig.widthRatio);
+		
+		// 	animation.x = appConfig.width/2;
+		// 	animation.y = appConfig.height/2;
+		// 	this.container.addChild(animation);
+
+		// 	if (animation.state.hasAnimation("hit"))
+		// 	{
+		// 		//animation.state.setAnimation(0, 'run', true);
+		// 	//	animation.state.setAnimation(0, "hit", true);
+			
+		// 	}
+		// 	if (animation.state.hasAnimation("run"))
+		// 	{
+		// 		//animation.state.setAnimation(0, 'run', true);
+		// 		animation.state.setAnimation(0, "run", true);
+			
+		// 	}
+
+		// 	console.log(animation);
+		// }
 	}
 
     recievedMessage(msgType, msgParams)
@@ -53,6 +82,7 @@ export class GameScene {
 		{
 			if(Globals.gameData.plId == msgParams.id)
 			{
+				
 				this.updateProgress(msgParams.time / 15);
 			}
 		} else if (msgType == "rollDiceResult")
@@ -204,7 +234,11 @@ export class GameScene {
 			
 			const heartClose = new PIXI.Sprite(Globals.resources.heartSkipClose.texture);
 			heartClose.anchor.set(0.5);
+			heartClose.interactive = true;
 
+			heartClose.on('pointerdown', () => {
+				skipContainer.renderable = false;
+			}, this);
 			heartClose.x += heartSkipBlock.width/2 - 10;
 			heartClose.y -= heartSkipBlock.height - 10;
 
@@ -241,7 +275,10 @@ export class GameScene {
 			skipContainer.zIndex= 3;
 
 			this.container.addChild(skipContainer);
+			player.assignHeartSkipBlock(skipContainer);
 			this.heartSkipContainers.push(skipContainer);
+
+			player.deactivateHeartSkipBlock();
 		});
 
         
@@ -318,11 +355,9 @@ export class GameScene {
 		this.interactiveDiceContainer.sortableChildren = true;
 
 
-		const background = new PIXI.Graphics();
-		background.lineStyle(10, 0xc3c3c3, 0.8);
-		background.beginFill(0x650a5a, 0);
-		background.drawCircle(0, 0, 120);
-		background.endFill();
+		const background = new PIXI.Sprite(Globals.resources.diceBG.texture);
+		
+		background.anchor.set(0.5);
 
 		// this.circleGraphic = new PIXI.Graphics();
 		// this.circleGraphic.lineStyle(10, 0x00FF00, 1);
@@ -332,11 +367,11 @@ export class GameScene {
 
 
 		this.radialGraphic = new PIXI.Graphics();
-		this.radialGraphic.lineStyle(10, 0x00FF00, 1);
+		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
 		//this.radialGraphic.angle = -90;
 
 		console.log("CREATING ARC INTI")
-		this.radialGraphic.arc(0, 0, 120, 0, Math.PI * 2);
+		this.radialGraphic.arc(0, 0, 60, 0, Math.PI * 2);
 
 
 		//this.circleGraphic.mask = this.radialGraphic;
@@ -387,11 +422,12 @@ export class GameScene {
 			.to({ angle: 360 }, 800)
 			.repeat(10);
 
-		this.interactiveDiceContainer.addChild(this.animatedDice);
+		
 		this.interactiveDiceContainer.addChild(background);
+		
 		//this.interactiveDiceContainer.addChild(this.circleGraphic);
 		this.interactiveDiceContainer.addChild(this.radialGraphic);
-
+		this.interactiveDiceContainer.addChild(this.animatedDice);
 		this.interactiveDiceContainer.x = appConfig.width / 2;
 		this.interactiveDiceContainer.y = appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3;
 		this.interactiveDiceContainer.scale.set(gameConfig.widthRatio);
@@ -399,11 +435,8 @@ export class GameScene {
 	}
 
 	updateProgress(value) {
-		console.log(" Turn Timer Update : " + value);
-		//this.interactiveDiceContainer.renderable = true;
-		console.log(value);
-		this.radialGraphic.arc(0, 0, 120, 0, (Math.PI));
-
+		this.radialGraphic.clear();
+		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value);
 	}
 
 	updateScore(scoreObj)

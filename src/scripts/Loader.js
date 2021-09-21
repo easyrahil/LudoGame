@@ -5,10 +5,14 @@ import { appConfig, gameConfig } from './appConfig';
 import {DebugText} from './DebugText';
 import {Background} from './Background';
 import {Howl, Howler} from 'howler';
+import "pixi-spine";
+import { Spine } from '@pixi-spine/runtime-4.0';
 
 export class Loader {
     constructor(loader, container) {
         this.loader = loader;
+        
+        
         
         this.background = new Background(PIXI.Texture.from('../src/sprites/background.png'));
 
@@ -60,6 +64,18 @@ export class Loader {
         });
         
         this.resources = LoaderConfig;
+
+        this.loader.add("spineAnim", "src/animation/Ludo.json",
+        {
+            crossOriginIsolated: true
+        });
+        
+        // .load((loader, res) => {
+        //     let spine = new Spine(res.spineAnim.spineData);
+
+        //     console.log(spine);
+        // });
+       
     }
 
     
@@ -81,8 +97,10 @@ export class Loader {
                 this.loader.add(key, this.resources[key]);
             }
     
-            this.loader.load((loader, resources) => {
-                Globals.resources = resources;  
+            this.loader.load((loader, res) => {
+                Globals.resources = res;  
+
+
                 resolve();
             });
         });
@@ -101,4 +119,7 @@ export class Loader {
             }, this);
         }
     }
+
+    
+
 }
