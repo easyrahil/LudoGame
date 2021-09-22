@@ -8,7 +8,7 @@ import { Globals } from "./Globals";
 
 export class Player
 {
-    constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard, hasAutomation)
+    constructor(id, horizontalIndex = 0, verticalIndex = 0, ludoBoard, hasAutomation = false)
     {
         this.playerID = id;
         this.playerDataUpdated = false;
@@ -40,6 +40,7 @@ export class Player
         
 
         this.hasAutomation = hasAutomation;
+
         if(this.hasAutomation)
             this.createAutomation();
         
@@ -47,11 +48,7 @@ export class Player
 
         this.currentHealth = 3;
         
-        
-        //this.deactivateHeartSkipBlock();
 
-        //this.setDice(5);
-        //this.playDiceAnimation();
     }
     
     setStartIndex(index)
@@ -116,7 +113,7 @@ export class Player
 
     updateHearts(noOfHearts)
     {
-        console.log(this.heartList.filledHeart.length);
+        //console.log(this.heartList.filledHeart.length);
 
         if(noOfHearts == 3)
         {
@@ -250,8 +247,8 @@ export class Player
         this.scoreText.x += (110 + this.scoreText.width/2);
         this.scoreText.y -= 190;
         
-        console.log("Text");
-        console.log(this.scoreText.textElement);
+ 
+      
         this.scoreText.addChild(this.scoreText.textElement);
         this.container.addChild(this.scoreText);
     }
@@ -273,7 +270,7 @@ export class Player
 
     resetPawns()
     {
-        console.log(this.pawnsID);
+      
         
         this.pawnsID.forEach(element => {
             Globals.pawns[element].setPointIndex(this.startIndex);

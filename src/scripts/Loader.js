@@ -6,7 +6,7 @@ import {DebugText} from './DebugText';
 import {Background} from './Background';
 import {Howl, Howler} from 'howler';
 import "pixi-spine";
-import { Spine } from '@pixi-spine/runtime-4.0';
+import { Spine } from '@pixi-spine/runtime-3.8';
 
 export class Loader {
     constructor(loader, container) {

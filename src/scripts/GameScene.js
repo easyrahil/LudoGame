@@ -11,7 +11,7 @@ import { Player } from "./Player";
 import { Prompt } from "./Prompt";
 import { DebugCircle } from "./DebugCircle";
 import "pixi-spine";
-import { Spine } from "@pixi-spine/runtime-4.0";
+import { Spine } from "@pixi-spine/runtime-3.8";
 
 export class GameScene {
 	constructor() {
@@ -32,7 +32,9 @@ export class GameScene {
 		this.assignPawns();
 		this.createSkipHeartBlock();
 
-		//Globals.gameData.currentTurn = 0;
+		this.addSpineAnimation();
+
+		
 		this.turnChanged(Globals.gameData.currentTurn);
 
 		//  this.setPawnPointIndex("Y1", 1);
@@ -40,35 +42,13 @@ export class GameScene {
 		//  this.setPawnPointIndex("B3", 45);
 		//  this.moveBackPawnTo("B3", 14);
 
-		//this.updateProgress(1 - (7 / 15));
+		this.updateProgress(1 - (7 / 15));
 
-
-
-		// { //Roll Dice
-
-		// 	const animation = new Spine(Globals.resources.spineAnim.spineData);
-
-		// 	animation.scale.set(gameConfig.widthRatio);
 		
-		// 	animation.x = appConfig.width/2;
-		// 	animation.y = appConfig.height/2;
-		// 	this.container.addChild(animation);
+		
+		
 
-		// 	if (animation.state.hasAnimation("hit"))
-		// 	{
-		// 		//animation.state.setAnimation(0, 'run', true);
-		// 	//	animation.state.setAnimation(0, "hit", true);
-			
-		// 	}
-		// 	if (animation.state.hasAnimation("run"))
-		// 	{
-		// 		//animation.state.setAnimation(0, 'run', true);
-		// 		animation.state.setAnimation(0, "run", true);
-			
-		// 	}
-
-		// 	console.log(animation);
-		// }
+		
 	}
 
     recievedMessage(msgType, msgParams)
@@ -90,10 +70,11 @@ export class GameScene {
 			
 			this.players[msgParams.id].setDice(msgParams.value);
 
-			if(this.players[msgParams.id].hasTurn)
+			if(msgParams.id == Globals.gameData.plId)
 			{
+				this.playAnimation("info2");
 				this.stopDiceAnimation(msgParams.value);
-				
+
 				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr);
 			}
 		} else if (msgType == "movePawn")
@@ -103,8 +84,11 @@ export class GameScene {
 			this.updateScore(msgParams.scoreObj);
 		} else if (msgType == "turnChanged")
 		{
+			this.playAnimation("info4");
 			this.players[msgParams.plId].deductHealth();
 			this.turnChanged(msgParams.nextRoll);
+
+
 		} else if (msgType == "threeSix")
 		{
 			const prompt = new Prompt("Three Six", {x : appConfig.leftX,
@@ -315,12 +299,12 @@ export class GameScene {
 	}
 
 	createPlayers(playerId, hasAutomation) {
-		console.log("Player ID :" + playerId);
+		//console.log("Player ID :" + playerId);
 		this.ludoBoard.rotateBoard(boardData[playerId].angle);
 
 
 		Object.keys(Globals.gameData.players).forEach(key => {
-			console.log("KEY " + key);
+			
 
 			this.createPawns(key);
 
@@ -367,12 +351,10 @@ export class GameScene {
 
 
 		this.radialGraphic = new PIXI.Graphics();
+		this.radialGraphic.beginFill();
 		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
-		//this.radialGraphic.angle = -90;
-
-		console.log("CREATING ARC INTI")
 		this.radialGraphic.arc(0, 0, 60, 0, Math.PI * 2);
-
+		this.radialGraphic.endFill();
 
 		//this.circleGraphic.mask = this.radialGraphic;
 
@@ -436,7 +418,10 @@ export class GameScene {
 
 	updateProgress(value) {
 		this.radialGraphic.clear();
-		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value);
+		this.radialGraphic.beginFill();
+		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
+		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI ));
+		this.radialGraphic.endFill();
 	}
 
 	updateScore(scoreObj)
@@ -449,7 +434,7 @@ export class GameScene {
 
 
 	setDiceInteractive(value) {
-		console.log("Dice Interactive : " + value);
+		
 
 		if (value) {
 			this.animatedDice.renderable = true;
@@ -534,7 +519,7 @@ export class GameScene {
 				this.moveBackPawnTo(pawnId, pointToCompare);
 			} else {
 				console.log("Turn Changed : " + Globals.gameData.currentTurn);
-				this.turnChanged(Globals.gameData.currentTurn);
+				this.turnChanged(Globals.gameData.currentTurn, true);
 			}
 
 			return;
@@ -551,7 +536,7 @@ export class GameScene {
 		if (Globals.pawns[pawnId].currentPointIndex == pointToCompare) {
 			Globals.pawns[pawnId].reachedFinalPosition();
 			console.log("Turn Changed : " + Globals.gameData.currentTurn);
-			this.turnChanged(Globals.gameData.currentTurn);
+			this.turnChanged(Globals.gameData.currentTurn, true);
 			return;
 		}
 
@@ -561,8 +546,86 @@ export class GameScene {
 		});
 	}
 
+	addSpineAnimation()
+	{
 
-	turnChanged(turnValue) {
+		this.spineAnimation = new Spine(Globals.resources.spineAnim.spineData);
+		this.spineAnimation.scale.set(gameConfig.widthRatio * 2);
+		this.spineAnimation.x = appConfig.width/2;
+		this.spineAnimation.y = appConfig.height/2;
+		this.container.addChild(this.spineAnimation);
+
+		this.spineAnimation.defaultPosition = new PIXI.Point();
+		this.spineAnimation.position.copyTo(this.spineAnimation.defaultPosition);
+		
+		
+
+		this.spineAnimation.state.addListener(
+			{
+				complete: (entry) => {
+					this.spineAnimation.renderable = false;
+					this.spineAnimation.position = this.spineAnimation.defaultPosition;
+				},
+				start : (entry) => this.spineAnimation.renderable = true 
+			}
+		);
+		this.spineAnimation.renderable = false;
+		this.spineAnimation.zIndex = 10;
+			
+		this.rollDiceAnimation = new Spine(Globals.resources.spineAnim.spineData);
+		this.rollDiceAnimation.scale.set(gameConfig.widthRatio * 2);
+		this.rollDiceAnimation.x = appConfig.width/2;
+		this.rollDiceAnimation.y = this.ludoBoard.container.y + this.ludoBoard.container.height/2 + this.ludoBoard.container.height * 0.1;
+		this.container.addChild(this.rollDiceAnimation);
+		this.rollDiceAnimation.state.addListener(
+			{
+				complete: (entry) => this.rollDiceAnimation.renderable = false,
+				start : (entry) => this.rollDiceAnimation.renderable = true 
+			}
+		);
+
+		this.rollDiceAnimation.renderable = false;
+		this.rollDiceAnimation.zIndex = 10;
+		//console.log(this.rollDiceAnimation);
+
+		//new DebugCircle(this.spineAnimation.x, this.spineAnimation.y, 5, this.container);
+		//this.playAnimation("info3");
+
+		//this.playAnimation("hit", Globals.gridPoints[54].globalPosition, {x : 12, y : 48});
+		
+
+	}
+
+	playAnimation(stateName, position = null, offset = null)
+	{
+
+		if(position != null && false)
+		{
+			//change position
+			
+			this.spineAnimation.position = position;
+			
+			this.spineAnimation.x += offset.x;
+			this.spineAnimation.y += offset.y;
+		}
+
+		if (this.spineAnimation.state.hasAnimation(stateName))
+		{
+			this.spineAnimation.state.setAnimation(0, stateName, false);
+		}
+
+	}
+
+	playRollDiceAnimation(rollAnimationString = null)
+	{
+		if (this.rollDiceAnimation.state.hasAnimation((rollAnimationString) ? rollAnimationString : "info1"))
+		{
+			this.rollDiceAnimation.state.setAnimation(0, (rollAnimationString) ? rollAnimationString : "info1", false);
+		}
+	}
+
+
+	turnChanged(turnValue, again = false) {
 		Globals.gameData.isCut = false;
 		Globals.gameData.cutPawn = null;
 
@@ -575,18 +638,19 @@ export class GameScene {
 		});
 
 		if (turnValue == Globals.gameData.plId) {
-			this.activateDiceRolling();
+			this.activateDiceRolling(again);
 		} else {
 			this.deactivateDiceRolling();
 		}
 
 	}
 
-	activateDiceRolling() {
+	activateDiceRolling(again) {
 		this.setDiceInteractive(true);
-
+		this.playRollDiceAnimation((again) ? "info3" : null);
 		if(this.players[Globals.gameData.plId].hasAutomation)
 		{
+			console.log("Roll Dice");
 			this.players[Globals.gameData.plId].automation.RollDice(this);
 		}
 

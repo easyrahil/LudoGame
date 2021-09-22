@@ -106,6 +106,7 @@ export class Socket
             {
                 
                 Globals.emitter.Call("turnChanged", {nextRoll : msg.nextRoll, plId : msg.plId});
+                
             } else if (msg.t == "turnTimer")
             {
                 Globals.emitter.Call("turnTimer", {time : msg.data, id : msg.currPlTurn});

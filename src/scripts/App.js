@@ -37,13 +37,13 @@ export class App {
         
         this.loader = new Loader(this.app.loader, loaderContainer);
         
-        //this.pushSampleData();
+        this.pushSampleData();
 
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-                Globals.scene.start(new MainScene());
-                //Globals.scene.start(new GameScene());
+                //Globals.scene.start(new MainScene());
+                Globals.scene.start(new GameScene());
             }, 1000);
             
             
@@ -65,6 +65,8 @@ export class App {
                 pImage : "../src/sprites/68.png"
             };
         }
+
+        Globals.gameData.currentTurn = 0;
 
         
 

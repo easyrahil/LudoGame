@@ -7,7 +7,7 @@ export class Pawn extends PIXI.Sprite
 {
     constructor(id, textureId, ludoBoard)
     {
-        console.log(textureId);
+        
         super(Globals.resources[textureId].texture);
         this.pawnID = id;
         

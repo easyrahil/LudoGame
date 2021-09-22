@@ -25,8 +25,7 @@ export class LudoBoard
         this.addStars();
         //console.log("Ratio :" + gameConfig.widthRatio);
         this.container.scale.set(gameConfig.widthRatio);
-        console.log("Width Ratio : " + gameConfig.widthRatio);
-        console.log("Width : " + this.container.width);
+        
 
         
     }
