@@ -71,10 +71,10 @@ export class GameScene {
 
 			if(msgParams.id == Globals.gameData.plId)
 			{
-				this.playAnimation("info2");
+				
 				this.stopDiceAnimation(msgParams.value);
 
-				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr);
+				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr, this);
 			}
 		} else if (msgType == "movePawn")
 		{

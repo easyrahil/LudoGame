@@ -352,7 +352,7 @@ export class Player
     }
 
     
-    ActivatePointerChoose(pawnsArr)
+    ActivatePointerChoose(pawnsArr, classRef)
     {
         this.activePawnsId = [];
         
@@ -365,6 +365,8 @@ export class Player
             this.pawnSelected(pawnsArr[0]);
         } else
         {
+            classRef.playAnimation("info2");
+
             pawnsArr.forEach((id) => {
                 Globals.pawns[id].setInteractive();
                 this.activePawnsId.push(id);

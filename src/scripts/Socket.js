@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://6505-2405-201-5006-10c7-a4e8-56be-f7fc-d8ca.ngrok.io");
-        //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
+        //this.socket = new WebSocket("ws://6505-2405-201-5006-10c7-a4e8-56be-f7fc-d8ca.ngrok.io");
+        this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
         this.socket.onopen = e => {
@@ -123,8 +123,31 @@ export class Socket
             } else if(msg.t == "gameEnded")
             {
                 if(msg.data == null || Object.keys(msg.data).length == 0)
-                {
-                    Globals.emitter.Call("gameEnd", {reason : msg.msg});
+                {   
+
+                    let responseMsg = ""
+
+                    if(msg.msg == "moveToken")
+                    {
+                        responseMsg = "Token Moved.";
+                    } else if(msg.msg == "threeSix")
+                    {
+                        responseMsg = "Rolled Six Three Times.";
+                    }else if(msg.msg == "turnSkipped")
+                    {
+                        responseMsg = "Timer Ended.";
+                    }else if(msg.msg == "noValidMove")
+                    {
+                        responseMsg = "No valid move.";
+                    }else if(msg.msg == "allTokensIn")
+                    {
+                        responseMsg = "Reached Home.";
+                    }else if(msg.msg == "allOpponentLeft")
+                    {
+                        responseMsg = "All opponents left.";
+                    }
+
+                    Globals.emitter.Call("gameEnd", {reason : responseMsg});
                     return;
                 }
 
