@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import TWEEN from "@tweenjs/tween.js";
+import TWEEN, { Tween } from "@tweenjs/tween.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, playerData, starsPosition } from "./boardConfig";
@@ -37,14 +37,11 @@ export class GameScene {
 		
 		this.turnChanged(Globals.gameData.currentTurn);
 
-		//  this.setPawnPointIndex("Y1", 1);
-		//  this.movePawnTo("Y1", [2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-		//  this.setPawnPointIndex("B3", 45);
-		//  this.moveBackPawnTo("B3", 14);
 
-		this.updateProgress(1 - (7 / 15));
 
-		
+		//this.updateProgress(14/15);
+
+	//	this.updateVisualPerTick();
 		
 		
 
@@ -57,13 +54,14 @@ export class GameScene {
 
 		if(msgType == "timer")
 		{
-			this.updateTimer(msgParams.time);	
+			this.updateTimer(msgParams.time);
+			this.updateVisualPerTick();
 		} else if (msgType == "turnTimer")
 		{
 			if(Globals.gameData.plId == msgParams.id)
 			{
 				
-				this.updateProgress(msgParams.time / 15);
+				this.updateProgress(1 - (msgParams.time / 15));
 			}
 		} else if (msgType == "rollDiceResult")
 		{
@@ -167,6 +165,20 @@ export class GameScene {
 		const minutes = Math.floor(time / 60);
 		const timeString = minutes + ":" + seconds;
 		this.timer.text = timeString;
+	}
+
+	updateVisualPerTick()
+	{
+		//return;
+		let pawnArray = Object.entries(Globals.pawns);
+		
+		pawnArray = pawnArray.sort((a, b) => a[1].globalPosition.y - b[1].globalPosition.y);
+
+		let i = 16;
+		pawnArray.reverse().forEach((pawnObj) => {
+			pawnObj[1].zIndex = i;
+			i--;
+		});
 	}
 
 
@@ -351,9 +363,10 @@ export class GameScene {
 
 
 		this.radialGraphic = new PIXI.Graphics();
+		this.radialGraphic.angle = -90;
 		this.radialGraphic.beginFill();
 		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
-		this.radialGraphic.arc(0, 0, 60, 0, Math.PI * 2);
+		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2), true);
 		this.radialGraphic.endFill();
 
 		//this.circleGraphic.mask = this.radialGraphic;
@@ -420,8 +433,10 @@ export class GameScene {
 		this.radialGraphic.clear();
 		this.radialGraphic.beginFill();
 		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
-		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI ));
+		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value, true);
 		this.radialGraphic.endFill();
+
+		
 	}
 
 	updateScore(scoreObj)
@@ -570,7 +585,7 @@ export class GameScene {
 			}
 		);
 		this.spineAnimation.renderable = false;
-		this.spineAnimation.zIndex = 10;
+		this.spineAnimation.zIndex = 17;
 			
 		this.rollDiceAnimation = new Spine(Globals.resources.spineAnim.spineData);
 		this.rollDiceAnimation.scale.set(gameConfig.widthRatio * 2);
@@ -585,7 +600,7 @@ export class GameScene {
 		);
 
 		this.rollDiceAnimation.renderable = false;
-		this.rollDiceAnimation.zIndex = 10;
+		this.rollDiceAnimation.zIndex = 17;
 		//console.log(this.rollDiceAnimation);
 
 		//new DebugCircle(this.spineAnimation.x, this.spineAnimation.y, 5, this.container);

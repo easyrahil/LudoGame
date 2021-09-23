@@ -30,6 +30,14 @@ export class Pawn extends PIXI.Sprite
         
     }
 
+    get globalPosition()
+    {
+        let point = new PIXI.Point();
+
+        this.getGlobalPosition(point);
+
+        return point;
+    }
     
 
     reset(setPos = false)
