@@ -44,7 +44,7 @@ export class MainScene {
         const button1 = new PIXI.Graphics();
 
         button1.beginFill(0xDE3249);
-        button1.drawRect(appConfig.leftX, 50, 100, 100);
+        button1.drawRect(appConfig.leftX, appConfig.innerWidth/4/2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button1.endFill();
 
         button1.interactive = true;
@@ -57,7 +57,7 @@ export class MainScene {
         const button2 = new PIXI.Graphics();
         
         button2.beginFill(0xDE3249);
-        button2.drawRect(appConfig.rightX, 50, 100, 100);
+        button2.drawRect(appConfig.rightX-appConfig.innerWidth/4, appConfig.innerWidth/4/2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button2.endFill();
 
         button2.interactive = true;
@@ -71,7 +71,7 @@ export class MainScene {
         const button3 = new PIXI.Graphics();
 
         button3.beginFill(0x00FF00);
-        button3.drawRect(appConfig.leftX, 200, 100, 100);
+        button3.drawRect(appConfig.leftX, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button3.endFill();
 
         button3.interactive = true;
@@ -85,7 +85,7 @@ export class MainScene {
         const button4 = new PIXI.Graphics();
         
         button4.beginFill(0x00FF00);
-        button4.drawRect(appConfig.rightX, 200, 100, 100);
+        button4.drawRect(appConfig.rightX-appConfig.innerWidth/4, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button4.endFill();
 
         button4.interactive = true;

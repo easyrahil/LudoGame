@@ -8,6 +8,7 @@ import { SceneManager } from "./SceneManager";
 import { appConfig, gameConfig } from "./appConfig";
 import { GameScene } from "./GameScene";
 import { MyEmitter } from "./MyEmitter";
+import { GameEndScene } from "./GameEndScene";
 
 
 export class App {
@@ -19,6 +20,12 @@ export class App {
         document.body.appendChild(this.app.view);
         appConfig.width = this.app.screen.width;
         appConfig.height = this.app.screen.height;
+        
+        if(appConfig.innerWidth > appConfig.width)
+        {
+            appConfig.innerWidth = appConfig.width;
+        }
+
         console.log(appConfig.width);
         console.log(window.innerWidth);
         //this.app.raenderer.resolution = window.devicePixelRatio;
@@ -44,6 +51,7 @@ export class App {
                 loaderContainer.destroy();
                 Globals.scene.start(new MainScene());
                 //Globals.scene.start(new GameScene());
+               // Globals.scene.start(new GameEndScene());
             }, 1000);
             
             
@@ -62,7 +70,7 @@ export class App {
                 balance : "12",
                 plId : i,
                 pName : "Player " + i,
-                pImage : "../src/sprites/68.png"
+                pImage : "https://cccdn.b-cdn.net/1584464368856.png"
             };
         }
 

@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        //this.socket = new WebSocket("ws://6879-2405-201-5006-10c7-10af-cee6-d01d-94ec.ngrok.io");
-        this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
+        this.socket = new WebSocket("ws://6505-2405-201-5006-10c7-a4e8-56be-f7fc-d8ca.ngrok.io");
+        //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
         this.socket.onopen = e => {
@@ -25,7 +25,7 @@ export class Socket
                 entryFee : "6",
                 pName : name,
                 //pImage : "../src/sprites/68.png"
-                pImage : "https://sguru.org/wp-content/uploads/2017/06/steam-avatar-profile-picture-1974.jpg"
+                pImage : "https://cccdn.b-cdn.net/1584464368856.png"
             }
 
             this.sendMessage(distmsg);
@@ -120,6 +120,28 @@ export class Socket
             } else if (msg.t == "invalidMove")
             {
                 Globals.emitter.Call("choosePawnAgain", {});
+            } else if(msg.t == "gameEnded")
+            {
+                if(msg.data == null || Object.keys(msg.data).length == 0)
+                {
+                    Globals.emitter.Call("gameEnd", {reason : msg.msg});
+                    return;
+                }
+
+                const cutData = msg.data.filter(data => data["isCut"] == true);
+                console.log("Filtered Data : ");
+                console.log(cutData);
+                
+                Globals.gameData.currentTurn = -1;
+                Globals.gameData.isCut = (cutData.length > 0);
+                if(Globals.gameData.isCut)
+                {
+                    Globals.gameData.cutPawn = cutData[0];
+                    console.log(Globals.gameData.cutPawn);
+                }
+
+
+                Globals.emitter.Call("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos, scoreObj : msg.gState.score});
             }
         };
 

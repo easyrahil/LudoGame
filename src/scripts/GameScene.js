@@ -12,6 +12,7 @@ import { Prompt } from "./Prompt";
 import { DebugCircle } from "./DebugCircle";
 import "pixi-spine";
 import { Spine } from "@pixi-spine/runtime-3.8";
+import { GameEndScene } from "./GameEndScene";
 
 export class GameScene {
 	constructor() {
@@ -41,7 +42,7 @@ export class GameScene {
 
 		//this.updateProgress(14/15);
 
-	//	this.updateVisualPerTick();
+		//	this.updateVisualPerTick();
 		
 		
 
@@ -122,6 +123,23 @@ export class GameScene {
             this.container.addChild(prompt.container);
 
 			this.players[Globals.gameData.plId].ActivatePointerChoose();
+		} else if(msgType == "gameEnd")
+		{
+			const prompt = new Prompt(msgParams.reason, {x : appConfig.leftX,
+                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+                30,
+                "#fff");
+
+            setTimeout(() => {
+                prompt.container.destroy();
+            }, 1000);
+                
+            this.container.addChild(prompt.container);
+			setTimeout(() => {
+				Globals.scene.start(new GameEndScene());
+			}, 1500);
+
+			
 		}
     }
 
@@ -268,7 +286,7 @@ export class GameScene {
 			skipContainer.scale.set(gameConfig.widthRatio);
 			skipContainer.position =point;
 
-			skipContainer.zIndex= 3;
+			skipContainer.zIndex= 20;
 
 			this.container.addChild(skipContainer);
 			player.assignHeartSkipBlock(skipContainer);
@@ -633,30 +651,42 @@ export class GameScene {
 
 	playRollDiceAnimation(rollAnimationString = null)
 	{
-		if (this.rollDiceAnimation.state.hasAnimation((rollAnimationString) ? rollAnimationString : "info1"))
+		if (this.rollDiceAnimation.state.hasAnimation((rollAnimationString != null) ? rollAnimationString : "info1"))
 		{
-			this.rollDiceAnimation.state.setAnimation(0, (rollAnimationString) ? rollAnimationString : "info1", false);
+			this.rollDiceAnimation.state.setAnimation(0, (rollAnimationString != null) ? rollAnimationString : "info1", false);
 		}
 	}
 
 
 	turnChanged(turnValue, again = false) {
-		Globals.gameData.isCut = false;
-		Globals.gameData.cutPawn = null;
 
-		Object.keys(this.players).forEach(key => {
-			if (key == turnValue) {
-				this.players[turnValue].assignTurn();
+		if(turnValue == -1)
+		{
+			Globals.scene.start(new GameEndScene());
+
+		} else
+		{
+			Globals.gameData.isCut = false;
+			Globals.gameData.cutPawn = null;
+	
+			Object.keys(this.players).forEach(key => {
+				if (key == turnValue) {
+					this.players[turnValue].assignTurn();
+				} else {
+					this.players[key].removeTurn();
+				}
+			});
+	
+			if (turnValue == Globals.gameData.plId) {
+				this.activateDiceRolling(again);
 			} else {
-				this.players[key].removeTurn();
+				this.deactivateDiceRolling();
 			}
-		});
 
-		if (turnValue == Globals.gameData.plId) {
-			this.activateDiceRolling(again);
-		} else {
-			this.deactivateDiceRolling();
+			
 		}
+
+
 
 	}
 

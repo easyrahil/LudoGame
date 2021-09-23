@@ -175,9 +175,14 @@ export class Player
 
         this.avatar.anchor.set(0, 0.5);
         this.avatarImage.anchor.set(0, 0.5);
+        const avatarRatio = (this.avatarImage.height/this.avatarImage.width);
+        this.avatarImage.width = this.avatar.width;
+        this.avatarImage.height = this.avatar.width *  avatarRatio;
+
         
         this.avatar.x += 60;
-        this.avatarImage.x += 40;
+        this.avatarImage.x = this.avatar.x;
+
         this.playerName.y = this.playerBlock.y + this.playerBlock.height/2;
         this.playerName.x += 220;
         if(this.playerSide == 1)
@@ -196,18 +201,23 @@ export class Player
         //this.avatar.x = 0;
         this.avatar.y = 0;
 
-        // const graphics = new PIXI.Graphics();
-        // graphics.beginFill(0xFF3300);
-        // graphics.drawRect(this.avatar.x + (this.avatar.width * 0.1), this.avatar.y - (this.avatar.height*0.9)/2, this.avatar.width*0.8, this.avatar.height*0.8);
-        // graphics.endFill();
+         const maskGraphic = new PIXI.Graphics();
+         maskGraphic.beginFill(0xFF3300);
+
+         const widthPadding = (this.avatar.width * 0.07);
+         const heightPadding = (this.avatar.height * 0.07);
+
+
+         maskGraphic.drawRect((this.avatar.x) + widthPadding, (this.avatar.y - (this.avatar.height)/2) + heightPadding, this.avatar.width - (widthPadding * 2), this.avatar.height - (heightPadding * 2) );
+         maskGraphic.endFill();
         
-        //this.avatarImage.mask = graphics;
+        this.avatarImage.mask = maskGraphic;
         
         this.container.addChild(this.avatar);
         this.container.addChild(this.playerBlock);
-        //this.container.addChild(this.avatarImage);
+        this.container.addChild(this.avatarImage);
         
-        //this.container.addChild(graphics);
+        this.container.addChild(maskGraphic);
 
         this.container.addChild(this.playerName);
 

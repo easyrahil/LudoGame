@@ -4,9 +4,11 @@ export const appConfig = {
     width : 0,
     height : 0,
     get leftX (){
+        console.log(this.width/2 - this.innerWidth/2);
         return this.width/2 - this.innerWidth/2;
     },
     get rightX (){
+        console.log(this.width/2 + this.innerWidth/2);
         return this.width/2 + this.innerWidth/2;
     }
 };
