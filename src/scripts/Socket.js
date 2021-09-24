@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        //this.socket = new WebSocket("ws://6505-2405-201-5006-10c7-a4e8-56be-f7fc-d8ca.ngrok.io");
-        this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
+        this.socket = new WebSocket("ws://bdd5-2405-201-5006-10c7-19f6-81b0-7de9-d9fd.ngrok.io");
+        //this.socket = new WebSocket("wss://tablefromatsample.cap.yonzo.io");
         
         
         this.socket.onopen = e => {
@@ -81,8 +81,15 @@ export class Socket
             } else if (msg.t == "RollDiceResult")
             {   
                 //stop dice rolling animation
-        
-                Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice, pawnArr : msg.movable});
+                
+                if(msg.nextroll == null || msg.nextroll == undefined)
+                {
+                    Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice, pawnArr : msg.movable});
+                } else
+                {
+                    Globals.emitter.Call("noValidMove", {nextRoll : msg.nextroll, plId : msg.plId});
+                }
+                
                 //
             } else if (msg.t == "moveToken")
             {

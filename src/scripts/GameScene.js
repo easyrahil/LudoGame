@@ -140,6 +140,21 @@ export class GameScene {
 			}, 1500);
 
 			
+		} else if (msgType == "noValidMove")
+		{
+			const prompt = new Prompt("No Valid Move.", {x : appConfig.leftX,
+                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+                30,
+                "#fff");
+
+            setTimeout(() => {
+                prompt.container.destroy();
+            }, 1000);
+                
+            this.container.addChild(prompt.container);
+
+
+			this.turnChanged(msgParams.nextRoll);
 		}
     }
 
