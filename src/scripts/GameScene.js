@@ -250,7 +250,6 @@ export class GameScene {
     {
 		this.heartSkipContainers = [];
 
-
 		Object.keys(this.players).forEach(key => {
 			const player = this.players[key];
 
@@ -572,7 +571,7 @@ export class GameScene {
 				const pawnId = Globals.gameData.cutPawn.tokenId;
 				const pointToCompare = Globals.gameData.cutPawn.pos[0];
 				const pointIndex =Globals.pawns[pawnId].currentPointIndex;
-				this.playAnimation("hit",  Globals.gridPoints[pointIndex].globalPosition);
+				this.playHitAnimation("hit",  Globals.gridPoints[pointIndex].globalPosition);
 				this.moveBackPawnTo(pawnId, pointToCompare);
 			} else {
 				console.log("Turn Changed : " + Globals.gameData.currentTurn);
@@ -622,7 +621,6 @@ export class GameScene {
 			{
 				complete: (entry) => {
 					this.spineAnimation.renderable = false;
-					this.spineAnimation.position = this.spineAnimation.defaultPosition;
 				},
 				start : (entry) => this.spineAnimation.renderable = true 
 			}
@@ -644,24 +642,46 @@ export class GameScene {
 
 		this.rollDiceAnimation.renderable = false;
 		this.rollDiceAnimation.zIndex = 17;
+
+
+
+		this.hitAnimation = new Spine(Globals.resources.spineAnim.spineData);
+		this.hitAnimation.scale.set(gameConfig.widthRatio * 2);
+		this.hitAnimation.x = appConfig.width/2;
+		this.hitAnimation.y = appConfig.height/2;
+		this.container.addChild(this.hitAnimation);
+		this.hitAnimation.state.addListener(
+			{
+				complete: (entry) => this.hitAnimation.renderable = false,
+				start : (entry) => this.hitAnimation.renderable = true 
+			}
+		);
+
+		this.hitAnimation.renderable = false;
+		this.hitAnimation.zIndex = 17;
 		//console.log(this.rollDiceAnimation);
 
 		//new DebugCircle(this.spineAnimation.x, this.spineAnimation.y, 5, this.container);
 		//this.playAnimation("win");
 	}
 
-	playAnimation(stateName, position = null)
+	playAnimation(stateName)
 	{
-
-		if(position != null)
-		{
-			//change position
-			this.spineAnimation.position = position;
-		}
 
 		if (this.spineAnimation.state.hasAnimation(stateName))
 		{
 			this.spineAnimation.state.setAnimation(0, stateName, false);
+		}
+
+	}
+
+	playHitAnimation(stateName, position)
+	{
+		this.hitAnimation.position = position;
+
+		if (this.hitAnimation.state.hasAnimation(stateName))
+		{
+			this.hitAnimation.state.setAnimation(0, stateName, false);
 		}
 
 	}

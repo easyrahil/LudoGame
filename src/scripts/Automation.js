@@ -10,6 +10,7 @@ export class Automation
 
     RollDice(gameSceneRef)
     {
+        
         if(gameSceneRef.players[Globals.gameData.plId].hasAutomation)
 		{
 			const distmsg = {

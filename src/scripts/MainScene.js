@@ -51,7 +51,7 @@ export class MainScene {
         button1.drawRect(appConfig.leftX, appConfig.innerWidth/4/2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button1.endFill();
 
-        button1.textComponent = new DebugText("Player 1 \nManual", appConfig.leftX + appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
+        button1.textComponent = new DebugText("Player 1 \n100111", appConfig.leftX + appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
 
         button1.addChild(button1.textComponent);
         
@@ -59,7 +59,7 @@ export class MainScene {
         button1.on("pointerdown", () => {
             console.log("Clicked 1");
             Globals.automationOn = false;
-            Globals.socket = new Socket("230869", "Player1");
+            Globals.socket = new Socket("100111", "Player1");
             this.triggerButtonActive();
         }, this);
 
@@ -73,54 +73,75 @@ export class MainScene {
         button2.on("pointerdown", () => {
             console.log("Clicked 2");
             Globals.automationOn = false;
-            Globals.socket = new Socket("230870", "Player2");
+            Globals.socket = new Socket("100112", "Player2");
             this.triggerButtonActive();
         }, this);
 
-        button2.textComponent = new DebugText("Player 2 \nManual", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
+        button2.textComponent = new DebugText("Player 2 \n100112", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
 
         button2.addChild(button2.textComponent);
 
-        const button3 = new PIXI.Graphics();
 
-        button3.beginFill(0x00FF00);
-        button3.drawRect(appConfig.leftX, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
-        button3.endFill();
+        for (let i = 1; i <= 10; i++) {
+                const button3 = new PIXI.Graphics();
 
-        button3.textComponent = new DebugText("Player 1 \nAuto", appConfig.leftX + appConfig.innerWidth/8, appConfig.innerWidth/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
+                button3.beginFill(0x00FF00);
 
-        button3.addChild(button3.textComponent);
+                const xValue = (i % 2 == 0) ? appConfig.rightX - appConfig.innerWidth/5 : appConfig.leftX;
+                const xTextValue = (i % 2 == 0) ? appConfig.rightX - appConfig.innerWidth/10 : appConfig.leftX + appConfig.innerWidth/10;
+                const yValue = (appConfig.innerWidth/5) + (appConfig.innerWidth/4 * Math.ceil(i /2)) 
+                button3.drawRect(xValue, yValue, appConfig.innerWidth/5, appConfig.innerWidth/5);
+                button3.endFill();
 
-        button3.interactive = true;
-        button3.on("pointerdown", () => {
-            console.log("Clicked 1");
-            Globals.automationOn = true;
-            Globals.socket = new Socket("230869", "Player1");
-            this.triggerButtonActive();
-        }, this);
+                const id = 100100 + i;
 
-        const button4 = new PIXI.Graphics();
+                button3.textComponent = new DebugText("Player "+ i +" \n"+id, xTextValue,
+                    yValue + appConfig.innerWidth/10, "#000", 18, "Luckiest Guy");
+
+                button3.addChild(button3.textComponent);
+
+
+                
+
+                console.log(id);
+                button3.interactive = true;
+                button3.on("pointerdown", () => {
+                    console.log("Clicked 1");
+                    Globals.automationOn = true;
+                    Globals.socket = new Socket(id.toString(), "Player "+ i);
+                    this.triggerButtonActive();
+                }, this);
+                
+                this.buttonContainer.addChild(button3);
+        }
+
+
+
+
         
-        button4.beginFill(0x00FF00);
-        button4.drawRect(appConfig.rightX-appConfig.innerWidth/4, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
-        button4.endFill();
 
-        button4.textComponent = new DebugText("Player 2 \nAuto", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
+        // const button4 = new PIXI.Graphics();
+        
+        // button4.beginFill(0x00FF00);
+        // button4.drawRect(appConfig.rightX-appConfig.innerWidth/4, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
+        // button4.endFill();
 
-        button4.addChild(button4.textComponent);
+        // button4.textComponent = new DebugText("Player 2 \nAuto", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/2 + appConfig.innerWidth/8, "#fff", 18, "Luckiest Guy");
 
-        button4.interactive = true;
-        button4.on("pointerdown", () => {
-            console.log("Clicked 2");
-            Globals.automationOn = true;
-            Globals.socket = new Socket("230870", "Player2");
-            this.triggerButtonActive();
-        }, this);
+        // button4.addChild(button4.textComponent);
+
+        // button4.interactive = true;
+        // button4.on("pointerdown", () => {
+        //     console.log("Clicked 2");
+        //     Globals.automationOn = true;
+        //     Globals.socket = new Socket("230870", "Player2");
+        //     this.triggerButtonActive();
+        // }, this);
 
         this.buttonContainer.addChild(button1);
         this.buttonContainer.addChild(button2);
-        this.buttonContainer.addChild(button3);
-        this.buttonContainer.addChild(button4);
+        //this.buttonContainer.addChild(button3);
+        //this.buttonContainer.addChild(button4);
     }
 
     triggerButtonActive()
