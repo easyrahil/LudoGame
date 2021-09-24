@@ -85,4 +85,11 @@ export const starsPosition = [
 	}
 ];
 
+export const PawnsHomeIndex = [
+	58,
+	64,
+	70,
+	76
+];
+
 

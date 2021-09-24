@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import TWEEN, { Tween } from "@tweenjs/tween.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
-import { boardData, playerData, starsPosition } from "./boardConfig";
+import { boardData, PawnsHomeIndex, playerData, starsPosition } from "./boardConfig";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
@@ -171,7 +171,8 @@ export class GameScene {
 		timerIcon.y = timerBlock.y + timerBlock.height * 0.4;
 		
 
-		this.timer = new DebugText("56:23", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, "Luckiest Guy");
+		this.timer = new DebugText("00:00", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, "Luckiest Guy");
+		this.timer.style.fontWeight = 10;
 		this.timer.anchor.set(1, 0.5);
 		this.container.addChild(timerBlock);
 		this.container.addChild(timerIcon);
@@ -542,6 +543,12 @@ export class GameScene {
 	}
 
 	movePawnTo(pawnId, pointsArray) {
+
+		if(PawnsHomeIndex.includes(Globals.pawns[pawnId].currentPointIndex))
+		{
+			this.playAnimation("win");
+		}
+
 		if (pointsArray.length == 0) {
 
 			Globals.pawns[pawnId].reachedFinalPosition();
@@ -549,10 +556,13 @@ export class GameScene {
 			if (Globals.gameData.isCut) {
 				const pawnId = Globals.gameData.cutPawn.tokenId;
 				const pointToCompare = Globals.gameData.cutPawn.pos[0];
+				const pointIndex =Globals.pawns[pawnId].currentPointIndex;
+				this.playAnimation("hit",  Globals.gridPoints[pointIndex].globalPosition);
 				this.moveBackPawnTo(pawnId, pointToCompare);
 			} else {
 				console.log("Turn Changed : " + Globals.gameData.currentTurn);
-				this.turnChanged(Globals.gameData.currentTurn, true);
+
+				this.turnChanged(Globals.gameData.currentTurn, (Globals.gameData.currentTurn == Globals.gameData.lastTurn));
 			}
 
 			return;
@@ -569,7 +579,7 @@ export class GameScene {
 		if (Globals.pawns[pawnId].currentPointIndex == pointToCompare) {
 			Globals.pawns[pawnId].reachedFinalPosition();
 			console.log("Turn Changed : " + Globals.gameData.currentTurn);
-			this.turnChanged(Globals.gameData.currentTurn, true);
+			this.turnChanged(Globals.gameData.currentTurn, (Globals.gameData.currentTurn == Globals.gameData.lastTurn));
 			return;
 		}
 
@@ -622,24 +632,16 @@ export class GameScene {
 		//console.log(this.rollDiceAnimation);
 
 		//new DebugCircle(this.spineAnimation.x, this.spineAnimation.y, 5, this.container);
-		//this.playAnimation("info3");
-
-		//this.playAnimation("hit", Globals.gridPoints[54].globalPosition, {x : 12, y : 48});
-		
-
+		//this.playAnimation("win");
 	}
 
-	playAnimation(stateName, position = null, offset = null)
+	playAnimation(stateName, position = null)
 	{
 
-		if(position != null && false)
+		if(position != null)
 		{
 			//change position
-			
 			this.spineAnimation.position = position;
-			
-			this.spineAnimation.x += offset.x;
-			this.spineAnimation.y += offset.y;
 		}
 
 		if (this.spineAnimation.state.hasAnimation(stateName))
@@ -683,7 +685,7 @@ export class GameScene {
 				this.deactivateDiceRolling();
 			}
 
-			
+			Globals.gameData.lastTurn = turnValue;
 		}
 
 
