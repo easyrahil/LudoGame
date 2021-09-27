@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-       this.socket = new WebSocket("ws://6a79-2405-201-5006-10c7-7d12-5bc5-930e-715b.ngrok.io");
-       // this.socket = new WebSocket("ws://209.250.232.65:4400");
+       this.socket = new WebSocket("ws://655f-2405-201-5006-10c7-7d12-5bc5-930e-715b.ngrok.io");
+    //    this.socket = new WebSocket("ws://209.250.232.65:4400");
     
         
         this.socket.onopen = e => {
@@ -172,6 +172,9 @@ export class Socket
 
 
                 Globals.emitter.Call("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos, scoreObj : msg.gState.score});
+            } else if(msg.t == "diceRollNotif")
+            {
+                Globals.emitter.Call("diceRollNotif", {id : msg.plId});
             }
         };
 

@@ -328,8 +328,7 @@ export class Player
             dice.anchor.set(0.5);
             dice.width = this.diceBG.width * 0.6;
             dice.height = this.diceBG.height * 0.6;
-            if(i != 6)
-                dice.renderable = false;
+            dice.renderable = false;
             this.dices.push(dice);
             this.diceContainer.addChild(dice);
         }
@@ -350,12 +349,22 @@ export class Player
 		this.animatedDice.animationSpeed = 0.2;
 
 
+        this.animatedDice.on("pointerdown", () => {
+			const distmsg = {
+				t: "pDiceRoll"
+			}
+			Globals.socket.sendMessage(distmsg);
+			Globals.soundResources.click.play();
+			//Send Message to server
+			this.container.emit("pressedDiceRoll");
+			
+		}, this);
 
 		this.animatedDice.tween = new TWEEN.Tween(this.animatedDice)
 			.to({ angle: 360 }, 800)
 			.repeat(10);
 
-        this.animatedDice.renderable = false;
+        
 
         
         this.container.addChild(this.diceBG);
@@ -382,7 +391,8 @@ export class Player
     }
 
     playDiceAnimation() {
-		this.animatedDice.renderable = true;
+        this.animatedDice.interactive = false;
+        
 		Globals.soundResources.dice.play();
 
 		this.dices.forEach(dice => {
@@ -415,6 +425,7 @@ export class Player
 
     assignTurn()
     {
+        this.animatedDice.interactive = true;
         this.diceContainer.alpha = 1;
         this.hasTurn = true;
     }
@@ -423,6 +434,10 @@ export class Player
     {
         this.diceContainer.alpha = 0.2;
         this.hasTurn = false;
+        this.animatedDice.renderable = true;
+        this.dices.forEach(dice => {
+			dice.renderable = false;
+		});
         this.graphicRadial.clear();
     }
 

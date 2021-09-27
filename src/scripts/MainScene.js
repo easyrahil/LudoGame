@@ -41,6 +41,7 @@ export class MainScene {
 
     createButton()
     {
+        console.log(gameConfig.heightRatio);
         const fontSize = 50 * gameConfig.widthRatio;
         this.buttonContainer = new PIXI.Container();
         this.container.addChild(this.buttonContainer);

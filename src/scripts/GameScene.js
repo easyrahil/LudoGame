@@ -70,12 +70,13 @@ export class GameScene {
 		{
 			
 			this.players[msgParams.id].setDice(msgParams.value);
+			this.players[msgParams.id].stopDiceAnimation(msgParams.value);
 			
 			if(msgParams.id == Globals.gameData.plId)
 			{
 				
 				this.stopDiceAnimation(msgParams.value);
-				this.players[msgParams.id].stopDiceAnimation(msgParams.value);
+				
 
 				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr, this);
 			}
@@ -162,6 +163,9 @@ export class GameScene {
 
 
 			this.turnChanged(msgParams.nextRoll);
+		} else if (msgType == "diceRollNotif")
+		{
+			this.players[msgParams.id].playDiceAnimation();
 		}
     }
 
@@ -373,6 +377,11 @@ export class GameScene {
 				
 			player1.setStartIndex(boardData[key].startIndex);
 			player1.squeezeAnchor = data.anchor;
+			
+			player1.container.on("pressedDiceRoll", () => {
+				this.playDiceAnimation();
+			}, this);
+			
 			this.players[key] = player1;
 
 			//Debug Pivot
@@ -420,7 +429,7 @@ export class GameScene {
 			Globals.soundResources.click.play();
 			//Send Message to server
 			this.playDiceAnimation();
-			this.players[Globals.gameData.plId].playDiceAnimation();
+			
 		}, this);
 
 
@@ -508,9 +517,10 @@ export class GameScene {
 
 
 	playDiceAnimation() {
+		this.interactiveDiceContainer.interactive = false;
 		this.animatedDice.renderable = true;
 		Globals.soundResources.dice.play();
-		this.interactiveDiceContainer.interactive = false;
+	
 
 		this.dices.forEach(dice => {
 			dice.renderable = false;
