@@ -606,7 +606,8 @@ export class GameScene {
 		}
 
 
-		Globals.pawns[pawnId].move(Globals.pawns[pawnId].currentPointIndex - 1, false).then(() => {
+		let nextPointIndex = Globals.pawns[pawnId].currentPointIndex == 1 ? 52 : Globals.pawns[pawnId].currentPointIndex - 1;
+		Globals.pawns[pawnId].move(nextPointIndex, false).then(() => {
 			this.moveBackPawnTo(pawnId, pointToCompare);
 		});
 	}
