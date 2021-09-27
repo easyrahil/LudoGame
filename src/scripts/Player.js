@@ -5,6 +5,7 @@ import { Automation } from "./Automation";
 import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
+import TWEEN, { Tween } from "@tweenjs/tween.js";
 
 export class Player
 {
@@ -47,6 +48,8 @@ export class Player
         
 
         this.currentHealth = 3;
+        
+
         
 
     }
@@ -293,18 +296,31 @@ export class Player
     {
         this.diceBG = new PIXI.Sprite(Globals.resources.diceBG.texture);
 
-        this.diceBG.anchor.set(0, 1);
-        this.diceBG.x += 240;
-        this.diceBG.y -= 50;
+        this.diceBG.anchor.set(0.5);
+        this.diceBG.x = (240 + this.diceBG.width/2);
+        this.diceBG.y = -50 - this.diceBG.height/2;
 
-               
+        
+
+        this.graphicRadial = new PIXI.Graphics();
+        //this.diceBG.addChild(this.graphicRadial);
+
+        this.graphicRadial.beginFill(0xff0000, 0);
+        this.graphicRadial.lineStyle(40, 0x32CD32, 0.5);
+        this.graphicRadial.arc(0, 0, 60, 2 * Math.PI , 2 * Math.PI, true);
+        this.graphicRadial.endFill();
+        
+        this.diceBG.addChild(this.graphicRadial);
+        this.diceBG.angle = -90;
+       
+                     
 
         this.diceContainer = new PIXI.Container();
         this.diceContainer.sortableChildren = true;
-        this.diceContainer.position = new PIXI.Point(this.diceBG.x + this.diceBG.width/2, this.diceBG.y - this.diceBG.height/2);
+        this.diceContainer.position = new PIXI.Point(this.diceBG.x, this.diceBG.y);
         this.diceContainer.alpha = 0.3;
 
-        this.dices = []
+        this.dices = [];
 
         for (let i = 1; i <= 6; i++) {
             const dice = new PIXI.Sprite(Globals.resources[`dice${i}`].texture);
@@ -318,8 +334,34 @@ export class Player
             this.diceContainer.addChild(dice);
         }
 
+		const textureArrayOfAnimation = []
+
+		for (let x = 1; x <= 6; x++) {
+			textureArrayOfAnimation.push(Globals.resources[`diceEdge${x}`].texture);
+		}
+
+		this.animatedDice = new PIXI.AnimatedSprite(textureArrayOfAnimation);
+
+		this.animatedDice.anchor.set(0.5);
+        this.animatedDice.position = new PIXI.Point(this.diceBG.x, this.diceBG.y);
+		this.animatedDice.width = this.diceBG.width * 0.7;
+		this.animatedDice.height = this.diceBG.height * 0.7;
+		this.animatedDice.loop = true;
+		this.animatedDice.animationSpeed = 0.2;
+
+
+
+		this.animatedDice.tween = new TWEEN.Tween(this.animatedDice)
+			.to({ angle: 360 }, 800)
+			.repeat(10);
+
+        this.animatedDice.renderable = false;
+
+        
         this.container.addChild(this.diceBG);
+       
         this.container.addChild(this.diceContainer);
+        this.container.addChild(this.animatedDice);
     }
 
     setDice(index)
@@ -339,6 +381,38 @@ export class Player
         });
     }
 
+    playDiceAnimation() {
+		this.animatedDice.renderable = true;
+		Globals.soundResources.dice.play();
+
+		this.dices.forEach(dice => {
+			dice.renderable = false;
+		});
+
+		this.animatedDice.play();
+		this.animatedDice.tween.start();
+
+
+	}
+
+	stopDiceAnimation(diceValue) {
+		this.animatedDice.stop();
+		this.animatedDice.tween.stop();
+		this.animatedDice.renderable = false;
+
+		this.setDice(diceValue);
+	}
+
+    updateTimer(progress)
+    {
+        console.log("Progress :" + progress);
+        this.graphicRadial.clear();
+        this.graphicRadial.beginFill(0xff0000, 0);
+        this.graphicRadial.lineStyle(35, 0x32CD32, 0.5);
+        this.graphicRadial.arc(0, 0, 60, 2 * Math.PI , 2 * Math.PI * progress, true);
+        this.graphicRadial.endFill();
+    }
+
     assignTurn()
     {
         this.diceContainer.alpha = 1;
@@ -349,6 +423,7 @@ export class Player
     {
         this.diceContainer.alpha = 0.2;
         this.hasTurn = false;
+        this.graphicRadial.clear();
     }
 
     

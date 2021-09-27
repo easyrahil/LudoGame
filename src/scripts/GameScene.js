@@ -59,20 +59,23 @@ export class GameScene {
 			this.updateVisualPerTick();
 		} else if (msgType == "turnTimer")
 		{
+			this.players[msgParams.id].updateTimer(1 - (msgParams.time/15));
+
 			if(Globals.gameData.plId == msgParams.id)
 			{
-				
+
 				this.updateProgress(1 - (msgParams.time / 15));
 			}
 		} else if (msgType == "rollDiceResult")
 		{
 			
 			this.players[msgParams.id].setDice(msgParams.value);
-
+			
 			if(msgParams.id == Globals.gameData.plId)
 			{
 				
 				this.stopDiceAnimation(msgParams.value);
+				this.players[msgParams.id].stopDiceAnimation(msgParams.value);
 
 				this.players[Globals.gameData.plId].ActivatePointerChoose(msgParams.pawnArr, this);
 			}
@@ -105,7 +108,11 @@ export class GameScene {
             this.players[msgParams.id].setDice(6);
             
             if(msgParams.id == Globals.gameData.plId)
-                this.stopDiceAnimation(6);
+			{
+				this.stopDiceAnimation(6);
+				this.players[msgParams.id].stopDiceAnimation(6);
+			}
+                
             //this.players[data.id].ActivatePointerChoose();
             this.turnChanged(msgParams.nextRoll);
 		} else if (msgType == "choosePawnAgain")
@@ -413,6 +420,7 @@ export class GameScene {
 			Globals.soundResources.click.play();
 			//Send Message to server
 			this.playDiceAnimation();
+			this.players[Globals.gameData.plId].playDiceAnimation();
 		}, this);
 
 
@@ -728,6 +736,7 @@ export class GameScene {
 	}
 
 	activateDiceRolling(again) {
+		//this.players[Globals.gameData.plId].activateDiceRolling();
 		this.setDiceInteractive(true);
 		this.playRollDiceAnimation((again) ? "info3" : null);
 		if(this.players[Globals.gameData.plId].hasAutomation)
