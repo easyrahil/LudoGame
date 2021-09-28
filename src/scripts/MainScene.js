@@ -25,7 +25,7 @@ export class MainScene {
         //this.createPlayBtn();
 
         this.createButton();
-
+        this.createAvatars();
     }
 
 
@@ -36,7 +36,40 @@ export class MainScene {
             Globals.gameData.currentTurn = msgParams.turn;
             console.log("Turn :" + Globals.gameData.currentTurn);
             Globals.scene.start(new GameScene());
+        } else if (msgType == "waitTimer")
+        {
+            this.waitingText.text = "Waiting for Others.. " + msgParams.data;
         }
+    }
+
+    createWaitingScreen()
+    {
+        const darkBackground = new PIXI.Sprite(Globals.resources.darkBackground.texture);
+        darkBackground.width = appConfig.width;
+        darkBackground.height = appConfig.height;
+
+        const timerContainer = new PIXI.Container();
+        const block = new PIXI.Sprite(Globals.resources.waitingTextBlock.texture);
+        block.anchor.set(0.5);
+
+        this.waitingText = new DebugText("Waiting for Others..",0,0, "#fff", 48, "Luckiest Guy");
+        this.waitingText.style.fontWeight = 'normal'
+
+        timerContainer.x = appConfig.width/2;
+        timerContainer.y = appConfig.height/2;
+
+        timerContainer.addChild(block);
+        timerContainer.addChild(this.waitingText);
+
+        timerContainer.scale.set(gameConfig.widthRatio);
+        
+        this.container.addChild(darkBackground);
+        this.container.addChild(timerContainer);
+    }
+
+    createAvatars()
+    {
+        
     }
 
     createButton()
@@ -131,6 +164,7 @@ export class MainScene {
                     Globals.automationOn = true;
                     Globals.socket = new Socket(id.toString(), "Player "+ i);
                     this.triggerButtonActive();
+                    
                 }, this);
                 
                 this.buttonContainer.addChild(button);
@@ -170,9 +204,10 @@ export class MainScene {
     {
         this.buttonContainer.destroy();
         
-        const waitingText = new DebugText("Waiting for other players.", appConfig.width/2, appConfig.height/2, "#fff", 28, "Luckiest Guy");
-        waitingText.style.fontWeight = 10;
-        this.container.addChild(waitingText);
+        //const waitingText = new DebugText("Waiting for other players.", appConfig.width/2, appConfig.height/2, "#fff", 28, "Luckiest Guy");
+        //waitingText.style.fontWeight = 10;
+        //this.container.addChild(waitingText);
+        this.createWaitingScreen();
     }
 
     createBackground()

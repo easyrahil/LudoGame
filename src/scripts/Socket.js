@@ -178,6 +178,9 @@ export class Socket
             } else if(msg.t == "diceRollNotif")
             {
                 Globals.emitter.Call("diceRollNotif", {id : msg.plId});
+            } else if(msg.t == "waitTimer")
+            {
+                Globals.emitter.Call("waitTimer", {data : msg.data});
             }
         };
 
