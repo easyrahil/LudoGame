@@ -50,7 +50,7 @@ export const LoaderConfig = {
     heartSkip2 : require("../sprites/New/heartSkip2.png"),
     heartSkip3 : require("../sprites/New/heartSkip3.png"),
     heartSkipText : require("../sprites/New/heartSkippedText.png"),
-
+    circleIndication : require("../sprites/circle.png"),
     //spineAnimation : require("../animation/Ludo.json"),
 
     luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")

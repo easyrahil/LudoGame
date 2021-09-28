@@ -24,9 +24,11 @@ export class Pawn extends PIXI.Sprite
 
         this.anchor.set(0.5, 0.8);
 
-        this.on('pointerdown', () => {
-            this.emit("pawnSelected", this.pawnID);
-        }, this);
+        // this.on('pointerdown', () => {
+        //     this.emit("pawnSelected", this.pawnID);
+        // }, this);
+
+    
         
     }
 
@@ -38,6 +40,8 @@ export class Pawn extends PIXI.Sprite
 
         return point;
     }
+
+    
     
 
     reset(setPos = false)
@@ -74,6 +78,7 @@ export class Pawn extends PIXI.Sprite
         const point = Globals.gridPoints[index].globalPosition;
         this.x = point.x;
         this.y = point.y;
+        this.indication.position = new PIXI.Point(this.x, this.y);
     }
 
     reachedFinalPosition()
@@ -131,12 +136,22 @@ export class Pawn extends PIXI.Sprite
 
     setInteractive()
     {
-        this.interactive = true;
+        new TWEEN.Tween(this.indication)
+                                .to({width: this.indication.defaultWidth, height : this.indication.defaultWidth},250)
+                                .easing(TWEEN.Easing.Back.In)
+                                .onComplete(() => {
+                                    this.indication.interactive = true;
+                                })
+                                .start();
     }
 
     removeInteractive()
     {
-        this.interactive = false;
+        this.indication.interactive = false;
+        new TWEEN.Tween(this.indication)
+        .to({width: this.indication.defaultWidth * 0.5, height : this.indication.defaultWidth * 0.5},250)
+        .easing(TWEEN.Easing.Back.In)
+        .start();
     }
 
 
