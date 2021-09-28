@@ -25,7 +25,9 @@ export class MainScene {
         //this.createPlayBtn();
 
         this.createButton();
-        this.createAvatars();
+
+        //this.createWaitingScreen();
+        
     }
 
 
@@ -39,7 +41,14 @@ export class MainScene {
         } else if (msgType == "waitTimer")
         {
             this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+        } else if (msgType == "joined")
+        {
+            //Init Avatars
+        } else if (msgType == "playerJoined")
+        {
+            //init addon player avatar
         }
+
     }
 
     createWaitingScreen()
@@ -69,7 +78,57 @@ export class MainScene {
 
     createAvatars()
     {
-        
+        this.avatars = [];
+
+        for (let i = -1; i <=1; i+=2) {  
+            for (let j = -1; j <= 1; j+=2) {
+                const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
+                avatar.anchor.set(0.5);
+                avatar.scale.set(gameConfig.widthRatio * 2);
+
+                avatar.x = appConfig.width/2;
+                avatar.y = appConfig.height/2;
+
+                avatar.x += i * avatar.width;
+                avatar.y += j * avatar.height;
+
+
+                this.avatars.push(avatar);            
+               
+                this.container.addChild(avatar);
+
+                this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
+               
+                
+            }   
+        }
+    }
+
+    activateAvatarImage(url, avatarParent)
+    {
+        avatarParent.plImage = PIXI.Sprite.from(url);
+        avatarParent.plImage.anchor.set(0.5);
+        avatarParent.plImage.x = avatarParent.x;
+        avatarParent.plImage.y = avatarParent.y;
+        avatarParent.plImage.width = avatarParent.width;
+        avatarParent.plImage.height = avatarParent.height;
+
+
+        const maskGraphic = new PIXI.Graphics();
+        maskGraphic.beginFill(0xFF3300);
+
+        const widthPadding = (avatarParent.width * 0.07);
+        const heightPadding = (avatarParent.height * 0.07);
+
+
+        maskGraphic.drawRect((avatarParent.x - avatarParent.width/2) + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
+        maskGraphic.endFill();
+
+        avatarParent.plImage.mask = maskGraphic;
+
+        this.container.addChild(avatarParent.plImage);    
+        this.container.addChild(maskGraphic);
+
     }
 
     createButton()
@@ -208,6 +267,7 @@ export class MainScene {
         //waitingText.style.fontWeight = 10;
         //this.container.addChild(waitingText);
         this.createWaitingScreen();
+        this.createAvatars();
     }
 
     createBackground()
