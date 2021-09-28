@@ -166,6 +166,13 @@ export class GameScene {
 		} else if (msgType == "diceRollNotif")
 		{
 			this.players[msgParams.id].playDiceAnimation();
+		} else if (msgType == "playerLeft")
+		{
+			console.log("msg param : " + msgParams.id);
+			this.players[msgParams.id].destroy();
+			
+			delete this.players[msgParams.id];
+			delete Globals.gameData.players[msgParams.id];
 		}
     }
 
@@ -357,8 +364,8 @@ export class GameScene {
 			pawn.indication.height = this.ludoBoard.container.height * 0.07;
 			pawn.indication.defaultWidth = pawn.indication.width;
 
-			pawn.indication.width = pawn.indication.defaultWidth * 0.5;
-			pawn.indication.height = pawn.indication.defaultWidth * 0.5;
+			pawn.indication.width = pawn.indication.defaultWidth * 0.3;
+			pawn.indication.height = pawn.indication.defaultWidth * 0.3;
 
 			pawn.indication.on('pointerdown', () => {
 				pawn.emit("pawnSelected", pawn.pawnID);

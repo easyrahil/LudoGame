@@ -149,7 +149,7 @@ export class Pawn extends PIXI.Sprite
     {
         this.indication.interactive = false;
         new TWEEN.Tween(this.indication)
-        .to({width: this.indication.defaultWidth * 0.5, height : this.indication.defaultWidth * 0.5},250)
+        .to({width: this.indication.defaultWidth * 0.3, height : this.indication.defaultWidth * 0.3},150)
         .easing(TWEEN.Easing.Back.In)
         .start();
     }

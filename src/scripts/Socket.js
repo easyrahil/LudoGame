@@ -75,7 +75,10 @@ export class Socket
             } 
             else if (msg.t == "pLeft")
             {
-                delete Globals.gameData.players[msg.data.plId];
+
+                Globals.emitter.Call("playerLeft", {id : msg.data});
+
+                
                 
                 //Update Board with Player Left if game is running
             } else if (msg.t == "RollDiceResult")

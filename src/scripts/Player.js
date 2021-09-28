@@ -500,4 +500,19 @@ export class Player
     {
         this.automation = new Automation(this);
     }
+
+    destroy()
+    {
+        this.pawnsID.forEach(element => {
+
+            Globals.pawns[element].beginMoving();
+
+            Globals.pawns[element].indication.destroy();
+            Globals.pawns[element].destroy();
+
+            delete Globals.pawns[element];
+        });
+        
+        this.container.destroy();
+    }
 }
