@@ -745,6 +745,8 @@ export class GameScene {
 
 	playRollDiceAnimation(rollAnimationString = null)
 	{
+		console.log(navigator.vibrate(500));
+
 		if (this.rollDiceAnimation.state.hasAnimation((rollAnimationString != null) ? rollAnimationString : "info1"))
 		{
 			this.rollDiceAnimation.state.setAnimation(0, (rollAnimationString != null) ? rollAnimationString : "info1", false);
@@ -787,6 +789,8 @@ export class GameScene {
 	activateDiceRolling(again) {
 		//this.players[Globals.gameData.plId].activateDiceRolling();
 		this.setDiceInteractive(true);
+		
+		
 		this.playRollDiceAnimation((again) ? "info3" : null);
 		if(this.players[Globals.gameData.plId].hasAutomation)
 		{

@@ -28,6 +28,14 @@ export class MainScene {
 
         //this.createWaitingScreen();
         //this.createAvatars();
+{
+    const verText = new DebugText("Ver: 0.01", appConfig.leftX, 0);
+    verText.y += verText.height;
+    this.container.addChild(verText);
+    console.log("VIBRATION : Active");
+    console.log(navigator);
+    navigator.vibrate(500);
+}
     }
 
 
