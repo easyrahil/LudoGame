@@ -58,6 +58,8 @@ export class Socket
                 
                 console.log(Globals.gameData.players);
 
+                Globals.emitter.Call("joined", {});
+
             } else if (msg.t == "pAdd")
             {
                 Globals.gameData.players[msg.plId] = {
@@ -67,6 +69,7 @@ export class Socket
                     pImage : msg.pImage
                 };
 
+                Globals.emitter.Call("playerJoined", {player : Globals.gameData.players[msg.plId]});
                 console.log(Globals.gameData.players);
 
             } else if(msg.t == "gameStart")
@@ -180,7 +183,7 @@ export class Socket
                 Globals.emitter.Call("diceRollNotif", {id : msg.plId});
             } else if(msg.t == "waitTimer")
             {
-                Globals.emitter.Call("waitTimer", {data : msg.data});
+                Globals.emitter.Call("waitTimer", {data : msg.data}); 
             }
         };
 

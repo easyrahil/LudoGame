@@ -27,7 +27,7 @@ export class MainScene {
         this.createButton();
 
         //this.createWaitingScreen();
-        
+        //this.createAvatars();
     }
 
 
@@ -43,9 +43,15 @@ export class MainScene {
             this.waitingText.text = "Waiting for Others.. " + msgParams.data;
         } else if (msgType == "joined")
         {
+            Object.keys(Globals.gameData.players).forEach(key => {
+                const player = Globals.gameData.players[key];
+
+                this.activateAvatarImage(player.pImage, this.avatars[parseInt(player.plId)]);
+            });
             //Init Avatars
         } else if (msgType == "playerJoined")
         {
+            this.activateAvatarImage(msgParams.player.pImage, this.avatars[parseInt(msgParams.player.plId)]);
             //init addon player avatar
         }
 
@@ -92,12 +98,14 @@ export class MainScene {
                 avatar.x += i * avatar.width;
                 avatar.y += j * avatar.height;
 
+                const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 36 * gameConfig.widthRatio, "Luckiest Guy");
 
                 this.avatars.push(avatar);            
                
                 this.container.addChild(avatar);
+                this.container.addChild(searchingText);
 
-                this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
+                // this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
                
                 
             }   
