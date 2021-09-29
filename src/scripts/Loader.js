@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { LoaderConfig, LoaderSoundConfig, preloaderConfig } from "./LoaderConfig";
+import { fontData, LoaderConfig, LoaderSoundConfig, preloaderConfig } from "./LoaderConfig";
 import { Globals } from "./Globals";
 import { appConfig, gameConfig } from './appConfig';
 import {DebugText} from './DebugText';
@@ -7,6 +7,7 @@ import {Background} from './Background';
 import {Howl, Howler} from 'howler';
 import "pixi-spine";
 import { Spine } from '@pixi-spine/runtime-3.8';
+import * as FFC from 'fontfaceobserver';
 
 export class Loader {
     constructor(loader, container) {
@@ -100,8 +101,16 @@ export class Loader {
             this.loader.load((loader, res) => {
                 Globals.resources = res;  
 
+                const fontArray =[];
+                fontData.forEach(fontName => {
+                    fontArray.push(new FFC(fontName).load());
+                });
 
-                resolve();
+                Promise.all(fontArray).then(() => {
+                    resolve();
+                });
+
+              
             });
         });
     }

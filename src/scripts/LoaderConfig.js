@@ -56,9 +56,13 @@ export const LoaderConfig = {
 
     //spineAnimation : require("../animation/Ludo.json"),
 
-    luckiestGuyFont : require("../fonts/LuckiestGuy-Regular.ttf")
+    
 
 };
+
+export const fontData = [
+    "Luckiest Guy"
+];
 
 export const LoaderSoundConfig = {
     click : require("../sounds/click.mp3"),
