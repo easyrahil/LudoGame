@@ -129,7 +129,7 @@ export class Player
            
             
                 this.heartList.filledHeart[i].renderable = false
-                this.heartSkipBlock.heartsBlack[i].renderable = false;
+                this.heartSkipBlock.hearts[i].renderable = false;
             }
         }
     }

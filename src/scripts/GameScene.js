@@ -318,11 +318,12 @@ export class GameScene {
 				heartBlack.x = xPos * heartBlack.width;
 				heartBlack.y -= heartSkipBlock.height/2;
 
-				skipContainer.addChild(heart);
 				skipContainer.addChild(heartBlack);
+				skipContainer.addChild(heart);
+				
 
-				skipContainer.hearts.push(heart);
-				skipContainer.heartsBlack.unshift(heartBlack);
+				skipContainer.heartsBlack.push(heartBlack);
+				skipContainer.hearts.unshift(heart);
 				xPos++;
 			}
 
