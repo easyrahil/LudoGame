@@ -242,7 +242,7 @@ export class GameScene {
 
 		potInfo.anchor.set(0.5);
 
-		this.potText = new DebugText("234", 0, 0, "#fff", 72, Globals.resources.luckiestGuyFont.name);		
+		this.potText = new DebugText("234", 0, 0, "#fff", 72, "Luckiest Guy");		
 		pot.anchor.set(0.5);
 
 		pot.y = pot.height * 2;
@@ -300,14 +300,29 @@ export class GameScene {
 			skipContainer.addChild(heartText);
 
 			let xPos = -1;
+			skipContainer.hearts = [];
+			skipContainer.heartsBlack = [];
+
+
 			for (let i = 1; i <= 3; i++) {
 				const heart = new PIXI.Sprite(Globals.resources["heartSkip"+i].texture);
+				const heartBlack = new PIXI.Sprite(Globals.resources["heartSkipBlack"+i].texture);
+
+				
 				heart.anchor.set(0.5);
+				heartBlack.anchor.set(0.5);
 
 				heart.x = xPos * heart.width;
 				heart.y -= heartSkipBlock.height/2;
 
+				heartBlack.x = xPos * heartBlack.width;
+				heartBlack.y -= heartSkipBlock.height/2;
+
 				skipContainer.addChild(heart);
+				skipContainer.addChild(heartBlack);
+
+				skipContainer.hearts.push(heart);
+				skipContainer.heartsBlack.unshift(heartBlack);
 				xPos++;
 			}
 

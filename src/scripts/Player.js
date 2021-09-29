@@ -129,7 +129,7 @@ export class Player
            
             
                 this.heartList.filledHeart[i].renderable = false
-            
+                this.heartSkipBlock.heartsBlack[i].renderable = false;
             }
         }
     }
@@ -168,7 +168,7 @@ export class Player
         this.playerName.zIndex = 1;
         this.playerName.anchor.set(0.5);
         this.playerName.style = {
-            fontFamily: Globals.resources.luckiestGuyFont.name,
+            fontFamily: "Luckiest Guy",
             fontWeight: "bold",
             stroke : "black",
             strokeThickness : 4,
@@ -233,7 +233,7 @@ export class Player
     createScore()
     {
         this.scoreText = new PIXI.Container();
-        this.scoreText.textElement = new DebugText("102", 0, 0, "#fff", 64);
+        this.scoreText.textElement = new DebugText("102", 0, 0, "#fff", 64, "Luckiest Guy");
         this.scoreText.textElement.y += this.scoreText.textElement.height/2 + 20;
         
         switch(parseInt(this.playerID))
