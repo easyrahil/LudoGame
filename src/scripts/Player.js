@@ -233,7 +233,7 @@ export class Player
     createScore()
     {
         this.scoreText = new PIXI.Container();
-        this.scoreText.textElement = new DebugText("102", 0, 0, "#fff", 64, "Luckiest Guy");
+        this.scoreText.textElement = new DebugText("0", 0, 0, "#fff", 64, "Luckiest Guy");
         this.scoreText.textElement.y += this.scoreText.textElement.height/2 + 20;
         
         switch(parseInt(this.playerID))
@@ -318,7 +318,7 @@ export class Player
         this.diceContainer = new PIXI.Container();
         this.diceContainer.sortableChildren = true;
         this.diceContainer.position = new PIXI.Point(this.diceBG.x, this.diceBG.y);
-        this.diceContainer.alpha = 0.3;
+        this.diceContainer.alpha = 0.2;
 
         this.dices = [];
 
@@ -340,7 +340,7 @@ export class Player
 		}
 
 		this.animatedDice = new PIXI.AnimatedSprite(textureArrayOfAnimation);
-
+        this.animatedDice.alpha = 0.2;
 		this.animatedDice.anchor.set(0.5);
         this.animatedDice.position = new PIXI.Point(this.diceBG.x, this.diceBG.y);
 		this.animatedDice.width = this.diceBG.width * 0.7;
@@ -442,6 +442,7 @@ export class Player
         this.animatedDice.interactive = true;
         
         this.diceContainer.alpha = 1;
+        this.animatedDice.alpha = 1;
         this.hasTurn = true;
     }
 
@@ -449,6 +450,7 @@ export class Player
     {
         this.animatedDice.tween.stop();
         this.diceContainer.alpha = 0.2;
+        this.animatedDice.alpha = 0.2;
         this.hasTurn = false;
         this.animatedDice.renderable = true;
         this.dices.forEach(dice => {

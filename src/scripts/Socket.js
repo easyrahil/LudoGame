@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-    //    this.socket = new WebSocket("ws://655f-2405-201-5006-10c7-7d12-5bc5-930e-715b.ngrok.io");
-       this.socket = new WebSocket("ws://209.250.232.65:4400");
+        this.socket = new WebSocket("ws://6fee-2405-201-5006-10c7-805f-b7de-e670-8a93.ngrok.io");
+      // this.socket = new WebSocket("ws://209.250.232.65:4400");
     
         
         this.socket.onopen = e => {
@@ -39,41 +39,59 @@ export class Socket
             const msg = JSON.parse(e.data);
             if(msg.t == "joined")
             {
-                Globals.gameData.plId = msg.data;
-                Globals.gameData.players[msg.data] = {
-                    balance : msg.bal
-                };
 
+                Globals.gameData.tempPlayerData = [];
+                Globals.gameData.bal = msg.bal;
+
+               
                 Object.keys(msg.snap).forEach(key => {
                     const data = msg.snap[key];
-                    if(!(data.plId in Globals.gameData.players))
-                    {
-                        Globals.gameData.players[data.plId] = data;
-                    } else
-                    {
-                        const mergeData = {...Globals.gameData.players[data.plId], ...data};
-                        Globals.gameData.players[data.plId] = mergeData;
-                    }
+
+                    Globals.gameData.tempPlayerData.push(data);
+
+
+
+                    // if(!(data.plId in Globals.gameData.players))
+                    // {
+                    //     Globals.gameData.players[data.plId] = data;
+                    // } else
+                    // {
+                    //     const mergeData = {...Globals.gameData.players[data.plId], ...data};
+                    //     Globals.gameData.players[data.plId] = mergeData;
+                    // }
                 });
-                
-                console.log(Globals.gameData.players);
 
                 Globals.emitter.Call("joined", {});
 
             } else if (msg.t == "pAdd")
             {
-                Globals.gameData.players[msg.plId] = {
-                    balance : msg.bal,
-                    plId : msg.plId,
+                const plData = {
                     pName : msg.pName,
                     pImage : msg.pImage
                 };
 
-                Globals.emitter.Call("playerJoined", {player : Globals.gameData.players[msg.plId]});
-                console.log(Globals.gameData.players);
+                Globals.gameData.tempPlayerData.push(plData);
+
+
+                // Globals.gameData.players[msg.plId] = {
+                //     balance : msg.bal,
+                //     plId : msg.plId,
+                //     pName : msg.pName,
+                //     pImage : msg.pImage
+                // };
+
+                Globals.emitter.Call("playerJoined", {index : Globals.gameData.tempPlayerData.indexOf(plData)});
 
             } else if(msg.t == "gameStart")
             {
+                Globals.gameData.plId = msg.plId;
+                Globals.gameData.players = {};
+
+                msg.snap.forEach(plData => {
+                    Globals.gameData.players[plData.plId] = plData;
+                });
+
+
                 Globals.emitter.Call("gameStart", {turn : msg.turn});
             } 
             else if (msg.t == "pLeft")

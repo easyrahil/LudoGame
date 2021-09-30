@@ -46,20 +46,23 @@ export class MainScene {
             Globals.gameData.currentTurn = msgParams.turn;
             console.log("Turn :" + Globals.gameData.currentTurn);
             Globals.scene.start(new GameScene());
+
         } else if (msgType == "waitTimer")
         {
             this.waitingText.text = "Waiting for Others.. " + msgParams.data;
         } else if (msgType == "joined")
         {
-            Object.keys(Globals.gameData.players).forEach(key => {
-                const player = Globals.gameData.players[key];
 
-                this.activateAvatarImage(player.pImage, this.avatars[parseInt(player.plId)]);
+            Globals.gameData.tempPlayerData.forEach(player => {
+                this.activateAvatarImage(player.pImage, this.avatars[Globals.gameData.tempPlayerData.indexOf(player)]);
             });
+
             //Init Avatars
         } else if (msgType == "playerJoined")
         {
-            this.activateAvatarImage(msgParams.player.pImage, this.avatars[parseInt(msgParams.player.plId)]);
+            console.log("INDEX : " + msgParams.index);
+            console.log(Globals.gameData.tempPlayerData[msgParams.index]);
+            this.activateAvatarImage(Globals.gameData.tempPlayerData[msgParams.index].pImage, this.avatars[msgParams.index]);
             //init addon player avatar
         }
 
@@ -94,29 +97,30 @@ export class MainScene {
     {
         this.avatars = [];
 
-        for (let i = -1; i <=1; i+=2) {  
-            for (let j = -1; j <= 1; j+=2) {
-                const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-                avatar.anchor.set(0.5);
-                avatar.scale.set(gameConfig.widthRatio * 2);
+        for (let i = -2; i <=2; i++) {  
+            if(i == 0)
+                continue;
 
-                avatar.x = appConfig.width/2;
-                avatar.y = appConfig.height/2;
+            const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
+            avatar.anchor.set(0.5);
+            avatar.scale.set(gameConfig.widthRatio);
 
-                avatar.x += i * avatar.width;
-                avatar.y += j * avatar.height;
+            avatar.x = appConfig.width/2;
+            avatar.y = appConfig.height/2;
 
-                const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 36 * gameConfig.widthRatio, "Luckiest Guy");
+            avatar.x += i * avatar.width;
+            avatar.y += avatar.height;
 
-                this.avatars.push(avatar);            
-               
-                this.container.addChild(avatar);
-                this.container.addChild(searchingText);
+            const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 24 * gameConfig.widthRatio, "Luckiest Guy");
 
-                // this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
-               
-                
-            }   
+            this.avatars.push(avatar);            
+            
+            this.container.addChild(avatar);
+            this.container.addChild(searchingText);
+
+            // this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
+            
+            
         }
     }
 

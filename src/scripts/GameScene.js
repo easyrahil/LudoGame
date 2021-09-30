@@ -22,6 +22,9 @@ export class GameScene {
 
 		this.players = {};
 
+		Globals.gridPoints = {};
+		Globals.pawns = {};
+
 		this.createBackground();
 		this.createTimer();
 		this.createPot();
@@ -573,7 +576,7 @@ export class GameScene {
 	playDiceAnimation() {
 		this.interactiveDiceContainer.interactive = false;
 		this.animatedDice.renderable = true;
-		Globals.soundResources.dice.play();
+		//Globals.soundResources.dice.play();
 	
 
 		this.dices.forEach(dice => {
@@ -611,6 +614,8 @@ export class GameScene {
 
 	assignPawns() {
 		const pawnIds = ["Y", "B", "R", "G"];
+
+		
 
 		Object.keys(this.players).forEach(key => {
 
