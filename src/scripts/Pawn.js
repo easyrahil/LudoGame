@@ -70,6 +70,8 @@ export class Pawn extends PIXI.Sprite
         this.squeezeTween =  new TWEEN.Tween(this)
                                 .to({width: this.currentWidth * 0.8, height : this.currentHeight * 0.8, x : pos.x, y : pos.y}, 100)
                                 .start();
+
+        this.indication.x = pos.x;
     }
 
     setPointIndex(index)
@@ -79,6 +81,7 @@ export class Pawn extends PIXI.Sprite
         this.x = point.x;
         this.y = point.y;
         this.indication.position = new PIXI.Point(this.x, this.y);
+        
     }
 
     reachedFinalPosition()
@@ -137,6 +140,7 @@ export class Pawn extends PIXI.Sprite
     setInteractive()
     {
         this.indication.renderable = true;
+        //this.indication.x = globalPosition.x + (this.anchor.x - 0.5) * this.width;
         new TWEEN.Tween(this.indication)
                                 .to({width: this.indication.defaultWidth, height : this.indication.defaultWidth},250)
                                 .easing(TWEEN.Easing.Back.In)
