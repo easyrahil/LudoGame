@@ -28,7 +28,7 @@ export class Pawn extends PIXI.Sprite
         //     this.emit("pawnSelected", this.pawnID);
         // }, this);
 
-    
+        
         
     }
 
@@ -136,6 +136,7 @@ export class Pawn extends PIXI.Sprite
 
     setInteractive()
     {
+        this.indication.renderable = true;
         new TWEEN.Tween(this.indication)
                                 .to({width: this.indication.defaultWidth, height : this.indication.defaultWidth},250)
                                 .easing(TWEEN.Easing.Back.In)
@@ -149,8 +150,11 @@ export class Pawn extends PIXI.Sprite
     {
         this.indication.interactive = false;
         new TWEEN.Tween(this.indication)
-        .to({width: this.indication.defaultWidth * 0.3, height : this.indication.defaultWidth * 0.3},150)
+        .to({width: this.indication.defaultWidth * 0.1, height : this.indication.defaultWidth * 0.1},300)
         .easing(TWEEN.Easing.Back.In)
+        .onComplete(() => {
+            this.indication.renderable = false;
+        })
         .start();
     }
 

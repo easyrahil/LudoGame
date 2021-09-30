@@ -49,8 +49,8 @@ export class Player
 
         this.currentHealth = 3;
         
+        this.lastProgress = {x : 0};
 
-        
 
     }
     
@@ -391,6 +391,7 @@ export class Player
     }
 
     playDiceAnimation() {
+        this.animatedDice.renderable = true;
         this.animatedDice.interactive = false;
         
 		Globals.soundResources.dice.play();
@@ -416,22 +417,37 @@ export class Player
     updateTimer(progress)
     {
         console.log("Progress :" + progress);
-        this.graphicRadial.clear();
-        this.graphicRadial.beginFill(0xff0000, 0);
-        this.graphicRadial.lineStyle(35, 0x32CD32, 0.5);
-        this.graphicRadial.arc(0, 0, 60, 2 * Math.PI , 2 * Math.PI * progress, true);
-        this.graphicRadial.endFill();
+        
+        const tween = new TWEEN.Tween(this.lastProgress)
+        .to({x : progress}, 900)
+        .onUpdate(
+            (value) => {
+                this.graphicRadial.clear();
+                this.graphicRadial.beginFill(0xff0000, 0);
+                this.graphicRadial.lineStyle(35, 0x32CD32, 0.5);
+                this.graphicRadial.arc(0, 0, 60, 2 * Math.PI , 2 * Math.PI * value.x, true);
+                this.graphicRadial.endFill();
+            }
+        )
+        .onComplete((value) => {
+            this.lastProgress = value;
+        })
+        .start();
+
+        
     }
 
     assignTurn()
     {
         this.animatedDice.interactive = true;
+        
         this.diceContainer.alpha = 1;
         this.hasTurn = true;
     }
 
     removeTurn()
     {
+        this.animatedDice.tween.stop();
         this.diceContainer.alpha = 0.2;
         this.hasTurn = false;
         this.animatedDice.renderable = true;

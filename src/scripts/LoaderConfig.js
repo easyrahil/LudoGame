@@ -53,7 +53,7 @@ export const LoaderConfig = {
     heartSkipBlack2 : require("../sprites/New/heartSkipBlack2.png"),
     heartSkipBlack3 : require("../sprites/New/heartSkipBlack3.png"),
     heartSkipText : require("../sprites/New/heartSkippedText.png"),
-    circleIndication : require("../sprites/circle.png"),
+    pointer : require("../sprites/pointer.png"),
     darkBackground : require("../sprites/New/darkBackground.png"),
     waitingTextBlock : require("../sprites/New/waitingTextBlock.png"),
 

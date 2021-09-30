@@ -45,7 +45,7 @@ export class GameScene {
 		//	this.updateVisualPerTick();
 		
 		
-
+		this.lastProgress = {x : 0};
 		
 	}
 
@@ -373,11 +373,11 @@ export class GameScene {
 			pawn.x = (x * 50);
 			pawn.y = y * 20 + 50;
 
-			pawn.indication = new PIXI.Sprite(Globals.resources.circleIndication.texture);
+			pawn.indication = new PIXI.Sprite(Globals.resources.pointer.texture);
 			pawn.indication.position = new PIXI.Point(pawn.x, pawn.y);
-			pawn.indication.anchor.set(0.5);
-			pawn.indication.width = this.ludoBoard.container.height * 0.07;
-			pawn.indication.height = this.ludoBoard.container.height * 0.07;
+			pawn.indication.anchor.set(0.5,1);
+			pawn.indication.width = this.ludoBoard.container.height * 0.1;
+			pawn.indication.height = this.ludoBoard.container.height * 0.1;
 			pawn.indication.defaultWidth = pawn.indication.width;
 
 			pawn.indication.width = pawn.indication.defaultWidth * 0.3;
@@ -387,8 +387,12 @@ export class GameScene {
 				pawn.emit("pawnSelected", pawn.pawnID);
 			}, this);
 
-			this.container.addChild(pawn.indication);
+			pawn.indication.zIndex = 17;
+			pawn.indication.renderable = false;
 			this.container.addChild(pawn);
+			this.container.addChild(pawn.indication);
+
+			//pawn.setInteractive();
 		}
 	}
 
@@ -517,13 +521,25 @@ export class GameScene {
 		this.container.addChild(this.interactiveDiceContainer);
 	}
 
-	updateProgress(value) {
-		this.radialGraphic.clear();
-		this.radialGraphic.beginFill();
-		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
-		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value, true);
-		this.radialGraphic.endFill();
+	updateProgress(progress) {
+		
 
+		const tween = new TWEEN.Tween(this.lastProgress)
+        .to({x : progress}, 999)
+        .onUpdate(
+            (value) => {
+				//console.log("PROGRESS VALUE : " + value.x);
+                this.radialGraphic.clear();
+				this.radialGraphic.beginFill();
+				this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
+				this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value.x, true);
+				this.radialGraphic.endFill();
+            }
+        )
+        .onComplete((value) => {
+            this.lastProgress = value;
+        })
+        .start();
 		
 	}
 
