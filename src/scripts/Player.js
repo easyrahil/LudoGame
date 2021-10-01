@@ -418,7 +418,12 @@ export class Player
     {
         console.log("Progress :" + progress);
         
-        const tween = new TWEEN.Tween(this.lastProgress)
+
+        
+        if(this.updateTimerTween != null && this.updateTimerTween != undefined && this.updateTimerTween.isPlaying)
+            this.updateTimerTween.stop();    
+
+        this.updateTimerTween = new TWEEN.Tween(this.lastProgress)
         .to({x : progress}, 900)
         .onUpdate(
             (value) => {
@@ -456,6 +461,11 @@ export class Player
         this.dices.forEach(dice => {
 			dice.renderable = false;
 		});
+
+        if(this.updateTimerTween != null && this.updateTimerTween != undefined && this.updateTimerTween.isPlaying)
+            this.updateTimerTween.stop();    
+
+            
         this.graphicRadial.clear();
     }
 
