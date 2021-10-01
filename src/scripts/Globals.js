@@ -10,6 +10,6 @@ export const Globals = {
     },
     debug :
     {
-        sound : false
+        sound : true
     }
 };

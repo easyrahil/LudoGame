@@ -654,6 +654,10 @@ export class GameScene {
 				const pointToCompare = Globals.gameData.cutPawn.pos[0];
 				const pointIndex =Globals.pawns[pawnId].currentPointIndex;
 				this.playHitAnimation("hit",  Globals.gridPoints[pointIndex].globalPosition);
+				
+				if(Globals.debug.sound)
+					Globals.soundResources.hit.play();
+					
 				this.moveBackPawnTo(pawnId, pointToCompare);
 			} else {
 				console.log("Turn Changed : " + Globals.gameData.currentTurn);
