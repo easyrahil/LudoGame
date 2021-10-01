@@ -56,8 +56,11 @@ export const LoaderConfig = {
     pointer : require("../sprites/pointer.png"),
     darkBackground : require("../sprites/New/darkBackground.png"),
     waitingTextBlock : require("../sprites/New/waitingTextBlock.png"),
-    gameEndScreen : require("../sprites/New/gameEndScreen.png")
-
+    gameEndScreen : require("../sprites/New/gameEndScreen.png"),
+    wonPlayerBlock : require("../sprites/New/wonPlayerBlock.png"),
+    wonBlock : require("../sprites/New/wonBlock.png"),
+    rupee : require("../sprites/New/rupee.png"),
+    close : require("../sprites/New/close.png")
     //spineAnimation : require("../animation/Ludo.json"),
 
     

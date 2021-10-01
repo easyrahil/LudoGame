@@ -26,8 +26,8 @@ export class MainScene {
 
         this.createButton();
 
-        this.createWaitingScreen();
-        this.createAvatars();
+       // this.createWaitingScreen();
+        //this.createAvatars();
 {
     const verText = new DebugText("Ver: 0.01", appConfig.leftX, 0);
     verText.y += verText.height;
@@ -53,17 +53,19 @@ export class MainScene {
         } else if (msgType == "joined")
         {
 
-            Globals.gameData.tempPlayerData.forEach(player => {
-                this.activateAvatarImage(player.pImage, this.avatars[Globals.gameData.tempPlayerData.indexOf(player)]);
+            Object.values(Globals.gameData.tempPlayerData).forEach(player => {
+                this.activateAvatarImage(player.pImage, this.avatars[player.plId]);
             });
 
             //Init Avatars
         } else if (msgType == "playerJoined")
         {
-            console.log("INDEX : " + msgParams.index);
-            console.log(Globals.gameData.tempPlayerData[msgParams.index]);
+           
             this.activateAvatarImage(Globals.gameData.tempPlayerData[msgParams.index].pImage, this.avatars[msgParams.index]);
             //init addon player avatar
+        } else if(msgType = "playerLeft")
+        {
+            this.removePlayerAvatar(msgParams.id);
         }
 
     }
@@ -138,7 +140,7 @@ export class MainScene {
     activateAvatarImage(url, avatarParent)
     {
         avatarParent.plImage = PIXI.Sprite.from(url);
-        avatarParent.plImage.anchor.set(0.5);
+        avatarParent.plImage.anchor.set(0, 0.5);
         avatarParent.plImage.x = avatarParent.x;
         avatarParent.plImage.y = avatarParent.y;
         avatarParent.plImage.width = avatarParent.width;
@@ -152,7 +154,7 @@ export class MainScene {
         const heightPadding = (avatarParent.height * 0.07);
 
 
-        maskGraphic.drawRect((avatarParent.x - avatarParent.width/2) + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
+        maskGraphic.drawRect(avatarParent.x + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
         maskGraphic.endFill();
 
         avatarParent.plImage.mask = maskGraphic;
@@ -160,6 +162,13 @@ export class MainScene {
         this.container.addChild(avatarParent.plImage);    
         this.container.addChild(maskGraphic);
 
+    }
+
+    removePlayerAvatar(index)
+    {
+        const avatar = this.avatars[index];
+
+        avatar.plImage.destroy();
     }
 
     createButton()

@@ -9,7 +9,7 @@ export class DebugText extends PIXI.Text {
         this.anchor.set(0.5);
         this.style = {
             fontFamily: font,
-            fontWeight: "bold",
+            fontWeight: "normal",
             fontSize: size,
             fill: [color]
         };

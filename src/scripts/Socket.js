@@ -11,8 +11,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        this.socket = new WebSocket("ws://6fee-2405-201-5006-10c7-805f-b7de-e670-8a93.ngrok.io");
-      // this.socket = new WebSocket("ws://209.250.232.65:4400");
+        this.socket = new WebSocket("ws://1f1d-2405-201-5006-10c7-5d12-fb6e-3b63-99c1.ngrok.io");
+    //   this.socket = new WebSocket("ws://209.250.232.65:4400");
     
         
         this.socket.onopen = e => {
@@ -40,14 +40,16 @@ export class Socket
             if(msg.t == "joined")
             {
 
-                Globals.gameData.tempPlayerData = [];
+                Globals.gameData.tempPlayerData = {
+
+                };
                 Globals.gameData.bal = msg.bal;
 
                
                 Object.keys(msg.snap).forEach(key => {
                     const data = msg.snap[key];
 
-                    Globals.gameData.tempPlayerData.push(data);
+                    Globals.gameData.tempPlayerData[data.plId] = data;
 
 
 
@@ -67,10 +69,11 @@ export class Socket
             {
                 const plData = {
                     pName : msg.pName,
-                    pImage : msg.pImage
+                    pImage : msg.pImage,
+                    plId : msg.plId
                 };
 
-                Globals.gameData.tempPlayerData.push(plData);
+                Globals.gameData.tempPlayerData[msg.plId] = plData;
 
 
                 // Globals.gameData.players[msg.plId] = {
@@ -80,7 +83,7 @@ export class Socket
                 //     pImage : msg.pImage
                 // };
 
-                Globals.emitter.Call("playerJoined", {index : Globals.gameData.tempPlayerData.indexOf(plData)});
+                Globals.emitter.Call("playerJoined", {index : msg.plId});
 
             } else if(msg.t == "gameStart")
             {
