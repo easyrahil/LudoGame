@@ -26,8 +26,8 @@ export class MainScene {
 
         this.createButton();
 
-        //this.createWaitingScreen();
-        //this.createAvatars();
+        this.createWaitingScreen();
+        this.createAvatars();
 {
     const verText = new DebugText("Ver: 0.01", appConfig.leftX, 0);
     verText.y += verText.height;
@@ -95,33 +95,44 @@ export class MainScene {
 
     createAvatars()
     {
+
+              
+
         this.avatars = [];
 
-        for (let i = -2; i <=2; i++) {  
-            if(i == 0)
-                continue;
+        for (let i = 0; i < 4; i++) {  
+            
 
             const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-            avatar.anchor.set(0.5);
-            avatar.scale.set(gameConfig.widthRatio);
+            avatar.anchor.set(0, 0.5);
+            avatar.scale.set(gameConfig.widthRatio * 1.4);
 
-            avatar.x = appConfig.width/2;
+            avatar.x = appConfig.leftX + appConfig.innerWidth/10;
             avatar.y = appConfig.height/2;
 
-            avatar.x += i * avatar.width;
-            avatar.y += avatar.height;
+            avatar.x += i * (appConfig.innerWidth/5);
+            avatar.y += (avatar.height * 1.2);
 
-            const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 24 * gameConfig.widthRatio, "Luckiest Guy");
+            const searchingText = new DebugText("Searching..", avatar.x + avatar.width/2, avatar.y, "#000", 24 * gameConfig.widthRatio, "Luckiest Guy");
 
             this.avatars.push(avatar);            
             
             this.container.addChild(avatar);
             this.container.addChild(searchingText);
 
+            
             // this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
             
             
         }
+
+        const logo = new PIXI.Sprite(Globals.resources.logo.texture);
+        logo.scale.set(gameConfig.widthRatio);
+        logo.anchor.set(0.5);
+        logo.x = appConfig.width/2;
+        logo.y = appConfig.height/2 - (this.avatars[0].height * 1.2);
+
+        this.container.addChild(logo);  
     }
 
     activateAvatarImage(url, avatarParent)
