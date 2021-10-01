@@ -39,12 +39,12 @@ export class GameEndScene {
         } else if (msgType == "waitTimer")
         {
             this.updateTimer(msgParams.data);
-            //this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+            this.waitingText.text = "Waiting for Others.. " + msgParams.data;
         }else if (msgType == "playerJoined")
         {
             this.activateAvatarImage(Globals.gameData.tempPlayerData[msgParams.index].pImage, this.avatars[msgParams.index]);
             //init addon player avatar
-        } else if(msgType = "playerLeft")
+        } else if(msgType == "playerLeft")
         {
             this.removePlayerAvatar(msgParams.id);
         }

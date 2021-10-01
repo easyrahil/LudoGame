@@ -17,7 +17,9 @@ export class Automation
 				t: "pDiceRoll"
 			}
 			Globals.socket.sendMessage(distmsg);
-            Globals.soundResources.click.play();
+            
+            if(Globals.debug.sound)
+                Globals.soundResources.click.play();
 			
 			//Send Message to server
 			gameSceneRef.playDiceAnimation();

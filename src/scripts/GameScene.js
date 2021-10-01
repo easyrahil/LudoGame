@@ -171,11 +171,12 @@ export class GameScene {
 			this.players[msgParams.id].playDiceAnimation();
 		} else if (msgType == "playerLeft")
 		{
-			console.log("msg param : " + msgParams.id);
+			delete Globals.gameData.players[msgParams.id];
+			
 			this.players[msgParams.id].destroy();
 			
 			delete this.players[msgParams.id];
-			delete Globals.gameData.players[msgParams.id];
+			
 		}
     }
 
@@ -471,7 +472,9 @@ export class GameScene {
 				t: "pDiceRoll"
 			}
 			Globals.socket.sendMessage(distmsg);
-			Globals.soundResources.click.play();
+            
+			if(Globals.debug.sound)
+				Globals.soundResources.click.play();
 			//Send Message to server
 			this.playDiceAnimation();
 			

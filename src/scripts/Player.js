@@ -354,6 +354,7 @@ export class Player
 				t: "pDiceRoll"
 			}
 			Globals.socket.sendMessage(distmsg);
+            if(Globals.debug.sound)
 			Globals.soundResources.click.play();
 			//Send Message to server
 			this.container.emit("pressedDiceRoll");
@@ -393,7 +394,7 @@ export class Player
     playDiceAnimation() {
         this.animatedDice.renderable = true;
         this.animatedDice.interactive = false;
-        
+        if(Globals.debug.sound)
 		Globals.soundResources.dice.play();
 
 		this.dices.forEach(dice => {
@@ -531,6 +532,18 @@ export class Player
 
     destroy()
     {
+
+        if(this.updateTimerTween != null && this.updateTimerTween != undefined && this.updateTimerTween.isPlaying)
+            this.updateTimerTween.stop(); 
+
+
+        this.pawnsID.forEach(element => {
+
+                Globals.pawns[element].isRemoved = true;
+                Globals.pawns[element].stopTweens();
+
+        });
+
         this.pawnsID.forEach(element => {
 
             Globals.pawns[element].beginMoving();

@@ -28,7 +28,7 @@ export class Pawn extends PIXI.Sprite
         //     this.emit("pawnSelected", this.pawnID);
         // }, this);
 
-        
+        this.isRemoved = false;
         
     }
 
@@ -46,7 +46,7 @@ export class Pawn extends PIXI.Sprite
 
     reset(setPos = false)
     {
-        if(this.squeezeTween.isPlaying())
+        //if(this.squeezeTween.isPlaying)
             this.squeezeTween.stop();
 
         this.width = this.currentWidth;
@@ -66,6 +66,8 @@ export class Pawn extends PIXI.Sprite
 
     squeeze(pos, zIndex)
     {
+        if(this.isRemoved) return;
+
         this.zIndex = zIndex;
         this.squeezeTween =  new TWEEN.Tween(this)
                                 .to({width: this.currentWidth * 0.8, height : this.currentHeight * 0.8, x : pos.x, y : pos.y}, 100)
@@ -97,6 +99,7 @@ export class Pawn extends PIXI.Sprite
     {
         Globals.gridPoints[this.currentPointIndex].leave(this);
     }
+    
 
     move(pointIndex, bounceEffect= true)
     {
@@ -111,7 +114,7 @@ export class Pawn extends PIXI.Sprite
             
             const point = Globals.gridPoints[pointIndex].globalPosition;
             
-            const tween1 =  new TWEEN.Tween(this)
+            this.moveTween =  new TWEEN.Tween(this)
                                 .to({x: point.x, y : point.y},(bounceEffect) ? 200 : 50)
                                 .easing(TWEEN.Easing.Back.In)
                                 .onComplete(() => {
@@ -123,11 +126,12 @@ export class Pawn extends PIXI.Sprite
             if(bounceEffect)
             {
                 
-                const tween2 =  new TWEEN.Tween(this)
+                this.bounceTween =  new TWEEN.Tween(this)
                 .to({width: this.currentWidth * 1.3, height : this.currentHeight * 1.3}, 100)
                 .yoyo(true)
                 .easing(TWEEN.Easing.Back.In)
                 .onComplete(() => {
+            if(Globals.debug.sound)
                     Globals.soundResources.click.play();
                 })
                 .repeat(1)
@@ -141,7 +145,7 @@ export class Pawn extends PIXI.Sprite
     {
         this.indication.renderable = true;
         //this.indication.x = globalPosition.x + (this.anchor.x - 0.5) * this.width;
-        new TWEEN.Tween(this.indication)
+        this.indicationActiveTween = new TWEEN.Tween(this.indication)
                                 .to({width: this.indication.defaultWidth, height : this.indication.defaultWidth},250)
                                 .easing(TWEEN.Easing.Back.In)
                                 .onComplete(() => {
@@ -153,7 +157,7 @@ export class Pawn extends PIXI.Sprite
     removeInteractive()
     {
         this.indication.interactive = false;
-        new TWEEN.Tween(this.indication)
+        this.indicationDeactiveTween = new TWEEN.Tween(this.indication)
         .to({width: this.indication.defaultWidth * 0.1, height : this.indication.defaultWidth * 0.1},300)
         .easing(TWEEN.Easing.Back.In)
         .onComplete(() => {
@@ -163,5 +167,15 @@ export class Pawn extends PIXI.Sprite
     }
 
 
-    
+    stopTweens()
+    {
+        if(this.moveTween != null && this.moveTween != undefined)
+            this.moveTween.stop();
+        if(this.bounceTween != null && this.bounceTween != undefined)
+            this.bounceTween.stop();
+        if(this.indicationActiveTween != null && this.indicationActiveTween != undefined)
+            this.indicationActiveTween.stop();
+        if(this.indicationDeactiveTween != null && this.indicationDeactiveTween != undefined)
+            this.indicationDeactiveTween.stop();
+    }
 }

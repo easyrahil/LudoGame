@@ -7,5 +7,9 @@ export const Globals = {
         players : {},
         isCut : false,
         cutPawn : {}
+    },
+    debug :
+    {
+        sound : false
     }
 };

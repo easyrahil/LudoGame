@@ -29,6 +29,7 @@ export class SceneManager {
 
     update(dt) {
         TWEEN.update();
+        
         if (this.scene && this.scene.update) {
             this.scene.update(dt);
         }

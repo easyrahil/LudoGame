@@ -63,7 +63,7 @@ export class MainScene {
            
             this.activateAvatarImage(Globals.gameData.tempPlayerData[msgParams.index].pImage, this.avatars[msgParams.index]);
             //init addon player avatar
-        } else if(msgType = "playerLeft")
+        } else if(msgType == "playerLeft")
         {
             this.removePlayerAvatar(msgParams.id);
         }
@@ -334,6 +334,7 @@ export class MainScene {
 
         this.logo.interactive = true;
         this.logo.on("pointerdown", () => {
+            if(Globals.debug.sound)
             Globals.soundResources.click.play();
             
             Globals.scene.start(new MatchmakingScene());
