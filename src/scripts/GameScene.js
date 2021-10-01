@@ -62,7 +62,8 @@ export class GameScene {
 			this.updateVisualPerTick();
 		} else if (msgType == "turnTimer")
 		{
-			this.players[msgParams.id].updateTimer(1 - (msgParams.time/15));
+			if(msgParams.id in this.players)
+				this.players[msgParams.id].updateTimer(1 - (msgParams.time/15));
 
 			if(Globals.gameData.plId == msgParams.id)
 			{
@@ -91,7 +92,8 @@ export class GameScene {
 		} else if (msgType == "turnChanged")
 		{
 			this.playAnimation("info4");
-			this.players[msgParams.plId].deductHealth();
+			if(msgParams.plId in this.players)
+				this.players[msgParams.plId].deductHealth();
 			this.turnChanged(msgParams.nextRoll);
 
 
