@@ -244,8 +244,14 @@ export class GameEndScene {
 
     removePlayerAvatar(index)
     {
-        const avatar = this.avatars[index];
 
-        avatar.plImage.destroy();
+        if(this.avatars[index] != undefined && this.avatars[index] != null)
+        {
+            const avatar = this.avatars[index];
+
+            avatar.plImage.destroy();
+        }
+
+        
     }
 }

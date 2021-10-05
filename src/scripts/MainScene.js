@@ -165,9 +165,12 @@ export class MainScene {
 
     removePlayerAvatar(index)
     {
-        const avatar = this.avatars[index];
+        if(this.avatars[index] != undefined && this.avatars[index] != null)
+        {
+            const avatar = this.avatars[index];
 
-        avatar.plImage.destroy();
+            avatar.plImage.destroy();
+        }
     }
 
     createButton()
