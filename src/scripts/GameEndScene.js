@@ -10,7 +10,7 @@ export class GameEndScene {
     constructor() {
         this.container = new PIXI.Container();
       
-
+        this.container.sortableChildren = true;
         this.createBackground();
 
      
@@ -27,6 +27,7 @@ export class GameEndScene {
 
         this.createWonModal();
 
+       
         
     }
 
@@ -74,6 +75,7 @@ export class GameEndScene {
         this.wonBlock.x = appConfig.width/2;
         this.wonBlock.y = appConfig.height/2;
         
+        this.wonBlock.zIndex = 20;
 
         const playerWonData = [
             {name : "Player 1", won: "456"},
@@ -139,7 +141,7 @@ export class GameEndScene {
         //this.gameEndText.x = this.wonBlock.x + this.wonBlock.width/2;
         this.gameEndText.anchor.set(0.5, 1);
         this.gameEndText.y = this.wonBlock.y + this.wonBlock.height/2 - this.gameEndText.height;
-
+        this.gameEndText.zIndex = 20;
         this.container.addChild(this.gameEndText);
 
     }
