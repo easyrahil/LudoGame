@@ -8,6 +8,7 @@ import { MatchmakingScene } from "./MatchmakingScene";
 import { DebugText } from "./DebugText";
 import { Socket } from "./Socket";
 import { Prompt } from "./Prompt";
+import { GameEndScene } from "./GameEndScene";
 
 export class MainScene {
     constructor() {
@@ -31,6 +32,8 @@ export class MainScene {
     console.log(navigator);
     navigator.vibrate(500);
 }
+
+
     }
 
 
@@ -65,6 +68,9 @@ export class MainScene {
         {
             delete Globals.gameData.tempPlayerData[msgParams.id]
             this.removePlayerAvatar(msgParams.id);
+        } else if(msgType == "gameEnd")
+        {
+            Globals.scene.start(new GameEndScene());
         }
 
     }

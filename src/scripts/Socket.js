@@ -12,8 +12,8 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-         this.socket = new WebSocket("ws://402a-8-17-206-208.ngrok.io");
-      //this.socket = new WebSocket("ws://209.250.232.65:4400");
+        //  this.socket = new WebSocket("ws://402a-8-17-206-208.ngrok.io");
+      this.socket = new WebSocket("ws://209.250.232.65:4400");
     
         
         this.socket.onopen = e => {
@@ -30,7 +30,13 @@ export class Socket
             }
 
             this.sendMessage(distmsg);
+
+            setInterval(() => {
+                this.sendMessage({t : "ping"});
+            }, 2000);
         };
+
+        
 
         this.socket.onmessage = e => {
             let type;
@@ -209,6 +215,9 @@ export class Socket
             } else if (msg.t == "threeSkips")
             {
                 Globals.scene.start(new FinalScene());
+            } else if (msg.t == "error")
+            {
+                Globals.scene.start(new FinalScene(msg.data));
             }
         };
 
@@ -220,6 +229,8 @@ export class Socket
             {
                 console.log(`[close] Connection Died`);
             }
+
+            Globals.scene.start(new FinalScene());
         };
 
         this.socket.onerror = e => {
