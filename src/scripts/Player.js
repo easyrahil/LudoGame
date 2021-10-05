@@ -97,7 +97,10 @@ export class Player
         this.infoButton.interactive = true;
 
         this.infoButton.on("pointerdown", () => {
-           this.activateHeartSkipBlock();
+           if(this.heartSkipBlock.renderable)
+            this.deactivateHeartSkipBlock();
+           else
+            this.activateHeartSkipBlock();
         }, this);
         this.infoButton.zIndex = 1;
 
