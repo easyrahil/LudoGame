@@ -1,3 +1,4 @@
+import { FinalScene } from "./FinalScene";
 import { Globals } from "./Globals";
 
 export class Socket
@@ -205,6 +206,9 @@ export class Socket
             } else if(msg.t == "waitTimer")
             {
                 Globals.emitter.Call("waitTimer", {data : msg.data}); 
+            } else if (msg.t == "threeSkips")
+            {
+                Globals.scene.start(new FinalScene());
             }
         };
 

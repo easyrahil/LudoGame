@@ -9,6 +9,7 @@ import { appConfig, gameConfig } from "./appConfig";
 import { GameScene } from "./GameScene";
 import { MyEmitter } from "./MyEmitter";
 import { GameEndScene } from "./GameEndScene";
+import { FinalScene } from "./FinalScene";
 
 
 export class App {
@@ -49,7 +50,8 @@ export class App {
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-                Globals.scene.start(new MainScene());
+               Globals.scene.start(new MainScene());
+                //Globals.scene.start(new FinalScene());
                 //Globals.scene.start(new GameScene());
                //Globals.scene.start(new GameEndScene());
             }, 1000);

@@ -12,17 +12,12 @@ import { Prompt } from "./Prompt";
 export class MainScene {
     constructor() {
         this.container = new PIXI.Container();
-        // Globals.resources.music.sound.play({
-        //     loop: true,
-        //     volume: 0.2
-        // });
+
       
 
         this.createBackground();
         this.showWaitingTime();
-        //this.createInteractiveDice();
-        //this.createLogo();
-        //this.createPlayBtn();
+
 
         this.createButton();
 
@@ -72,9 +67,9 @@ export class MainScene {
 
     createWaitingScreen()
     {
-        const darkBackground = new PIXI.Sprite(Globals.resources.darkBackground.texture);
-        darkBackground.width = appConfig.width;
-        darkBackground.height = appConfig.height;
+        // const darkBackground = new PIXI.Sprite(Globals.resources.darkBackground.texture);
+        // darkBackground.width = appConfig.width;
+        // darkBackground.height = appConfig.height;
 
         const timerContainer = new PIXI.Container();
         const block = new PIXI.Sprite(Globals.resources.waitingTextBlock.texture);
@@ -91,7 +86,7 @@ export class MainScene {
 
         timerContainer.scale.set(gameConfig.widthRatio);
         
-        this.container.addChild(darkBackground);
+        // this.container.addChild(darkBackground);
         this.container.addChild(timerContainer);
     }
 
