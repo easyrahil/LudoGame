@@ -44,7 +44,10 @@ export class MainScene {
 
         } else if (msgType == "waitTimer")
         {
-            this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+            if(Object.keys(Globals.gameData.tempPlayerData).length == 1)
+                this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+            else
+                this.waitingText.text = "Game starting in.. " + msgParams.data;
         } else if (msgType == "joined")
         {
 
@@ -60,6 +63,7 @@ export class MainScene {
             //init addon player avatar
         } else if(msgType == "playerLeft")
         {
+            delete Globals.gameData.tempPlayerData[msgParams.id]
             this.removePlayerAvatar(msgParams.id);
         }
 

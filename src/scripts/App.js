@@ -45,14 +45,14 @@ export class App {
         
         this.loader = new Loader(this.app.loader, loaderContainer);
         
-        this.pushSampleData();
+        //this.pushSampleData();
 
         this.loader.preload().then(() => {
             setTimeout(() => {
                 loaderContainer.destroy();
-               //Globals.scene.start(new MainScene());
+               Globals.scene.start(new MainScene());
                 //Globals.scene.start(new FinalScene());
-                Globals.scene.start(new GameScene());
+                //Globals.scene.start(new GameScene());
                //Globals.scene.start(new GameEndScene());
             }, 1000);
             

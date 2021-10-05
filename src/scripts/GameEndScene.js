@@ -17,10 +17,11 @@ export class GameEndScene {
         this.createWaitingScreen();
         this.createAvatars();
 
+        Globals.gameData.tempPlayerData = {};
 
         Object.keys(Globals.gameData.players).forEach(key => {
             const player = Globals.gameData.players[key];
-
+            Globals.gameData.tempPlayerData[key] = player;
             this.activateAvatarImage(player.pImage, this.avatars[parseInt(key)]);
         });
 
@@ -39,13 +40,19 @@ export class GameEndScene {
         } else if (msgType == "waitTimer")
         {
             this.updateTimer(msgParams.data);
-            this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+
+
+            if(Object.keys(Globals.gameData.tempPlayerData).length == 1)
+                this.waitingText.text = "Waiting for Others.. " + msgParams.data;
+            else
+                this.waitingText.text = "Game starting in.. " + msgParams.data;
         }else if (msgType == "playerJoined")
         {
             this.activateAvatarImage(Globals.gameData.tempPlayerData[msgParams.index].pImage, this.avatars[msgParams.index]);
             //init addon player avatar
         } else if(msgType == "playerLeft")
         {
+            delete Globals.gameData.tempPlayerData[msgParams.id];
             this.removePlayerAvatar(msgParams.id);
         }
     }
