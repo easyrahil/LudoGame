@@ -12,7 +12,7 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        //  this.socket = new WebSocket("ws://402a-8-17-206-208.ngrok.io");
+        //  this.socket = new WebSocket("ws://4925-2405-201-5006-10c7-9829-ee89-567b-bf6c.ngrok.io");
       this.socket = new WebSocket("ws://209.250.232.65:4400");
     
         
@@ -31,7 +31,7 @@ export class Socket
 
             this.sendMessage(distmsg);
 
-            setInterval(() => {
+            this.pingIntervalId = setInterval(() => {
                 this.sendMessage({t : "ping"});
             }, 2000);
         };
@@ -222,6 +222,7 @@ export class Socket
         };
 
         this.socket.onclose = e => {
+            clearInterval(this.pingIntervalId);
             if(e.wasClean)
             {
                 console.log(`[close] Connection closed cleanly, code=${e.code} reason=${e.reason}`);

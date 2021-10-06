@@ -10,7 +10,7 @@ export class FinalScene {
         const text = new DebugText("You've been disconnected.", appConfig.width/2, appConfig.height/2, "#fff", 100 * gameConfig.widthRatio, "Luckiest Guy");
 
         if(textToShow != null)
-            text.text = "textToShow\nYou've been disconnected.";
+            text.text = textToShow+"\nYou've been disconnected.";
 
         this.container.addChild(text);
     }

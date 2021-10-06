@@ -242,9 +242,33 @@ export class GameScene {
 
 	createPot()
 	{
+
+		const playerPotData = [
+            {name : "Player 1", won: "456"},
+            {name : "Player 2", won: "23"},
+            {name : "Player 3", won: "524"},
+            {name : "Player 4", won: "123"},
+        ];
+
 		const container = new PIXI.Container();
 		const pot = new PIXI.Sprite(Globals.resources.pot.texture);
 		const potInfo = new PIXI.Sprite(Globals.resources.potInfo.texture);
+		potInfo.interactive = true;
+		potInfo.on("pointerdown", () => {
+			potContainer.renderable = true;
+		}, this);
+
+		const potContainer = new PIXI.Container();
+		const potPanel = new PIXI.Sprite(Globals.resources.potPanel.texture);
+		const close = new PIXI.Sprite(Globals.resources.close.texture);
+		const potHeading = new PIXI.Sprite(Globals.resources.potDistribution.texture);
+		close.interactive = true;
+		close.on("pointerdown", () => {
+			potContainer.renderable = false;
+		}, this);
+		potPanel.anchor.set(0.5);
+		close.anchor.set(0.5);
+		potHeading.anchor.set(0.5);
 
 		potInfo.anchor.set(0.5);
 
@@ -254,6 +278,7 @@ export class GameScene {
 		pot.y = pot.height * 2;
 
 		container.x = appConfig.width/2;
+		potContainer.x = appConfig.width/2;
 		
 		this.potText.anchor.set(0, 0.5);
 
@@ -263,11 +288,65 @@ export class GameScene {
 		potInfo.y = pot.y - pot.height/2;
 		potInfo.x += pot.width/2;
 
+		potContainer.y = pot.height * gameConfig.widthRatio * 2;
+		
+		close.x = potPanel.x + potPanel.width/2 - close.width/2;
+		close.y = potPanel.y - potPanel.height/2 + close.height/4;
+
+
+
 		container.scale.set(gameConfig.widthRatio);
+		potContainer.scale.set(gameConfig.widthRatio);
+
 		container.addChild(pot);
 		container.addChild(this.potText);
 		container.addChild(potInfo);
+
+		potContainer.addChild(potPanel);
+		potContainer.addChild(close);
+		potContainer.addChild(potHeading);
+
+		potHeading.y -= potContainer.height;
+		
+		for (let i = 0; i < playerPotData.length; i++) {
+			const data = playerPotData[i];
+			
+			const playerPanel = new PIXI.Sprite(Globals.resources.potPlayerPanel.texture);
+			playerPanel.anchor.set(0.5);
+			playerPanel.x = i * playerPanel.width * 1.1 - (playerPanel.width * 1.1)/2 ;
+			if(i > 1)
+			{
+				playerPanel.x = (i - 2) * playerPanel.width * 1.1 - (playerPanel.width * 1.1)/2 ;
+				playerPanel.y += playerPanel.height * 0.9;
+			} else
+			{
+				playerPanel.y -= playerPanel.height * 0.4;
+			}
+
+
+			playerPanel.playerText = new DebugText(data.name, 0, 0, "#eaff93", 42, "Luckiest Guy");
+            playerPanel.playerText.anchor.set(0, 0.5);
+            playerPanel.playerText.x -= playerPanel.width * 0.44 ;
+            playerPanel.addChild(playerPanel.playerText);
+
+            const divider = new DebugText(":", 0, 0, "#eaff93", 42, "Luckiest Guy");
+            playerPanel.addChild(divider);
+
+            const rupee = new PIXI.Sprite(Globals.resources.rupee.texture);
+            rupee.anchor.set(0, 0.5);
+            rupee.x += playerPanel.width * 0.05;
+            rupee.y += rupee.height * 0.1;
+            playerPanel.addChild(rupee);
+
+            const prize = new DebugText(data.won, playerPanel.width * 0.1 + rupee.width/2, 0, "#fff", 42, "Luckiest Guy");
+            prize.anchor.set(0, 0.5);
+            playerPanel.addChild(prize);
+
+			potContainer.addChild(playerPanel);
+		}
+		potContainer.renderable = false;
 		this.container.addChild(container);
+		this.container.addChild(potContainer);
 	}
 	
 	createSkipHeartBlock()

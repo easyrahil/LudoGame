@@ -60,7 +60,12 @@ export const LoaderConfig = {
     wonPlayerBlock : require("../sprites/New/wonPlayerBlock.png"),
     wonBlock : require("../sprites/New/wonBlock.png"),
     rupee : require("../sprites/New/rupee.png"),
-    close : require("../sprites/New/close.png")
+    close : require("../sprites/New/close.png"),
+    potDistribution : require("../sprites/New/potDistribution.png"),
+    potPanel : require("../sprites/New/potPanel.png"),
+    potPlayerPanel : require("../sprites/New/potPlayerPanel.png"),
+    
+    
     //spineAnimation : require("../animation/Ludo.json"),
 
     
