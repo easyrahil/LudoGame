@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
+import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
 import { GameScene } from "./GameScene";
 import { Globals } from "./Globals";
@@ -78,54 +79,68 @@ export class GameEndScene {
         this.wonBlock.zIndex = 20;
 
         const playerWonData = [
-            {name : "Player 1", won: "456"},
-            {name : "Player 2", won: "23"},
-            {name : "Player 3", won: "524"},
-            {name : "Player 4", won: "123"},
+            {name : "Player 1", won: "456", isMine : true},
+            {name : "Player 2", won: "23", isMine : false},
+            {name : "Player 3", won: "524", isMine : false},
+            {name : "Player 4", won: "123", isMine : false},
         ];
         
 
         for (let i = 0; i < playerWonData.length; i++) {
             const wonData = playerWonData[i];
             
-            const wonPlayerBlock = new PIXI.Sprite(Globals.resources.wonPlayerBlock.texture);
-            wonPlayerBlock.anchor.set(0.5);
-            wonPlayerBlock.y -= this.wonBlock.height/2 - wonPlayerBlock.height * 1.6;
+            const wonPlayerBlock = new PIXI.Sprite(wonData.isMine ?
+                Globals.resources.wonPlayerSelfBlock.texture :
+                Globals.resources.wonPlayerBlock.texture 
+                );
 
-            wonPlayerBlock.playerText = new DebugText(wonData.name, 0, 0, "#eaff93", 64, "Luckiest Guy");
-            wonPlayerBlock.playerText.anchor.set(0, 0.5);
-            wonPlayerBlock.playerText.x -= wonPlayerBlock.width * 0.4 ;
+            wonPlayerBlock.anchor.set(0.5);
+            
+            wonPlayerBlock.y -= wonPlayerBlock.height * 0.3;
+
+            wonPlayerBlock.playerText = new DebugText(wonData.name.toUpperCase(), 0, 0,wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            
+                
+                
+            wonPlayerBlock.playerText.anchor.set(0.5);
+            wonPlayerBlock.playerText.x -= wonPlayerBlock.width * 0.27 ;
             wonPlayerBlock.addChild(wonPlayerBlock.playerText);
 
-            const divider = new DebugText(":", 0, 0, "#eaff93", 64, "Luckiest Guy");
-            wonPlayerBlock.addChild(divider);
-
-            const rupee = new PIXI.Sprite(Globals.resources.rupee.texture);
-            rupee.anchor.set(0, 0.5);
-            rupee.x += wonPlayerBlock.width * 0.05;
-            rupee.y += rupee.height * 0.1;
-            wonPlayerBlock.addChild(rupee);
-
-            const prize = new DebugText(wonData.won, wonPlayerBlock.width * 0.1 + rupee.width/2, 0, "#fff", 64, "Luckiest Guy");
-            prize.anchor.set(0, 0.5);
+            const rank = new DebugText(i+1, wonPlayerBlock.width * 0.1, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            wonPlayerBlock.addChild(rank);
+            
+            const prize = new DebugText(wonData.won, wonPlayerBlock.width * 0.34, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            prize.anchor.set(0.5);
             wonPlayerBlock.addChild(prize);
             
+            if(wonData.isMine)
+            {
+                wonPlayerBlock.playerText.style.stroke = "#be3638";
+                wonPlayerBlock.playerText.style.strokeThickness = 8;
+
+                rank.style.stroke = "#be3638";
+                rank.style.strokeThickness = 8;
+
+                prize.style.stroke = "#be3638";
+                prize.style.strokeThickness = 8;
+            }
             
-            wonPlayerBlock.y +=  i * wonPlayerBlock.height * 1.2;
+            wonPlayerBlock.y +=  i * wonPlayerBlock.height * 1.17;
 
            this.wonBlock.addChild(wonPlayerBlock);
         }
 
-        const close = new PIXI.Sprite(Globals.resources.close.texture);
+        const close = new PIXI.Sprite(Globals.resources.gameOverClose.texture);
         close.anchor.set(0.5, 0.3);
         
-        close.x += this.wonBlock.width/2;
-        close.y -= this.wonBlock.height/2;
+        close.x += this.wonBlock.width/2.1;
+        close.y -= this.wonBlock.height/5;
 
         close.interactive = true;
         close.once("pointerdown", () => {
             this.wonBlock.destroy();
             this.gameEndText.destroy();
+            this.logo.renderable = true;
         }, this);
         this.wonBlock.addChild(close);
 
@@ -137,7 +152,7 @@ export class GameEndScene {
 
     createGameEndText()
     {
-        this.gameEndText = new DebugText("", appConfig.width/2, appConfig.height/2, "#1e729b", 48 * gameConfig.widthRatio, "Luckiest Guy")
+        this.gameEndText = new DebugText("", appConfig.width/2, appConfig.height/2, "#fff", 38 * gameConfig.widthRatio, "Luckiest Guy")
         //this.gameEndText.x = this.wonBlock.x + this.wonBlock.width/2;
         this.gameEndText.anchor.set(0.5, 1);
         this.gameEndText.y = this.wonBlock.y + this.wonBlock.height/2 - this.gameEndText.height;
@@ -205,13 +220,14 @@ export class GameEndScene {
             
         }
 
-        const logo = new PIXI.Sprite(Globals.resources.logo.texture);
-        logo.scale.set(gameConfig.widthRatio);
-        logo.anchor.set(0.5);
-        logo.x = appConfig.width/2;
-        logo.y = appConfig.height/2 - (this.avatars[0].height * 1.2);
+        this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
+        this.logo.scale.set(gameConfig.widthRatio);
+        this.logo.anchor.set(0.5);
+        this.logo.x = appConfig.width/2;
+        this.logo.y = appConfig.height/2 - (this.avatars[0].height * 1.2);
+        this.logo.renderable = false;
+        this.container.addChild(this.logo);  
 
-        this.container.addChild(logo);  
     }
 
     activateAvatarImage(url, avatarParent)

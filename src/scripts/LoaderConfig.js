@@ -54,11 +54,18 @@ export const LoaderConfig = {
     heartSkipBlack3 : require("../sprites/New/heartSkipBlack3.png"),
     heartSkipText : require("../sprites/New/heartSkippedText.png"),
     pointer : require("../sprites/pointer.png"),
-    darkBackground : require("../sprites/New/darkBackground.png"),
+
+    //GameOverEnd Screen
+    
     waitingTextBlock : require("../sprites/New/waitingTextBlock.png"),
-    gameEndScreen : require("../sprites/New/gameEndScreen.png"),
-    wonPlayerBlock : require("../sprites/New/wonPlayerBlock.png"),
-    wonBlock : require("../sprites/New/wonBlock.png"),
+    gameEndScreen : require("../sprites/New/gameOverEndScreen.png"),
+    wonPlayerBlock : require("../sprites/New/gameOverOther.png"),
+    wonPlayerSelfBlock : require("../sprites/New/gameOverSelf.png"),
+    wonBlock : require("../sprites/New/gameOverBlock.png"),
+    gameOverClose : require('../sprites/New/gameOverClose.png'),
+
+
+    //Pot Display
     rupee : require("../sprites/New/rupee.png"),
     close : require("../sprites/New/close.png"),
     potDistribution : require("../sprites/New/potDistribution.png"),
