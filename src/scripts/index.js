@@ -15,6 +15,15 @@ app.run();
 app.addOrientationCheck();
 
 
+ global.updateFromNative = function updateFromNative(message)
+{
+    const jsonData = JSON.parse(message);
+
+    Globals.socket = new Socket(jsonData.token.playerID, jsonData.username, jsonData.token.tableTypeID);
+
+    Globals.emitter.Call("socketConnection", {});
+}
+
 //Globals.socket = new Socket();
 
 

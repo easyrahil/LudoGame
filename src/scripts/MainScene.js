@@ -71,6 +71,9 @@ export class MainScene {
         } else if(msgType == "gameEnd")
         {
             Globals.scene.start(new GameEndScene());
+        } else if(msgType == "socketConnection")
+        {
+            this.triggerButtonActive();
         }
 
     }

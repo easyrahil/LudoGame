@@ -3,7 +3,7 @@ import { Globals } from "./Globals";
 
 export class Socket
 {
-    constructor(uuid, name)
+    constructor(uuid, name, tableTypeID, url = null)
     {
        
         console.log("Socket Created");
@@ -12,8 +12,16 @@ export class Socket
         const urlParams = new URLSearchParams(queryString);
         const servAddress = urlParams.get('debug');
 
-        //  this.socket = new WebSocket("ws://4925-2405-201-5006-10c7-9829-ee89-567b-bf6c.ngrok.io");
-      this.socket = new WebSocket("ws://209.250.232.65:4400");
+        if(url != null)
+        {
+            this.socket = new WebSocket(url);
+        } else
+        {
+            this.socket = new WebSocket("ws://209.250.232.65:4400");
+            //  this.socket = new WebSocket("ws://4925-2405-201-5006-10c7-9829-ee89-567b-bf6c.ngrok.io");
+        }
+        
+        
     
         
         this.socket.onopen = e => {
@@ -22,11 +30,11 @@ export class Socket
             const distmsg = {
                 t : "connect",
                 gid : uuid,
-                tableTypeID : "2",
+                tableTypeID : tableTypeID,
                 entryFee : "6",
                 pName : name,
-                //pImage : "../src/sprites/68.png"
                 pImage : "https://cccdn.b-cdn.net/1584464368856.png"
+                // pImage : useravatar
             }
 
             this.sendMessage(distmsg);
