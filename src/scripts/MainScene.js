@@ -17,10 +17,10 @@ export class MainScene {
       
 
         this.createBackground();
-        this.showWaitingTime();
 
 
-        this.createButton();
+
+       // this.createButton();
 
        // this.createWaitingScreen();
         //this.createAvatars();
@@ -312,7 +312,8 @@ export class MainScene {
 
     triggerButtonActive()
     {
-        this.buttonContainer.destroy();
+        if(this.buttonContainer != null || this.buttonContainer != undefined)
+            this.buttonContainer.destroy();
         
         //const waitingText = new DebugText("Waiting for other players.", appConfig.width/2, appConfig.height/2, "#fff", 28, "Luckiest Guy");
         //waitingText.style.fontWeight = 10;
@@ -327,12 +328,7 @@ export class MainScene {
         this.container.addChild(this.background.container);
     }
     
-    showWaitingTime()
-    {
-       // this.waitingTime = new DebugText("Looking For Players", appConfig.width/2, appConfig.height/2, "#000");
-        //this.container.addChild(this.waitingTime);
-    }
-    
+   
     
 
     createLogo()
