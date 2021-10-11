@@ -7,12 +7,23 @@ export class FinalScene {
         this.container = new PIXI.Container();
         
         
-        const text = new DebugText("You've been disconnected.", appConfig.width/2, appConfig.height/2, "#fff", 100 * gameConfig.widthRatio, "Luckiest Guy");
+        const text = new DebugText("You've been disconnected.", 0, 0, "#fff", 80, "Luckiest Guy");
 
         if(textToShow != null)
-            text.text = textToShow+"\nYou've been disconnected.";
+            text.text = textToShow;
 
         this.container.addChild(text);
+
+        if(text.width > appConfig.innerWidth)
+        {
+            text.style.fontSize *= appConfig.innerWidth/text.width  * 0.9;
+        }
+    
+
+
+      //  this.container.scale.set(gameConfig.widthRatio);
+        this.container.x = appConfig.width/2;
+        this.container.y = appConfig.height/2;
     }
 
   
