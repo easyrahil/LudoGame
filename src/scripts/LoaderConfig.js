@@ -53,7 +53,12 @@ export const LoaderConfig = {
     heartSkipBlack2 : require("../sprites/New/heartSkipBlack2.png"),
     heartSkipBlack3 : require("../sprites/New/heartSkipBlack3.png"),
     heartSkipText : require("../sprites/New/heartSkippedText.png"),
-    pointer : require("../sprites/pointer.png"),
+
+    pointer0 : require("../sprites/New/pointer0.png"),
+    pointer1 : require("../sprites/New/pointer1.png"),
+    pointer2 : require("../sprites/New/pointer2.png"),
+    pointer3 : require("../sprites/New/pointer3.png"),
+
 
     //GameOverEnd Screen
     
@@ -91,4 +96,4 @@ export const LoaderSoundConfig = {
 
 export const preloaderConfig = {
     startLogo : require("../sprites/Logo.png")
-};
+}

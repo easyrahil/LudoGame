@@ -15,7 +15,7 @@ app.run();
 app.addOrientationCheck();
 
 
- global.updateFromNative = function updateFromNative(message)
+global.updateFromNative = function updateFromNative(message)
 {
     const jsonData = JSON.parse(message);
 

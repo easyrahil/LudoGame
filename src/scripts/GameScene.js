@@ -458,15 +458,15 @@ export class GameScene {
 			pawn.x = (x * 50);
 			pawn.y = y * 20 + 50;
 
-			pawn.indication = new PIXI.Sprite(Globals.resources.pointer.texture);
+			pawn.indication = new PIXI.Sprite(Globals.resources["pointer" + y].texture);
 			pawn.indication.position = new PIXI.Point(pawn.x, pawn.y);
 			pawn.indication.anchor.set(0.5,1);
-			pawn.indication.width = this.ludoBoard.container.height * 0.1;
-			pawn.indication.height = this.ludoBoard.container.height * 0.1;
+			pawn.indication.scale.set(0.7);
 			pawn.indication.defaultWidth = pawn.indication.width;
+			pawn.indication.defaultHeight = pawn.indication.height;
 
 			pawn.indication.width = pawn.indication.defaultWidth * 0.3;
-			pawn.indication.height = pawn.indication.defaultWidth * 0.3;
+			pawn.indication.height = pawn.indication.defaultHeight * 0.3;
 
 			pawn.indication.on('pointerdown', () => {
 				pawn.emit("pawnSelected", pawn.pawnID);

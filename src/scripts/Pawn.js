@@ -146,7 +146,7 @@ export class Pawn extends PIXI.Sprite
         this.indication.renderable = true;
         //this.indication.x = globalPosition.x + (this.anchor.x - 0.5) * this.width;
         this.indicationActiveTween = new TWEEN.Tween(this.indication)
-                                .to({width: this.indication.defaultWidth, height : this.indication.defaultWidth},250)
+                                .to({width: this.indication.defaultWidth, height : this.indication.defaultHeight},250)
                                 .easing(TWEEN.Easing.Back.In)
                                 .onComplete(() => {
                                     this.indication.interactive = true;
@@ -158,7 +158,7 @@ export class Pawn extends PIXI.Sprite
     {
         this.indication.interactive = false;
         this.indicationDeactiveTween = new TWEEN.Tween(this.indication)
-        .to({width: this.indication.defaultWidth * 0.1, height : this.indication.defaultWidth * 0.1},300)
+        .to({width: this.indication.defaultWidth * 0.1, height : this.indication.defaultHeight * 0.1},300)
         .easing(TWEEN.Easing.Back.In)
         .onComplete(() => {
             this.indication.renderable = false;
