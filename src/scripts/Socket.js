@@ -171,6 +171,10 @@ export class Socket
                 Globals.emitter.Call("choosePawnAgain", {});
             } else if(msg.t == "gameEnded")
             {
+
+                Globals.gameData.winData = msg.winData
+                console.log(Globals.gameData.winData);
+                
                 if(msg.data == null || Object.keys(msg.data).length == 0)
                 {   
 
@@ -195,6 +199,9 @@ export class Socket
                     {
                         responseMsg = "All opponents left.";
                     }
+
+                  
+
 
                     Globals.emitter.Call("gameEnd", {reason : responseMsg});
                     return;

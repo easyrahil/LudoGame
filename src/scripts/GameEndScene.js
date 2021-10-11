@@ -78,17 +78,17 @@ export class GameEndScene {
         
         this.wonBlock.zIndex = 20;
 
-        const playerWonData = [
-            {name : "Player 1", won: "456", isMine : true},
-            {name : "Player 2", won: "23", isMine : false},
-            {name : "Player 3", won: "524", isMine : false},
-            {name : "Player 4", won: "123", isMine : false},
-        ];
+        // const playerWonData = [
+        //     {name : "Player 1", won: "456", isMine : true},
+        //     {name : "Player 2", won: "23", isMine : false},
+        //     {name : "Player 3", won: "524", isMine : false},
+        //     {name : "Player 4", won: "123", isMine : false},
+        // ];
         
 
-        for (let i = 0; i < playerWonData.length; i++) {
-            const wonData = playerWonData[i];
-            
+        for (let i = 0; i < Globals.gameData.winData.length; i++) {
+            const wonData = Globals.gameData.winData[i];
+            wonData.isMine = (wonData.plId == Globals.gameData.plId);
             const wonPlayerBlock = new PIXI.Sprite(wonData.isMine ?
                 Globals.resources.wonPlayerSelfBlock.texture :
                 Globals.resources.wonPlayerBlock.texture 
@@ -109,7 +109,7 @@ export class GameEndScene {
             const rank = new DebugText(i+1, wonPlayerBlock.width * 0.1, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
             wonPlayerBlock.addChild(rank);
             
-            const prize = new DebugText(wonData.won, wonPlayerBlock.width * 0.34, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            const prize = new DebugText(wonData.win, wonPlayerBlock.width * 0.34, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
             prize.anchor.set(0.5);
             wonPlayerBlock.addChild(prize);
             

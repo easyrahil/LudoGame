@@ -6,7 +6,8 @@ export const Globals = {
     gameData : {
         players : {},
         isCut : false,
-        cutPawn : {}
+        cutPawn : {},
+        winData : []
     },
     debug :
     {
