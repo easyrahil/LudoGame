@@ -3,7 +3,7 @@ import { Globals } from "./Globals";
 
 export class Socket
 {
-    constructor(uuid, name, tableTypeID, url = null)
+    constructor(uuid, name, tableTypeID, useravatar,  url = null)
     {
        
         console.log("Socket Created");
@@ -33,8 +33,8 @@ export class Socket
                 tableTypeID : tableTypeID,
                 entryFee : "6",
                 pName : name,
-                pImage : "https://cccdn.b-cdn.net/1584464368856.png"
-                // pImage : useravatar
+              // pImage : "https://cccdn.b-cdn.net/1584464368856.png"
+                 pImage : useravatar
             }
 
             this.sendMessage(distmsg);

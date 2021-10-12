@@ -60,6 +60,8 @@ export class Pawn extends PIXI.Sprite
             this.x = point.x;
             this.y = point.y;
         }
+
+        this.indication.x = this.x;
     }
 
     
