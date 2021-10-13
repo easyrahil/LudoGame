@@ -58,6 +58,7 @@ export class Socket
                 Globals.gameData.tempPlayerData = {
 
                 };
+                
                 Globals.gameData.bal = msg.bal;
 
                

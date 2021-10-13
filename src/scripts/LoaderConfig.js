@@ -88,6 +88,8 @@ export const fontData = [
     "Luckiest Guy"
 ];
 
+
+
 export const LoaderSoundConfig = {
     click : require("../sounds/click.mp3"),
     dice :  require("../sounds/dice-5.mp3"),

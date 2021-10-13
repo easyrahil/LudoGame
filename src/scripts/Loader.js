@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { fontData, LoaderConfig, LoaderSoundConfig, preloaderConfig } from "./LoaderConfig";
+import { animationData, fontData, LoaderConfig, LoaderSoundConfig, preloaderConfig } from "./LoaderConfig";
 import { Globals } from "./Globals";
 import { appConfig, gameConfig } from './appConfig';
 import {DebugText} from './DebugText';
@@ -15,13 +15,13 @@ export class Loader {
         
         
         
-        this.background = new Background(PIXI.Texture.from('../src/sprites/background.png'));
+        this.background = new Background(PIXI.Texture.from('./background.png'));
 
         container.addChild(this.background.container);
 
         this.loaderBarContainer = new PIXI.Container();
 
-        this.logo = PIXI.Sprite.from('../src/sprites/Logo.png');
+        this.logo = PIXI.Sprite.from('./Logo.png');
         
         this.logo.anchor.set(0.5, 1);
         this.logo.position = new PIXI.Point(0, 0);
@@ -66,10 +66,13 @@ export class Loader {
         
         this.resources = LoaderConfig;
 
-        this.loader.add("spineAnim", "src/animation/Ludo.json",
+        this.loader.add("spineAnim", "./animation/Ludo.json",
         {
             crossOriginIsolated: true
         });
+
+        // const configAnim = require("../animation/Ludo.json");
+        // this.loader.add(configAnim);
         
         // .load((loader, res) => {
         //     let spine = new Spine(res.spineAnim.spineData);
@@ -97,6 +100,11 @@ export class Loader {
             for (let key in this.resources) {
                 this.loader.add(key, this.resources[key]);
             }
+
+            // for(let key in animationData)
+            // {
+            //     this.loader.add(key, this.resources[key]);
+            // }
     
             this.loader.load((loader, res) => {
                 Globals.resources = res;  

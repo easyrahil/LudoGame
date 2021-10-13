@@ -20,18 +20,18 @@ export class MainScene {
 
 
 
-       // this.createButton();
+     //  this.createButton();
 
        // this.createWaitingScreen();
         //this.createAvatars();
-{
-    const verText = new DebugText("Ver: 0.01", appConfig.leftX, 0);
-    verText.y += verText.height;
-    this.container.addChild(verText);
-    console.log("VIBRATION : Active");
-    console.log(navigator);
-    navigator.vibrate(500);
-}
+    {
+        const verText = new DebugText("Ver: 0.02", appConfig.leftX, 0);
+        verText.y += verText.height;
+        this.container.addChild(verText);
+        console.log("VIBRATION : Active");
+        console.log(navigator);
+        navigator.vibrate(500);
+    }
 
 
     }
@@ -195,7 +195,7 @@ export class MainScene {
         button1.drawRect(appConfig.leftX, appConfig.innerWidth/4/2, appConfig.innerWidth/4, appConfig.innerWidth/4);
         button1.endFill();
 
-        button1.textComponent = new DebugText("Player 1 \n100111", appConfig.leftX + appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
+        button1.textComponent = new DebugText("Player 1 \n230773", appConfig.leftX + appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
 
         button1.addChild(button1.textComponent);
         
@@ -203,7 +203,7 @@ export class MainScene {
         button1.on("pointerdown", () => {
             console.log("Clicked 1");
             Globals.automationOn = false;
-            Globals.socket = new Socket("100111", "Player1");
+            Globals.socket = new Socket("230773", "Player1", "2", "https://cccdn.b-cdn.net/1584464368856.png");
             this.triggerButtonActive();
         }, this);
 
@@ -217,11 +217,11 @@ export class MainScene {
         button2.on("pointerdown", () => {
             console.log("Clicked 2");
             Globals.automationOn = false;
-            Globals.socket = new Socket("100112", "Player2");
+            Globals.socket = new Socket("230774", "Player2", "2", "https://cccdn.b-cdn.net/1584464368856.png");
             this.triggerButtonActive();
         }, this);
 
-        button2.textComponent = new DebugText("Player 2 \n100112", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
+        button2.textComponent = new DebugText("Player 2 \n230774", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
 
         button2.addChild(button2.textComponent);
 
@@ -236,13 +236,13 @@ export class MainScene {
         button3.on("pointerdown", () => {
             console.log("Clicked 2");
             Globals.automationOn = false;
-            Globals.socket = new Socket("100113", "Player2");
+            Globals.socket = new Socket("230772", "Player3", "2", "https://cccdn.b-cdn.net/1584464368856.png");
             this.triggerButtonActive();
         }, this);
 
         
 
-        button3.textComponent = new DebugText("Player 3 \n100113", appConfig.width/2 - appConfig.innerWidth/32, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
+        button3.textComponent = new DebugText("Player 3 \n230772", appConfig.width/2 - appConfig.innerWidth/32, appConfig.innerWidth/4/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
 
         button3.addChild(button3.textComponent);
 
@@ -257,7 +257,7 @@ export class MainScene {
                 button.drawRect(xValue, yValue, appConfig.innerWidth/5, appConfig.innerWidth/5);
                 button.endFill();
 
-                const id = 100100 + i;
+                const id = 230760 + i;
 
                 button.textComponent = new DebugText("Player "+ i +" \n"+id, xTextValue,
                     yValue + appConfig.innerWidth/10, "#000", fontSize, "Luckiest Guy");
@@ -272,7 +272,7 @@ export class MainScene {
                 button.on("pointerdown", () => {
                     console.log("Clicked 1");
                     Globals.automationOn = true;
-                    Globals.socket = new Socket(id.toString(), "Player "+ i);
+                    Globals.socket = new Socket(id.toString(), "Player "+ i, "2", "https://cccdn.b-cdn.net/1584464368856.png");
                     this.triggerButtonActive();
                     
                 }, this);
