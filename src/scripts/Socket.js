@@ -18,7 +18,7 @@ export class Socket
         } else
         {
             this.socket = new WebSocket("ws://209.250.232.65:4400");
-            //  this.socket = new WebSocket("ws://4925-2405-201-5006-10c7-9829-ee89-567b-bf6c.ngrok.io");
+            //  this.socket = new WebSocket("ws://3060-2405-201-5006-10c7-a587-e8df-de84-a6e1.ngrok.io");
         }
         
         
@@ -130,7 +130,7 @@ export class Socket
                     Globals.emitter.Call("rollDiceResult", {id : msg.plId, value : msg.dice, pawnArr : msg.movable});
                 } else
                 {
-                    Globals.emitter.Call("noValidMove", {nextRoll : msg.nextroll, plId : msg.plId});
+                    Globals.emitter.Call("noValidMove", {nextRoll : msg.nextroll, plId : msg.plId, value : msg.dice});
                 }
                 
                 //

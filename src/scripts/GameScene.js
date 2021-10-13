@@ -162,12 +162,28 @@ export class GameScene {
 
             setTimeout(() => {
                 prompt.container.destroy();
-            }, 1000);
+				if(msgParams.plId == Globals.gameData.plId)
+				{
+					this.turnChanged(msgParams.nextRoll);
+				}
+				
+            }, 2000);
                 
             this.container.addChild(prompt.container);
 
+			this.players[msgParams.plId].stopDiceAnimation(msgParams.value);
+			
+			if(msgParams.plId == Globals.gameData.plId)
+			{
+				this.stopDiceAnimation(msgParams.value);
+			
+			} else
+			{
+				this.turnChanged(msgParams.nextRoll);
+			}
 
-			this.turnChanged(msgParams.nextRoll);
+			
+
 		} else if (msgType == "diceRollNotif")
 		{
 			this.players[msgParams.id].playDiceAnimation();
@@ -388,6 +404,7 @@ export class GameScene {
 			skipContainer.hearts = [];
 			skipContainer.heartsBlack = [];
 
+			
 
 			for (let i = 1; i <= 3; i++) {
 				const heart = new PIXI.Sprite(Globals.resources["heartSkip"+i].texture);
@@ -419,7 +436,7 @@ export class GameScene {
 
 			skipContainer.scale.set(gameConfig.widthRatio);
 			skipContainer.position =point;
-
+			skipContainer.x -= skipContainer.width * 0.35;
 			skipContainer.zIndex= 20;
 
 			this.container.addChild(skipContainer);

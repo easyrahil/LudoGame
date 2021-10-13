@@ -19,8 +19,8 @@ export class MainScene {
         this.createBackground();
 
 
-
-     //  this.createButton();
+        this.createButton();
+       // global.activateScene = () =>  this.createButton();
 
        // this.createWaitingScreen();
         //this.createAvatars();

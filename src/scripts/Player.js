@@ -106,7 +106,7 @@ export class Player
 
         this.infoButton.anchor.set(0.5);
         
-        this.infoButton.x = heartBlock.x + heartBlock.width;
+        this.infoButton.x = heartBlock.x + heartBlock.width - this.infoButton.width/4;
         this.infoButton.y = heartBlock.y;
 
    

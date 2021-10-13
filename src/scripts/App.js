@@ -45,7 +45,7 @@ export class App {
         
         this.loader = new Loader(this.app.loader, loaderContainer);
         
-        // this.pushSampleData();
+        this.pushSampleData();
 
         this.loader.preload().then(() => {
             setTimeout(() => {
@@ -53,16 +53,22 @@ export class App {
                 
                 
 
-                Globals.scene.start(new MainScene());
+                // Globals.scene.start(new MainScene());
                 //Globals.scene.start(new FinalScene());
-                //Globals.scene.start(new GameScene());
+                Globals.scene.start(new GameScene());
             //    Globals.scene.start(new GameEndScene());
 
-
-            if(JSBridge)
+                try{
+                    if(JSBridge != undefined)
+                    {
+                        
+                        JSBridge.showMessageInNative("loadSuccess");
+                    }
+                } catch
                 {
-                    JSBridge.showMessageInNative("loadSuccess");
+                    console.log("JS Bridge Not Found!");
                 }
+               
             }, 1000);
             
             
