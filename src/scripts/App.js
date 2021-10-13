@@ -45,7 +45,7 @@ export class App {
         
         this.loader = new Loader(this.app.loader, loaderContainer);
         
-        this.pushSampleData();
+        // this.pushSampleData();
 
         this.loader.preload().then(() => {
             setTimeout(() => {
@@ -53,9 +53,9 @@ export class App {
                 
                 
 
-                // Globals.scene.start(new MainScene());
+                Globals.scene.start(new MainScene());
                 //Globals.scene.start(new FinalScene());
-                Globals.scene.start(new GameScene());
+                //Globals.scene.start(new GameScene());
             //    Globals.scene.start(new GameEndScene());
 
                 try{

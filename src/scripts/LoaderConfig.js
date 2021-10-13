@@ -64,6 +64,8 @@ export const LoaderConfig = {
     
     waitingTextBlock : require("../sprites/New/waitingTextBlock.png"),
     gameEndScreen : require("../sprites/New/gameOverEndScreen.png"),
+    gameOverShade : require("../sprites/New/gameOverShade.png"),
+    gameOverSpark : require("../sprites/New/gameOverSparkEffect.png"),
     wonPlayerBlock : require("../sprites/New/gameOverOther.png"),
     wonPlayerSelfBlock : require("../sprites/New/gameOverSelf.png"),
     wonBlock : require("../sprites/New/gameOverBlock.png"),

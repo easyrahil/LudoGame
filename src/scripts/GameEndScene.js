@@ -5,6 +5,7 @@ import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
 import { GameScene } from "./GameScene";
 import { Globals } from "./Globals";
+import TWEEN from "@tweenjs/tween.js";
 
 
 export class GameEndScene {
@@ -64,9 +65,35 @@ export class GameEndScene {
 
 		this.container.addChild(fullbg.container);
 
-		this.bg = new Background(Globals.resources.gameEndScreen.texture, null, appConfig.innerWidth, appConfig.innerHeight);
+		this.bg = new Background(Globals.resources.gameOverShade.texture, null, appConfig.innerWidth, appConfig.innerHeight);
 		this.bg.container.x = appConfig.leftX;
+
+        this.ludoBoard = new PIXI.Sprite(Globals.resources.board1.texture);
+        this.ludoBoard.scale.set(gameConfig.widthRatio);
+        this.ludoBoard.anchor.set(0.5);
+        this.ludoBoard.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+
+        this.bgSpark = new PIXI.Sprite(Globals.resources.gameOverSpark.texture);
+        this.bgSpark.scale.set(gameConfig.widthRatio);
+        this.bgSpark.anchor.set(0.5);
+        this.bgSpark.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+
+        const maskSpark = new PIXI.Graphics();
+        maskSpark.beginFill(0x00ff00);
+        maskSpark.drawRect(appConfig.leftX, 0, this.bg.container.width, this.bg.container.height);
+        maskSpark.endFill();
+
+        this.bgSpark.mask = maskSpark;
+
+        new TWEEN.Tween(this.bgSpark)
+            .to({angle : 360}, 5000)
+            .repeat(1000)
+            .start();
+
+        this.container.addChild(this.ludoBoard);
+        this.container.addChild(this.bgSpark);
 		this.container.addChild(this.bg.container);
+        this.container.addChild(maskSpark);
 	}
 
     createWonModal()

@@ -478,7 +478,7 @@ export class GameScene {
 			pawn.indication = new PIXI.Sprite(Globals.resources["pointer" + y].texture);
 			pawn.indication.position = new PIXI.Point(pawn.x, pawn.y);
 			pawn.indication.anchor.set(0.5,1);
-			pawn.indication.scale.set(0.7);
+			pawn.indication.scale.set(gameConfig.widthRatio * 1.3);
 			pawn.indication.defaultWidth = pawn.indication.width;
 			pawn.indication.defaultHeight = pawn.indication.height;
 
