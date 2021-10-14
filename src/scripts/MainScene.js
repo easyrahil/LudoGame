@@ -29,8 +29,15 @@ export class MainScene {
         verText.y += verText.height;
         this.container.addChild(verText);
         
-        if(PIXI.utils.isMobile.any)
-            navigator.vibrate(500);
+        // try
+        // {
+        //     navigator.vibrate(500);
+        // }
+        // catch
+        // {
+        //     console.log("Navigator blocked by device.");
+        // }
+            
     }
 
 

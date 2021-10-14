@@ -877,7 +877,15 @@ export class GameScene {
 
 	playRollDiceAnimation(rollAnimationString = null)
 	{
-		console.log(navigator.vibrate(500));
+		try
+        {
+            navigator.vibrate(500);
+        }
+        catch
+        {
+            console.log("Navigator blocked by device.");
+        }
+	
 
 		if (this.rollDiceAnimation.state.hasAnimation((rollAnimationString != null) ? rollAnimationString : "info1"))
 		{
