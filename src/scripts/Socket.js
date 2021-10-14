@@ -240,8 +240,9 @@ export class Socket
                 Globals.emitter.Call("waitTimer", {data : msg.data}); 
             } else if (msg.t == "threeSkips")
             {
-                //this.socket.close();
-                Globals.scene.start(new FinalScene());
+                Globals.gameEndState = GameEndStates.THREESKIPS;
+                this.socket.close();
+                // Globals.scene.start(new FinalScene());
             } else if (msg.t == "error")
             {
                 Globals.scene.start(new FinalScene(msg.data));
@@ -258,7 +259,15 @@ export class Socket
                 console.log(`[close] Connection Died`);
             }
 
-            Globals.scene.start(new FinalScene());
+            if(Globals.gameEndState == GameEndStates.THREESKIPS)
+            {
+                setTimeout(() => {
+                    Globals.scene.start(new FinalScene());
+                }, 2000);
+                Globals.gameEndState = GameEndStates.NONE;
+            }
+            else
+                Globals.scene.start(new FinalScene());
         };
 
         this.socket.onerror = e => {

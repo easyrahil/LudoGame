@@ -189,11 +189,17 @@ export class GameScene {
 			this.players[msgParams.id].playDiceAnimation();
 		} else if (msgType == "playerLeft")
 		{
-			delete Globals.gameData.players[msgParams.id];
+
+			if(Globals.gameData.players[msgParams.id] != null && Globals.gameData.players[msgParams.id] != undefined)
+				delete Globals.gameData.players[msgParams.id];
 			
-			this.players[msgParams.id].destroy();
+			if(this.players[msgParams.id] != undefined && this.players[msgParams.id] != null)
+			{
+				this.players[msgParams.id].destroy();
+				delete this.players[msgParams.id];
+			}
 			
-			delete this.players[msgParams.id];
+			
 			
 		}
     }

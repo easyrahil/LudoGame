@@ -18,5 +18,6 @@ export const Globals = {
 
 export const GameEndStates = {
     NONE : 0,
-    ALLTOKENSIN : 1
+    ALLTOKENSIN : 1,
+    THREESKIPS : 2
 };
