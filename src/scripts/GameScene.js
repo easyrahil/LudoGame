@@ -4,7 +4,7 @@ import { appConfig, gameConfig } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, PawnsHomeIndex, playerData, starsPosition } from "./boardConfig";
 import { DebugText } from "./DebugText";
-import { Globals } from "./Globals";
+import { GameEndStates, Globals } from "./Globals";
 import { LudoBoard } from "./LudoBoard";
 import { Pawn } from "./Pawn";
 import { Player } from "./Player";
@@ -884,8 +884,20 @@ export class GameScene {
 
 		if(turnValue == -1)
 		{
-			Globals.scene.start(new GameEndScene());
+			if(Globals.gameEndState == GameEndStates.ALLTOKENSIN)
+			{
+				setTimeout(() => {
+					Globals.scene.start(new GameEndScene());
+				}, 2000);
+			} else
+			{
+				Globals.scene.start(new GameEndScene());
+			}
 
+
+			//Resetting It.
+			Globals.gameEndState = GameEndStates.NONE;
+			
 		} else
 		{
 			Globals.gameData.isCut = false;

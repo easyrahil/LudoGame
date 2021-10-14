@@ -105,13 +105,13 @@ export class GameEndScene {
         
         this.wonBlock.zIndex = 20;
 
-        // const playerWonData = [
-        //     {name : "Player 1", won: "456", isMine : true},
-        //     {name : "Player 2", won: "23", isMine : false},
-        //     {name : "Player 3", won: "524", isMine : false},
-        //     {name : "Player 4", won: "123", isMine : false},
+        // Globals.gameData.winData = [
+        //     {name : "Abhishek Rana", win: "456", plId : 0, score : 10},
+        //     {name : "Player 2", win: "23", plId : 1, score : 10},
+        //     {name : "Player 3", win: "524", plId : 2, score : 10},
+        //     {name : "Player 4", win: "123", plId : 3, score : 10},
         // ];
-        
+        // Globals.gameData.plId = 0;
 
         for (let i = 0; i < Globals.gameData.winData.length; i++) {
             const wonData = Globals.gameData.winData[i];
@@ -125,7 +125,13 @@ export class GameEndScene {
             
             wonPlayerBlock.y -= wonPlayerBlock.height * 0.3;
 
-            wonPlayerBlock.playerText = new DebugText(wonData.name.toUpperCase(), 0, 0,wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            
+            
+            const name = wonData.name.substr(0, 8).toUpperCase();
+
+            if(wonData.name.length > 8)
+                name += "...";
+            wonPlayerBlock.playerText = new DebugText(name, 0, 0,wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
             
                 
                 
@@ -133,7 +139,7 @@ export class GameEndScene {
             wonPlayerBlock.playerText.x -= wonPlayerBlock.width * 0.27 ;
             wonPlayerBlock.addChild(wonPlayerBlock.playerText);
 
-            const rank = new DebugText(i+1, wonPlayerBlock.width * 0.1, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
+            const rank = new DebugText(wonData.score, wonPlayerBlock.width * 0.1, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");
             wonPlayerBlock.addChild(rank);
             
             const prize = new DebugText(wonData.win, wonPlayerBlock.width * 0.34, 0, wonData.isMine ? "#fff" : "#555", 58, "Luckiest Guy");

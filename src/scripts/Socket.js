@@ -1,5 +1,5 @@
 import { FinalScene } from "./FinalScene";
-import { Globals } from "./Globals";
+import { GameEndStates, Globals } from "./Globals";
 
 export class Socket
 {
@@ -174,7 +174,9 @@ export class Socket
             {
 
                 Globals.gameData.winData = msg.winData
-                console.log(Globals.gameData.winData);
+                //console.log(Globals.gameData.winData);
+
+               
                 
                 if(msg.data == null || Object.keys(msg.data).length == 0)
                 {   
@@ -199,14 +201,21 @@ export class Socket
                     }else if(msg.msg == "allOpponentLeft")
                     {
                         responseMsg = "All opponents left.";
+                    } else if (msg.msg == "allTokensIn")
+                    {
+                        responseMsg = "All Tokens In.";
                     }
-
-                  
 
 
                     Globals.emitter.Call("gameEnd", {reason : responseMsg});
                     return;
                 }
+
+                if(msg.msg == "allTokensIn")
+                {
+                    Globals.gameEndState = GameEndStates.ALLTOKENSIN;
+                }
+                
 
                 const cutData = msg.data.filter(data => data["isCut"] == true);
                 console.log("Filtered Data : ");
@@ -222,6 +231,7 @@ export class Socket
 
 
                 Globals.emitter.Call("movePawn", {id: msg.data[cutData.length].tokenId, moveArr : msg.data[cutData.length].pos, scoreObj : msg.gState.score});
+
             } else if(msg.t == "diceRollNotif")
             {
                 Globals.emitter.Call("diceRollNotif", {id : msg.plId});
@@ -230,6 +240,7 @@ export class Socket
                 Globals.emitter.Call("waitTimer", {data : msg.data}); 
             } else if (msg.t == "threeSkips")
             {
+                //this.socket.close();
                 Globals.scene.start(new FinalScene());
             } else if (msg.t == "error")
             {
