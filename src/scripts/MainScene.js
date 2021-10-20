@@ -19,7 +19,7 @@ export class MainScene {
 		this.container = new PIXI.Container();
 		this.container.scale.set(config.scaleFactor)
 		this.container.y = config.topX;
-
+		this.container.x = config.leftX;
 		
 
 
@@ -334,7 +334,8 @@ export class MainScene {
 	createBackground() {
 	//	this.background = new Background(Globals.resources.background.texture, Globals.resources.background.texture);
 		this.background = new PIXI.Sprite(Globals.resources.background.texture);
-		this.background.scale.set(0.66 * config.scaleFactor);
+		//this.background.scale.set(0.66 * config.scaleFactor);
+		this.background.width = window.innerWidth;
 		this.background.height = window.innerHeight;
 		
 		this.sceneContainer.addChild(this.background);

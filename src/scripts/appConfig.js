@@ -34,5 +34,13 @@ export const config = {
 	get bottomX()
 	{
 		return window.innerHeight - this.topX;
+	},
+	get leftX()
+	{
+		return (window.innerWidth - (this.logicalWidth * this.scaleFactor))/2;
+	},
+	get rightX()
+	{
+		return window.innerWidth - this.leftX;
 	}
 }
