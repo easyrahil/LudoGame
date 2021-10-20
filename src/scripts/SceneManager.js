@@ -13,11 +13,11 @@ export class SceneManager {
 
     start(scene) {
         if (this.scene) {
-            this.scene.container.destroy();
+            this.scene.sceneContainer.destroy();
         }
 
         this.scene = scene;
-        this.container.addChild(this.scene.container);
+        this.container.addChild(this.scene.sceneContainer);
 
 
         if( window.orientation == 90 || window.orientation == -90)

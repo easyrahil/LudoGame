@@ -12,9 +12,15 @@ import { GameEndScene } from "./GameEndScene";
 
 export class MainScene {
 	constructor() {
+
+		this.sceneContainer = new PIXI.Container();
+
+	
 		this.container = new PIXI.Container();
 		this.container.scale.set(config.scaleFactor)
+		this.container.y = config.topX;
 
+		
 
 
 		this.createBackground();
@@ -26,7 +32,8 @@ export class MainScene {
 		// this.createWaitingScreen();
 		//this.createAvatars();
 		{
-			const verText = new DebugText("Ver: 0.02", appConfig.leftX, 0);
+			const verText = new DebugText("Ver: 0.02", 0, 0, "#fff");
+			verText.x += verText.width/2;
 			verText.y += verText.height;
 			this.container.addChild(verText);
 
@@ -41,7 +48,7 @@ export class MainScene {
 
 		}
 
-
+		this.sceneContainer.addChild(this.container);
 	}
 
 
@@ -325,8 +332,12 @@ export class MainScene {
 	}
 
 	createBackground() {
-		this.background = new Background(Globals.resources.background.texture, Globals.resources.background.texture);
-		this.container.addChild(this.background.container);
+	//	this.background = new Background(Globals.resources.background.texture, Globals.resources.background.texture);
+		this.background = new PIXI.Sprite(Globals.resources.background.texture);
+		this.background.scale.set(0.66 * config.scaleFactor);
+		this.background.height = window.innerHeight;
+		
+		this.sceneContainer.addChild(this.background);
 	}
 
 

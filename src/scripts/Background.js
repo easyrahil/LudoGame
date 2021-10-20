@@ -3,7 +3,7 @@ import { appConfig, gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 
 export class Background {
-	constructor(topImage, backImage = null, width = window.innerWidth, height = window.innerHeight) {
+	constructor(topImage, backImage = null, width = appConfig.width, height = appConfig.height) {
 		this.container = new PIXI.Container();
 
 		//this.container.scale.set(gameConfig.currentResolutionRatio);

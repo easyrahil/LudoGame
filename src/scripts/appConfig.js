@@ -26,5 +26,13 @@ export const gameConfig = {
 export const config = {
 	logicalWidth: 720,
 	logicalHeight: 1280,
-	scaleFactor: 1
+	scaleFactor: 1,
+	get topX()
+	{
+		return (window.innerHeight - (this.logicalHeight * this.scaleFactor))/2;
+	},
+	get bottomX()
+	{
+		return window.innerHeight - this.topX;
+	}
 }

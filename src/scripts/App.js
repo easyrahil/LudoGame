@@ -23,7 +23,7 @@ export class App {
 		let logicalHeight = 1280
 
 		//{width : (window.innerWidth > gameConfig.maxWidth) ? gameConfig.maxWidth : window.innerWidth, height : window.innerHeight}
-		this.app = new PIXI.Application({ width: logicalWidth, height: logicalHeight });
+		this.app = new PIXI.Application({ width: logicalWidth, height: window.innerHeight });
 		document.body.appendChild(this.app.view);
 		const scaleFactor = Math.min(
 			window.innerWidth / logicalWidth,
@@ -36,9 +36,9 @@ export class App {
 		const newHeight = Math.ceil(logicalHeight * scaleFactor);
 
 		this.app.renderer.view.style.width = `${newWidth}px`;
-		this.app.renderer.view.style.height = `${newHeight}px`;
-
-		this.app.renderer.resize(newWidth, newHeight);
+		//this.app.renderer.view.style.height = `${newHeight}px`;
+		this.app.renderer.view.style.height = window.innerHeight;
+		this.app.renderer.resize(newWidth, window.innerHeight);
 
 		appConfig.width = logicalWidth;
 		appConfig.height = logicalHeight;
