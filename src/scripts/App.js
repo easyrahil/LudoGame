@@ -64,7 +64,7 @@ export class App {
 		const loaderContainer = new PIXI.Container();
 		this.app.stage.addChild(loaderContainer);
 
-		loaderContainer.scale.set(scaleFactor);
+		//loaderContainer.scale.set(scaleFactor);
 
 		this.loader = new Loader(this.app.loader, loaderContainer);
 

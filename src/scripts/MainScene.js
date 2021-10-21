@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { appConfig, config, gameConfig } from "./appConfig";
+import {config} from "./appConfig";
 import { Background } from "./Background";
 import { GameScene } from "./GameScene";
 import { Globals } from "./Globals";
@@ -18,7 +18,7 @@ export class MainScene {
 	
 		this.container = new PIXI.Container();
 		this.container.scale.set(config.scaleFactor)
-		this.container.y = config.topX;
+		this.container.y = config.topY;
 		this.container.x = config.leftX;
 		
 
@@ -29,23 +29,13 @@ export class MainScene {
 		this.createButton();
 		// global.activateScene = () =>  this.createButton();
 
-		// this.createWaitingScreen();
+		 //this.createWaitingScreen();
 		//this.createAvatars();
 		{
 			const verText = new DebugText("Ver: 0.02", 0, 0, "#fff");
 			verText.x += verText.width/2;
 			verText.y += verText.height;
 			this.container.addChild(verText);
-
-			// try
-			// {
-			//     navigator.vibrate(500);
-			// }
-			// catch
-			// {
-			//     console.log("Navigator blocked by device.");
-			// }
-
 		}
 
 		this.sceneContainer.addChild(this.container);
@@ -86,9 +76,7 @@ export class MainScene {
 	}
 
 	createWaitingScreen() {
-		// const darkBackground = new PIXI.Sprite(Globals.resources.darkBackground.texture);
-		// darkBackground.width = appConfig.width;
-		// darkBackground.height = appConfig.height;
+		
 
 		const timerContainer = new PIXI.Container();
 		const block = new PIXI.Sprite(Globals.resources.waitingTextBlock.texture);
@@ -97,14 +85,13 @@ export class MainScene {
 		this.waitingText = new DebugText("Waiting for Others..", 0, 0, "#fff", 48, "Luckiest Guy");
 		this.waitingText.style.fontWeight = 'normal'
 
-		timerContainer.x = appConfig.width / 2;
-		timerContainer.y = appConfig.height / 2;
+		timerContainer.x = config.logicalWidth / 2;
+		timerContainer.y = config.logicalHeight / 2;
 
 		timerContainer.addChild(block);
 		timerContainer.addChild(this.waitingText);
 
-		timerContainer.scale.set(gameConfig.widthRatio);
-
+		timerContainer.scale.set(0.66);
 		// this.container.addChild(darkBackground);
 		this.container.addChild(timerContainer);
 	}
@@ -115,20 +102,20 @@ export class MainScene {
 
 		this.avatars = [];
 
-		for (let i = 0; i < 4; i++) {
+		for (let i = 1; i <= 4; i++) {
 
 
 			const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-			avatar.anchor.set(0, 0.5);
-			avatar.scale.set(gameConfig.widthRatio * 1.4);
+			avatar.anchor.set(0.5);
+			avatar.scale.set(0.66);
 
-			avatar.x = appConfig.leftX + appConfig.innerWidth / 10;
-			avatar.y = appConfig.height / 2;
+			avatar.x = (i * (config.logicalWidth / 5))// + config.logicalWidth/10;
+			avatar.y = config.logicalHeight / 2;
 
-			avatar.x += i * (appConfig.innerWidth / 5);
+			//avatar.x += i * (config.logicalWidth / 5);
 			avatar.y += (avatar.height * 1.2);
 
-			const searchingText = new DebugText("Searching..", avatar.x + avatar.width / 2, avatar.y, "#000", 24 * gameConfig.widthRatio, "Luckiest Guy");
+			const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 12, "Luckiest Guy");
 
 			this.avatars.push(avatar);
 
@@ -142,10 +129,10 @@ export class MainScene {
 		}
 
 		const logo = new PIXI.Sprite(Globals.resources.logo.texture);
-		logo.scale.set(gameConfig.widthRatio);
+		logo.scale.set(0.66);
 		logo.anchor.set(0.5);
-		logo.x = appConfig.width / 2;
-		logo.y = appConfig.height / 2 - (this.avatars[0].height * 1.2);
+		logo.x = config.logicalWidth / 2;
+		logo.y = config.logicalHeight * 0.38;
 
 		this.container.addChild(logo);
 	}
@@ -185,8 +172,8 @@ export class MainScene {
 	}
 
 	createButton() {
-		console.log(gameConfig.heightRatio);
-		const fontSize = 25 //50 * gameConfig.widthRatio;
+		
+		const fontSize = 25 
 		this.buttonContainer = new PIXI.Container();
 		this.container.addChild(this.buttonContainer);
 
@@ -295,38 +282,17 @@ export class MainScene {
 
 
 
-		// const button4 = new PIXI.Graphics();
-
-		// button4.beginFill(0x00FF00);
-		// button4.drawRect(appConfig.rightX-appConfig.innerWidth/4, appConfig.innerWidth/4*2, appConfig.innerWidth/4, appConfig.innerWidth/4);
-		// button4.endFill();
-
-		// button4.textComponent = new DebugText("Player 2 \nAuto", appConfig.rightX - appConfig.innerWidth/8, appConfig.innerWidth/2 + appConfig.innerWidth/8, "#fff", fontSize, "Luckiest Guy");
-
-		// button4.addChild(button4.textComponent);
-
-		// button4.interactive = true;
-		// button4.on("pointerdown", () => {
-		//     console.log("Clicked 2");
-		//     Globals.automationOn = true;
-		//     Globals.socket = new Socket("230870", "Player2");
-		//     this.triggerButtonActive();
-		// }, this);
-
 		this.buttonContainer.addChild(button1);
 		this.buttonContainer.addChild(button2);
 		this.buttonContainer.addChild(button3);
-		//this.buttonContainer.addChild(button3);
-		//this.buttonContainer.addChild(button4);
+
 	}
 
 	triggerButtonActive() {
 		if (this.buttonContainer != null || this.buttonContainer != undefined)
 			this.buttonContainer.destroy();
 
-		//const waitingText = new DebugText("Waiting for other players.", appConfig.width/2, appConfig.height/2, "#fff", 28, "Luckiest Guy");
-		//waitingText.style.fontWeight = 10;
-		//this.container.addChild(waitingText);
+
 		this.createWaitingScreen();
 		this.createAvatars();
 	}
@@ -343,40 +309,6 @@ export class MainScene {
 
 
 
-
-	createLogo() {
-		this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
-		this.logo.scale.set(gameConfig.widthRatio);
-		this.logo.anchor.set(0.5);
-		this.logo.x = appConfig.width / 2;
-		this.logo.y = appConfig.height / 2;
-
-		this.logo.interactive = true;
-		this.logo.on("pointerdown", () => {
-			if (Globals.debug.sound)
-				Globals.soundResources.click.play();
-
-			Globals.scene.start(new MatchmakingScene());
-		}, this);
-
-		this.logo.on("pointerover", () => {
-			const tween = new TWEEN.Tween(this.logo)
-				.to({ scale: { x: gameConfig.widthRatio * 1.2, y: gameConfig.widthRatio * 1.2 } }, 300)
-				.start();
-		}, this);
-
-		this.logo.on("pointerout", () => {
-			const tween = new TWEEN.Tween(this.logo)
-				.to({ scale: { x: gameConfig.widthRatio, y: gameConfig.widthRatio } }, 100)
-				.start();
-		}, this);
-
-		this.container.addChild(this.logo);
-	}
-
-	createPlayBtn() {
-
-	}
 
 	update(dt) {
 

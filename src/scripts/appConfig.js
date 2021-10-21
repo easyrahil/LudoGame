@@ -27,11 +27,11 @@ export const config = {
 	logicalWidth: 720,
 	logicalHeight: 1280,
 	scaleFactor: 1,
-	get topX()
+	get topY()
 	{
 		return (window.innerHeight - (this.logicalHeight * this.scaleFactor))/2;
 	},
-	get bottomX()
+	get bottomY()
 	{
 		return window.innerHeight - this.topX;
 	},
