@@ -136,32 +136,32 @@ export class MainScene {
 
 		this.container.addChild(logo);
 	}
-
-	activateAvatarImage(url, avatarParent) {
-		avatarParent.plImage = PIXI.Sprite.from(url);
-		avatarParent.plImage.anchor.set(0, 0.5);
-		avatarParent.plImage.x = avatarParent.x;
-		avatarParent.plImage.y = avatarParent.y;
-		avatarParent.plImage.width = avatarParent.width;
-		avatarParent.plImage.height = avatarParent.height;
-
-
-		const maskGraphic = new PIXI.Graphics();
-		maskGraphic.beginFill(0xFF3300);
-
-		const widthPadding = (avatarParent.width * 0.07);
-		const heightPadding = (avatarParent.height * 0.07);
+	activateAvatarImage(url, avatarParent)
+    {
+        avatarParent.plImage = PIXI.Sprite.from(url);
+        avatarParent.plImage.anchor.set(0.5);
+        avatarParent.plImage.x = avatarParent.x;
+        avatarParent.plImage.y = avatarParent.y;
+        avatarParent.plImage.width = avatarParent.width;
+        avatarParent.plImage.height = avatarParent.height;
 
 
-		maskGraphic.drawRect(avatarParent.x + widthPadding, (avatarParent.y - avatarParent.height / 2) + heightPadding, avatarParent.width - widthPadding * 2, avatarParent.height - heightPadding * 2);
-		maskGraphic.endFill();
+        const maskGraphic = new PIXI.Graphics();
+        maskGraphic.beginFill(0xFF3300);
 
-		avatarParent.plImage.mask = maskGraphic;
+        const widthPadding = (avatarParent.width * 0.07);
+        const heightPadding = (avatarParent.height * 0.07);
 
-		this.container.addChild(avatarParent.plImage);
-		this.container.addChild(maskGraphic);
 
-	}
+        maskGraphic.drawRect(avatarParent.plImage.x - avatarParent.plImage.width/2  + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
+        maskGraphic.endFill();
+
+        avatarParent.plImage.mask = maskGraphic;
+
+        this.container.addChild(avatarParent.plImage);    
+        this.container.addChild(maskGraphic);
+
+    }
 
 	removePlayerAvatar(index) {
 		if (this.avatars[index] != undefined && this.avatars[index] != null) {

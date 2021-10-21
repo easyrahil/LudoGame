@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { appConfig, gameConfig } from "./appConfig";
+import {config } from "./appConfig";
 import { Background } from "./Background";
 import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
@@ -10,11 +10,21 @@ import TWEEN from "@tweenjs/tween.js";
 
 export class GameEndScene {
     constructor() {
+
+        this.sceneContainer = new PIXI.Container();
+
         this.container = new PIXI.Container();
       
         this.container.sortableChildren = true;
+
+        this.container.scale.set(config.scaleFactor);
+
+        this.container.x = config.leftX;
+        this.container.y = config.topY;
+
         this.createBackground();
 
+        this.sceneContainer.addChild(this.container);
      
         this.createWaitingScreen();
         this.createAvatars();
@@ -61,26 +71,29 @@ export class GameEndScene {
     }
 
     createBackground() {
-		const fullbg = new Background(Globals.resources.background.texture);
+		const fullbg = new PIXI.Sprite(Globals.resources.background.texture);
+        fullbg.width = window.innerWidth;
+        fullbg.height = window.innerHeight;
+		this.sceneContainer.addChild(fullbg);
 
-		this.container.addChild(fullbg.container);
+		this.bg =  new PIXI.Sprite(Globals.resources.gameOverShade.texture);
+		this.bg.width = config.logicalWidth;
+		this.bg.height = config.logicalHeight;
 
-		this.bg = new Background(Globals.resources.gameOverShade.texture, null, appConfig.innerWidth, appConfig.innerHeight);
-		this.bg.container.x = appConfig.leftX;
 
         this.ludoBoard = new PIXI.Sprite(Globals.resources.board1.texture);
-        this.ludoBoard.scale.set(gameConfig.widthRatio);
+        this.ludoBoard.scale.set(0.66);
         this.ludoBoard.anchor.set(0.5);
-        this.ludoBoard.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+        this.ludoBoard.position = new PIXI.Point(config.logicalWidth/2, config.logicalHeight/2);
 
         this.bgSpark = new PIXI.Sprite(Globals.resources.gameOverSpark.texture);
-        this.bgSpark.scale.set(gameConfig.widthRatio);
+        this.bgSpark.scale.set(0.66);
         this.bgSpark.anchor.set(0.5);
-        this.bgSpark.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+        this.bgSpark.position = new PIXI.Point(config.logicalWidth/2, config.logicalHeight/2);
 
         const maskSpark = new PIXI.Graphics();
         maskSpark.beginFill(0x00ff00);
-        maskSpark.drawRect(appConfig.leftX, 0, this.bg.container.width, this.bg.container.height);
+        maskSpark.drawRect(0, 0, this.bg.width, this.bg.height);
         maskSpark.endFill();
 
         this.bgSpark.mask = maskSpark;
@@ -92,7 +105,7 @@ export class GameEndScene {
 
         this.container.addChild(this.ludoBoard);
         this.container.addChild(this.bgSpark);
-		this.container.addChild(this.bg.container);
+		this.container.addChild(this.bg);
         this.container.addChild(maskSpark);
 	}
 
@@ -100,8 +113,8 @@ export class GameEndScene {
     {
         this.wonBlock = new PIXI.Sprite(Globals.resources.wonBlock.texture);
         this.wonBlock.anchor.set(0.5);
-        this.wonBlock.x = appConfig.width/2;
-        this.wonBlock.y = appConfig.height/2;
+        this.wonBlock.x = config.logicalWidth/2;
+        this.wonBlock.y = config.logicalHeight/2;
         
         this.wonBlock.zIndex = 20;
 
@@ -177,7 +190,7 @@ export class GameEndScene {
         }, this);
         this.wonBlock.addChild(close);
 
-        this.wonBlock.scale.set(gameConfig.widthRatio);
+        this.wonBlock.scale.set(0.66);
         this.container.addChild(this.wonBlock);
         
         this.createGameEndText();
@@ -185,7 +198,7 @@ export class GameEndScene {
 
     createGameEndText()
     {
-        this.gameEndText = new DebugText("", appConfig.width/2, appConfig.height/2, "#fff", 38 * gameConfig.widthRatio, "Luckiest Guy")
+        this.gameEndText = new DebugText("", config.logicalWidth/2, config.logicalHeight/2, "#fff", 28, "Luckiest Guy")
         //this.gameEndText.x = this.wonBlock.x + this.wonBlock.width/2;
         this.gameEndText.anchor.set(0.5, 1);
         this.gameEndText.y = this.wonBlock.y + this.wonBlock.height/2 - this.gameEndText.height;
@@ -209,64 +222,62 @@ export class GameEndScene {
         this.waitingText = new DebugText("Waiting for Others..",0,0, "#fff", 48, "Luckiest Guy");
         this.waitingText.style.fontWeight = 'normal'
 
-        timerContainer.x = appConfig.width/2;
-        timerContainer.y = appConfig.height/2;
+        timerContainer.x = config.logicalWidth/2;
+        timerContainer.y = config.logicalHeight/2;
 
         timerContainer.addChild(block);
         timerContainer.addChild(this.waitingText);
 
-        timerContainer.scale.set(gameConfig.widthRatio);
+        timerContainer.scale.set(0.66);
         
         this.container.addChild(timerContainer);
     }
 
-    createAvatars()
-    {
+    createAvatars() {
 
-              
 
-        this.avatars = [];
 
-        for (let i = 0; i < 4; i++) {  
-            
+		this.avatars = [];
 
-            const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
-            avatar.anchor.set(0, 0.5);
-            avatar.scale.set(gameConfig.widthRatio * 1.4);
+		for (let i = 1; i <= 4; i++) {
 
-            avatar.x = appConfig.leftX + appConfig.innerWidth/10;
-            avatar.y = appConfig.height/2;
 
-            avatar.x += i * (appConfig.innerWidth/5);
-            avatar.y += (avatar.height * 1.2);
+			const avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
+			avatar.anchor.set(0.5);
+			avatar.scale.set(0.66);
 
-            const searchingText = new DebugText("Searching..", avatar.x + avatar.width/2, avatar.y, "#000", 24 * gameConfig.widthRatio, "Luckiest Guy");
+			avatar.x = (i * (config.logicalWidth / 5))// + config.logicalWidth/10;
+			avatar.y = config.logicalHeight / 2;
 
-            this.avatars.push(avatar);            
-            
-            this.container.addChild(avatar);
-            this.container.addChild(searchingText);
+			//avatar.x += i * (config.logicalWidth / 5);
+			avatar.y += (avatar.height * 1.2);
 
-            
-            // this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
-            
-            
-        }
+			const searchingText = new DebugText("Searching..", avatar.x, avatar.y, "#000", 12, "Luckiest Guy");
 
-        this.logo = new PIXI.Sprite(Globals.resources.logo.texture);
-        this.logo.scale.set(gameConfig.widthRatio);
-        this.logo.anchor.set(0.5);
-        this.logo.x = appConfig.width/2;
-        this.logo.y = appConfig.height/2 - (this.avatars[0].height * 1.2);
-        this.logo.renderable = false;
-        this.container.addChild(this.logo);  
+			this.avatars.push(avatar);
 
-    }
+			this.container.addChild(avatar);
+			this.container.addChild(searchingText);
+
+
+			// this.activateAvatarImage("https://cccdn.b-cdn.net/1584464368856.png", avatar);
+
+
+		}
+
+		const logo = new PIXI.Sprite(Globals.resources.logo.texture);
+		logo.scale.set(0.66);
+		logo.anchor.set(0.5);
+		logo.x = config.logicalWidth / 2;
+		logo.y = config.logicalHeight * 0.38;
+
+		this.container.addChild(logo);
+	}
 
     activateAvatarImage(url, avatarParent)
     {
         avatarParent.plImage = PIXI.Sprite.from(url);
-        avatarParent.plImage.anchor.set(0, 0.5);
+        avatarParent.plImage.anchor.set(0.5);
         avatarParent.plImage.x = avatarParent.x;
         avatarParent.plImage.y = avatarParent.y;
         avatarParent.plImage.width = avatarParent.width;
@@ -280,7 +291,7 @@ export class GameEndScene {
         const heightPadding = (avatarParent.height * 0.07);
 
 
-        maskGraphic.drawRect(avatarParent.x  + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
+        maskGraphic.drawRect(avatarParent.plImage.x - avatarParent.plImage.width/2  + widthPadding, (avatarParent.y - avatarParent.height/2) + heightPadding, avatarParent.width - widthPadding*2, avatarParent.height - heightPadding*2);
         maskGraphic.endFill();
 
         avatarParent.plImage.mask = maskGraphic;

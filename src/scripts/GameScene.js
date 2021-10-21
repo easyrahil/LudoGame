@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import TWEEN, { Tween } from "@tweenjs/tween.js";
-import { appConfig, config, gameConfig } from "./appConfig";
+import {config } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, PawnsHomeIndex, playerData, starsPosition } from "./boardConfig";
 import { DebugText } from "./DebugText";
@@ -111,8 +111,8 @@ export class GameScene {
 
 		} else if (msgType == "threeSix")
 		{
-			const prompt = new Prompt("Three Six", {x : appConfig.leftX,
-                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+			const prompt = new Prompt("Three Six", {x : 0,
+                y : config.logicalHeight / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
                 30,
                 "#fff");
 
@@ -136,8 +136,8 @@ export class GameScene {
 		} else if (msgType == "choosePawnAgain")
 		{
 			
-			const prompt = new Prompt("Choose Token Again", {x : appConfig.leftX,
-                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+			const prompt = new Prompt("Choose Token Again", {x : 0,
+                y : config.logicalHeight / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
                 30,
                 "#fff");
 
@@ -150,8 +150,8 @@ export class GameScene {
 			this.players[Globals.gameData.plId].ActivatePointerChoose();
 		} else if(msgType == "gameEnd")
 		{
-			const prompt = new Prompt(msgParams.reason, {x : appConfig.leftX,
-                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+			const prompt = new Prompt(msgParams.reason, {x : 0,
+                y : config.logicalHeight / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
                 30,
                 "#fff");
 
@@ -167,8 +167,8 @@ export class GameScene {
 			
 		} else if (msgType == "noValidMove")
 		{
-			const prompt = new Prompt("No Valid Move.", {x : appConfig.leftX,
-                y : appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
+			const prompt = new Prompt("No Valid Move.", {x : 0,
+                y : config.logicalHeight / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3},
                 30,
                 "#fff");
 
@@ -487,7 +487,7 @@ export class GameScene {
 		const house = new PIXI.Sprite(Globals.resources.house.texture);
 		house.anchor.set(0.5);
 		house.scale.set(0.66);
-		house.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
+		house.position = new PIXI.Point(config.logicalWidth/2, config.logicalHeight/2);
 		this.container.addChild(house);
 	}
 
