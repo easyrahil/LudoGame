@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Globals } from "./Globals";
-import { appConfig, gameConfig } from "./appConfig";
 import TWEEN from "@tweenjs/tween.js";
+import { config } from "./appConfig";
 
 export class Pawn extends PIXI.Sprite
 {
@@ -71,6 +71,13 @@ export class Pawn extends PIXI.Sprite
         if(this.isRemoved) return;
 
         this.zIndex = zIndex;
+        
+        pos.x -= this.parent.x;
+		pos.y -=  this.parent.y;
+
+		pos.x /= config.scaleFactor;
+		pos.y /= config.scaleFactor;
+
         this.squeezeTween =  new TWEEN.Tween(this)
                                 .to({width: this.currentWidth * 0.8, height : this.currentHeight * 0.8, x : pos.x, y : pos.y}, 100)
                                 .start();
@@ -81,9 +88,18 @@ export class Pawn extends PIXI.Sprite
     setPointIndex(index)
     {
         this.currentPointIndex =  index;
-        const point = Globals.gridPoints[index].globalPosition;
+        const point = Globals.gridPoints[14].globalPosition;
+        
+        
         this.x = point.x;
         this.y = point.y;
+
+        this.x -= this.parent.x;
+		this.y -=  this.parent.y;
+
+		this.x /= config.scaleFactor;
+		this.y /= config.scaleFactor;
+
         this.indication.position = new PIXI.Point(this.x, this.y);
         
     }
@@ -116,6 +132,12 @@ export class Pawn extends PIXI.Sprite
             
             const point = Globals.gridPoints[pointIndex].globalPosition;
             
+            point.x -= this.parent.x;
+            point.y -=  this.parent.y;
+
+            point.x /= config.scaleFactor;
+            point.y /= config.scaleFactor;
+
             this.moveTween =  new TWEEN.Tween(this)
                                 .to({x: point.x, y : point.y},(bounceEffect) ? 200 : 50)
                                 .easing(TWEEN.Easing.Back.In)

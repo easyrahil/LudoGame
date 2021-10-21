@@ -1,6 +1,6 @@
 
 import * as PIXI from "pixi.js";
-import { appConfig, gameConfig } from "./appConfig";
+import {config } from "./appConfig";
 import { Automation } from "./Automation";
 import { DebugCircle } from "./DebugCircle";
 import { DebugText } from "./DebugText";
@@ -21,13 +21,13 @@ export class Player
 
        
 
-        this.container.x = (horizontalIndex == 0) ? appConfig.leftX: appConfig.width/2 + ludoBoard.container.width * 0.07;
+        this.container.x = (horizontalIndex == 0) ? config.logicalWidth * 0.0043: config.logicalWidth/2 + ludoBoard.container.width * 0.07;
         if(verticalIndex == 0)
-            this.container.y = (appConfig.height/2) + (ludoBoard.container.height * 0.347);
+            this.container.y = (config.logicalHeight/2) + (ludoBoard.container.height * 0.347);
         else
-            this.container.y = (appConfig.height/2) - (ludoBoard.container.height * 0.248);
+            this.container.y = (config.logicalHeight/2) - (ludoBoard.container.height * 0.248);
 
-        this.container.scale.set(gameConfig.widthRatio);
+        this.container.scale.set(0.66);
         
         this.container.sortableChildren = true;
 

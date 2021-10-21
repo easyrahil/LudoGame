@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import TWEEN, { Tween } from "@tweenjs/tween.js";
-import { appConfig, gameConfig } from "./appConfig";
+import { appConfig, config, gameConfig } from "./appConfig";
 import { Background } from "./Background";
 import { boardData, PawnsHomeIndex, playerData, starsPosition } from "./boardConfig";
 import { DebugText } from "./DebugText";
@@ -16,16 +16,27 @@ import { GameEndScene } from "./GameEndScene";
 
 export class GameScene {
 	constructor() {
+
+		this.sceneContainer = new PIXI.Container();
+
 		this.container = new PIXI.Container();
 
+		this.createBackground();
+
+		this.sceneContainer.addChild(this.container);
+
 		this.container.sortableChildren = true;
+		this.container.scale.set(config.scaleFactor);
+
+		this.container.x = config.leftX;
+		this.container.y = config.topY;
 
 		this.players = {};
 
 		Globals.gridPoints = {};
 		Globals.pawns = {};
 
-		this.createBackground();
+		
 		this.createTimer();
 		this.createPot();
 		this.createBoard();
@@ -49,7 +60,8 @@ export class GameScene {
 		
 		
 		this.lastProgress = {x : 0};
-		
+		//this.updateProgress(0.5)
+
 	}
 
     recievedMessage(msgType, msgParams)
@@ -207,13 +219,15 @@ export class GameScene {
     
 
 	createBackground() {
-		const fullbg = new Background(Globals.resources.background.texture);
+		const fullbg = new PIXI.Sprite(Globals.resources.background.texture);
+		fullbg.width = window.innerWidth;
+		fullbg.height = window.innerHeight;
+		this.sceneContainer.addChild(fullbg);
 
-		this.container.addChild(fullbg.container);
-
-		this.bg = new Background(Globals.resources.gameBg.texture, null, appConfig.innerWidth, appConfig.innerHeight);
-		this.bg.container.x = appConfig.leftX;
-		this.container.addChild(this.bg.container);
+		this.bg = new PIXI.Sprite(Globals.resources.gameBg.texture);
+		this.bg.width = config.logicalWidth;
+		this.bg.height = config.logicalHeight;
+		this.container.addChild(this.bg);
 	}
 
 	createTimer() {
@@ -222,28 +236,31 @@ export class GameScene {
 		const timerIcon = new PIXI.Sprite(Globals.resources.timerIcon.texture);
 		
 		timerBlock.anchor.set(0.5, 0);
-		timerBlock.scale.set(gameConfig.widthRatio);
-		timerBlock.x = appConfig.width/2;
+		timerBlock.scale.set(0.66);
+		timerBlock.x = config.logicalWidth/2;
 		timerBlock.y = timerBlock.height;
 
 		timerIcon.anchor.set(0.5);
-		timerIcon.scale.set(gameConfig.widthRatio);
-		timerIcon.x = appConfig.width/2 - timerBlock.width/2;
+		timerIcon.scale.set(0.66);
+		timerIcon.x = config.logicalWidth/2 - timerBlock.width * 0.6;
 		timerIcon.y = timerBlock.y + timerBlock.height * 0.4;
 		
 
-		this.timer = new DebugText("00:00", appConfig.width / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, "Luckiest Guy");
+		this.timer = new DebugText("00:00", config.logicalWidth / 2 + timerBlock.width * 0.4, timerBlock.y + timerBlock.height / 2, "#fff", timerBlock.height * 0.7, "Luckiest Guy");
 		this.timer.style.fontWeight = 10;
 		this.timer.anchor.set(1, 0.5);
 		this.container.addChild(timerBlock);
 		this.container.addChild(timerIcon);
 		this.container.addChild(this.timer);
+		
 	}
 
 	updateTimer(time) {
 		const seconds = Math.floor(time % 60);
 		const minutes = Math.floor(time / 60);
-		const timeString = minutes + ":" + seconds;
+		const timeString = (minutes < 10) ? minutes.toString().padStart(2,0) : minutes
+			+ ":"
+			+ (seconds < 10) ? seconds.toString().padStart(2,0) : seconds;
 		this.timer.text = timeString;
 	}
 
@@ -273,6 +290,7 @@ export class GameScene {
         ];
 
 		const container = new PIXI.Container();
+
 		const pot = new PIXI.Sprite(Globals.resources.pot.texture);
 		const potInfo = new PIXI.Sprite(Globals.resources.potInfo.texture);
 		potInfo.interactive = true;
@@ -283,15 +301,14 @@ export class GameScene {
 		const potContainer = new PIXI.Container();
 		const potPanel = new PIXI.Sprite(Globals.resources.potPanel.texture);
 		const close = new PIXI.Sprite(Globals.resources.close.texture);
-		const potHeading = new PIXI.Sprite(Globals.resources.potDistribution.texture);
+		
 		close.interactive = true;
 		close.on("pointerdown", () => {
 			potContainer.renderable = false;
 		}, this);
 		potPanel.anchor.set(0.5);
 		close.anchor.set(0.5);
-		potHeading.anchor.set(0.5);
-
+	
 		potInfo.anchor.set(0.5);
 
 		this.potText = new DebugText("234", 0, 0, "#fff", 72, "Luckiest Guy");		
@@ -299,8 +316,8 @@ export class GameScene {
 
 		pot.y = pot.height * 2;
 
-		container.x = appConfig.width/2;
-		potContainer.x = appConfig.width/2;
+		container.x = config.logicalWidth/2;
+		potContainer.x = config.logicalWidth/2;
 		
 		this.potText.anchor.set(0, 0.5);
 
@@ -309,16 +326,16 @@ export class GameScene {
 
 		potInfo.y = pot.y - pot.height/2;
 		potInfo.x += pot.width/2;
-
-		potContainer.y = pot.height * gameConfig.widthRatio * 2;
+		
+		potContainer.y = config.logicalHeight * 0.17;
 		
 		close.x = potPanel.x + potPanel.width/2 - close.width/2;
 		close.y = potPanel.y - potPanel.height/2 + close.height/4;
 
 
 
-		container.scale.set(gameConfig.widthRatio);
-		potContainer.scale.set(gameConfig.widthRatio);
+		container.scale.set(0.66);
+		potContainer.scale.set(0.66);
 
 		container.addChild(pot);
 		container.addChild(this.potText);
@@ -326,9 +343,8 @@ export class GameScene {
 
 		potContainer.addChild(potPanel);
 		potContainer.addChild(close);
-		potContainer.addChild(potHeading);
+		
 
-		potHeading.y -= potContainer.height;
 		
 		for (let i = 0; i < playerPotData.length; i++) {
 			const data = playerPotData[i];
@@ -440,7 +456,13 @@ export class GameScene {
 
 			player.infoButton.getGlobalPosition(point, false);
 
-			skipContainer.scale.set(gameConfig.widthRatio);
+			skipContainer.scale.set(0.66);
+			point.x -= this.container.x;
+			point.y -= this.container.y;
+
+			point.x /= config.scaleFactor;
+			point.y /= config.scaleFactor;
+
 			skipContainer.position =point;
 			skipContainer.x -= skipContainer.width * 0.35;
 			skipContainer.zIndex= 20;
@@ -456,7 +478,7 @@ export class GameScene {
     }
 
 	createBoard() {
-		this.ludoBoard = new LudoBoard(appConfig.width / 2, appConfig.height / 2);
+		this.ludoBoard = new LudoBoard(config.logicalWidth / 2, config.logicalHeight / 2);
 		this.container.addChild(this.ludoBoard.container);
 	}
 
@@ -464,7 +486,7 @@ export class GameScene {
 	{
 		const house = new PIXI.Sprite(Globals.resources.house.texture);
 		house.anchor.set(0.5);
-		house.scale.set(gameConfig.widthRatio);
+		house.scale.set(0.66);
 		house.position = new PIXI.Point(appConfig.width/2, appConfig.height/2);
 		this.container.addChild(house);
 	}
@@ -484,7 +506,7 @@ export class GameScene {
 			pawn.indication = new PIXI.Sprite(Globals.resources["pointer" + y].texture);
 			pawn.indication.position = new PIXI.Point(pawn.x, pawn.y);
 			pawn.indication.anchor.set(0.5,1);
-			pawn.indication.scale.set(gameConfig.widthRatio * 1.3);
+			pawn.indication.scale.set(0.66 * 1.33);
 			pawn.indication.defaultWidth = pawn.indication.width;
 			pawn.indication.defaultHeight = pawn.indication.height;
 
@@ -554,21 +576,12 @@ export class GameScene {
 		
 		background.anchor.set(0.5);
 
-		// this.circleGraphic = new PIXI.Graphics();
-		// this.circleGraphic.lineStyle(10, 0x00FF00, 1);
-		// this.circleGraphic.beginFill(0x650a5a, 0);
-		// this.circleGraphic.drawCircle(0, 0, 120);
-		// this.circleGraphic.endFill();
-
-
 		this.radialGraphic = new PIXI.Graphics();
 		this.radialGraphic.angle = -90;
 		this.radialGraphic.beginFill();
 		this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
 		this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2), true);
 		this.radialGraphic.endFill();
-
-		//this.circleGraphic.mask = this.radialGraphic;
 
 
 		this.interactiveDiceContainer.on("pointerdown", () => {
@@ -625,10 +638,12 @@ export class GameScene {
 		//this.interactiveDiceContainer.addChild(this.circleGraphic);
 		this.interactiveDiceContainer.addChild(this.radialGraphic);
 		this.interactiveDiceContainer.addChild(this.animatedDice);
-		this.interactiveDiceContainer.x = appConfig.width / 2;
-		this.interactiveDiceContainer.y = appConfig.height / 2 + this.ludoBoard.container.height / 2 + this.ludoBoard.container.height * 0.3;
-		this.interactiveDiceContainer.scale.set(gameConfig.widthRatio);
+		this.interactiveDiceContainer.x = config.logicalWidth / 2;
+		this.interactiveDiceContainer.y = config.logicalHeight * 0.9;
+		this.interactiveDiceContainer.scale.set(0.66);
 		this.container.addChild(this.interactiveDiceContainer);
+
+		
 	}
 
 	updateProgress(progress) {
@@ -733,6 +748,8 @@ export class GameScene {
 			}
 			this.players[key].resetPawns();
 		});
+
+		console.log(this.container.x, this.container.y);
 	}
 
 
@@ -796,9 +813,9 @@ export class GameScene {
 	{
 
 		this.spineAnimation = new Spine(Globals.resources.spineAnim.spineData);
-		this.spineAnimation.scale.set(gameConfig.widthRatio * 2);
-		this.spineAnimation.x = appConfig.width/2;
-		this.spineAnimation.y = appConfig.height/2;
+		//this.spineAnimation.scale.set(0.66);
+		this.spineAnimation.x = config.logicalWidth/2;
+		this.spineAnimation.y = config.logicalHeight/2;
 		this.container.addChild(this.spineAnimation);
 
 		this.spineAnimation.defaultPosition = new PIXI.Point();
@@ -818,8 +835,8 @@ export class GameScene {
 		this.spineAnimation.zIndex = 17;
 			
 		this.rollDiceAnimation = new Spine(Globals.resources.spineAnim.spineData);
-		this.rollDiceAnimation.scale.set(gameConfig.widthRatio * 2);
-		this.rollDiceAnimation.x = appConfig.width/2;
+		//this.rollDiceAnimation.scale.set(0.66);
+		this.rollDiceAnimation.x = config.logicalWidth/2;
 		this.rollDiceAnimation.y = this.ludoBoard.container.y + this.ludoBoard.container.height/2 + this.ludoBoard.container.height * 0.1;
 		this.container.addChild(this.rollDiceAnimation);
 		this.rollDiceAnimation.state.addListener(
@@ -835,9 +852,9 @@ export class GameScene {
 
 
 		this.hitAnimation = new Spine(Globals.resources.spineAnim.spineData);
-		this.hitAnimation.scale.set(gameConfig.widthRatio * 2);
-		this.hitAnimation.x = appConfig.width/2;
-		this.hitAnimation.y = appConfig.height/2;
+		//this.hitAnimation.scale.set(0.66);
+		this.hitAnimation.x = config.logicalWidth/2;
+		this.hitAnimation.y = config.logicalHeight/2;
 		this.container.addChild(this.hitAnimation);
 		this.hitAnimation.state.addListener(
 			{
@@ -852,6 +869,8 @@ export class GameScene {
 
 		//new DebugCircle(this.spineAnimation.x, this.spineAnimation.y, 5, this.container);
 		//this.playAnimation("win");
+		//this.playRollDiceAnimation("info2")
+		//this.playHitAnimation("hit",  Globals.gridPoints[14].globalPosition);
 	}
 
 	playAnimation(stateName)
@@ -866,6 +885,14 @@ export class GameScene {
 
 	playHitAnimation(stateName, position)
 	{
+
+		position.x -= this.container.x;
+		position.y -= this.container.y;
+
+		position.x /= config.scaleFactor;
+		position.y /= config.scaleFactor;
+
+
 		this.hitAnimation.position = position;
 
 		if (this.hitAnimation.state.hasAnimation(stateName))

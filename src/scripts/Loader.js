@@ -82,12 +82,12 @@ export class Loader {
 
         container.addChild(this.loaderBarContainer);
         this.loader.onProgress.add((e) => {
-           let value = e.progress / 100;
-           progressBar.clear();
-           progressBar.beginFill(0xffffff, 1);
-           progressBar.drawRect(boxData.x, boxData.y, boxData.width * 0.98 * value, boxData.height/2);
-           progressText.text = `${Math.ceil(e.progress)}%`;
-        progressBar.endFill();
+            let value = e.progress / 100;
+            progressBar.clear();
+            progressBar.beginFill(0xffffff, 1);
+            progressBar.drawRect(boxData.x - (boxData.width * 0.49), boxData.y + boxData.height/4, boxData.width * 0.98 * value, boxData.height/2);
+            progressText.text = `${Math.ceil(e.progress)}%`;
+            progressBar.endFill();
         });
 
         this.loader.onComplete.add((e) => {

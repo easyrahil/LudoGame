@@ -15,7 +15,6 @@ export class LudoBoard
         this.container.x = x;
         this.container.y = y;
 
-
         this.container.sortableChildren = true;
 
         this.createBoardSprite();
@@ -23,9 +22,8 @@ export class LudoBoard
         this.createGrid();
 
         this.addStars();
-        //console.log("Ratio :" + gameConfig.widthRatio);
-        this.container.scale.set(gameConfig.widthRatio);
         
+        this.container.scale.set(0.66);    
 
         
     }

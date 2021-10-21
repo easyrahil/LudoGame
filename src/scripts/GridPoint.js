@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { config } from "./appConfig";
 import { DebugText } from "./DebugText";
 import { Globals } from "./Globals";
 
