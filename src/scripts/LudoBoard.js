@@ -1,6 +1,5 @@
 
 import * as PIXI from "pixi.js";
-import { gameConfig } from "./appConfig";
 import { outerPath, starsPosition } from "./boardConfig";
 import { Globals } from "./Globals";
 import { GridPoint } from "./GridPoint";

@@ -1,5 +1,4 @@
 import * as PIXI from "pixi.js";
-import { gameConfig } from "./appConfig";
 import { Globals } from "./Globals";
 import TWEEN from "@tweenjs/tween.js";
 import { DebugText } from "./DebugText";
@@ -14,7 +13,7 @@ export class Prompt
         this.createBackground();
         this.createForegroundText(text, size, color);
 
-        this.container.scale.set(gameConfig.widthRatio);
+   
         console.log(position);
         this.finalPosition = new PIXI.Point(position.x, position.y);
         this.container.position = this.finalPosition // new PIXI.Point(this.finalPosition.x - this.container.width, this.finalPosition.y);

@@ -1,12 +1,11 @@
 import * as PIXI from "pixi.js";
-import { appConfig, gameConfig } from "./appConfig";
-import { Globals } from "./Globals";
+
 
 export class Background {
-	constructor(topImage, backImage = null, width = appConfig.width, height = appConfig.height) {
+	constructor(topImage, backImage = null, width = 0, height = 0) {
 		this.container = new PIXI.Container();
 
-		//this.container.scale.set(gameConfig.currentResolutionRatio);
+
 
 
 		this.createSprite(topImage, width, height);

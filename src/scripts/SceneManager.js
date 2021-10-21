@@ -3,7 +3,7 @@ import TWEEN from "@tweenjs/tween.js";
 import { Background } from "./Background";
 import { Globals } from "./Globals";
 import { DebugText } from "./DebugText";
-import { appConfig } from "./appConfig";
+import { config } from "./appConfig";
 
 export class SceneManager {
     constructor() {
@@ -46,7 +46,7 @@ export class SceneManager {
     drawImageAbove()
     {
         this.aboveBackground = new Background(Globals.resources.cover.texture,Globals.resources.cover.texture);
-        this.labelText = new DebugText("Move Back To Portrait Mode", appConfig.width/2, appConfig.height/2, "#FFF");
+        this.labelText = new DebugText("Move Back To Portrait Mode", config.logicalWidth/2, config.logicalHeight/2, "#FFF");
         this.container.addChild(this.aboveBackground.container);
         this.container.addChild(this.labelText);
     }

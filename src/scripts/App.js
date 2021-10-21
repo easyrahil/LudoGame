@@ -5,7 +5,7 @@ import { MainScene } from "./MainScene";
 
 import { Globals } from "./Globals";
 import { SceneManager } from "./SceneManager";
-import { appConfig, config, gameConfig } from "./appConfig";
+import { config } from "./appConfig";
 import { GameScene } from "./GameScene";
 import { MyEmitter } from "./MyEmitter";
 import { GameEndScene } from "./GameEndScene";
@@ -42,15 +42,9 @@ export class App {
 		this.app.renderer.resize(window.innerWidth, window.innerHeight);
 		console.log(window.innerHeight)
 		console.log(this.app.renderer.view);
-		appConfig.width = logicalWidth;
-		appConfig.height = logicalHeight;
 
-		// if (appConfig.innerWidth > appConfig.width) {
-		// 	appConfig.innerWidth = appConfig.width;
-		// }
 
-		//console.log(window.innerWidth);
-		//	this.app.renderer.resolution = window.devicePixelRatio;
+
 
 
 		Globals.emitter = new MyEmitter();
@@ -77,9 +71,9 @@ export class App {
 
 
 				// Globals.scene.start(new MainScene());
-				//Globals.scene.start(new FinalScene());
+				Globals.scene.start(new FinalScene());
 				//Globals.scene.start(new GameScene());
-				   Globals.scene.start(new GameEndScene());
+				//    Globals.scene.start(new GameEndScene());
 
 				try {
 					if (JSBridge != undefined) {
