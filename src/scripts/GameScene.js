@@ -258,9 +258,11 @@ export class GameScene {
 	updateTimer(time) {
 		const seconds = Math.floor(time % 60);
 		const minutes = Math.floor(time / 60);
-		const timeString = (minutes < 10) ? minutes.toString().padStart(2,0) : minutes
-			+ ":"
-			+ (seconds < 10) ? seconds.toString().padStart(2,0) : seconds;
+		console.log(seconds, minutes, "TIMIEMIMT");
+		let timeString = ((minutes < 10) ? minutes.toString().padStart(2,0) : minutes)
+		timeString += ":"
+		timeString += (seconds < 10) ? seconds.toString().padStart(2,0) : seconds;
+		console.log(timeString);
 		this.timer.text = timeString;
 	}
 

@@ -20,8 +20,12 @@ export class Socket {
 				gameId: "11",
 				tableTypeId: "2"
 			}
+
+			const apiURL = "https://api.gamesappludo.com/api/getserver";
+			// const apiURL = "http://localhost:80/api/getserver";
+
 			this.socket = null
-			fetch('http://localhost:80/api/getserver', {
+			fetch(apiURL, {
 					method: 'POST', // or 'PUT'
 					headers: {
 						'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ export class Pawn extends PIXI.Sprite
         super(Globals.resources[textureId].texture);
         this.pawnID = id;
         
-        //this.sprite.scale.set(gameConfig.widthRatio * 0.1);
+
 
         this.zIndex = 1;
 
@@ -57,6 +57,12 @@ export class Pawn extends PIXI.Sprite
         if(setPos)
         {
             const point = Globals.gridPoints[this.currentPointIndex].globalPosition;
+            point.x -= this.parent.x;
+            point.y -= this.parent.y;
+
+            point.x /= config.scaleFactor;
+            point.y /= config.scaleFactor;
+
             this.x = point.x;
             this.y = point.y;
         }
@@ -88,7 +94,7 @@ export class Pawn extends PIXI.Sprite
     setPointIndex(index)
     {
         this.currentPointIndex =  index;
-        const point = Globals.gridPoints[14].globalPosition;
+        const point = Globals.gridPoints[index].globalPosition;
         
         
         this.x = point.x;

@@ -25,9 +25,6 @@ export class FinalScene {
         }
     
 
-
-      //  this.container.scale.set(gameConfig.widthRatio);
-
     }
 
   
