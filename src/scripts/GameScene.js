@@ -383,7 +383,7 @@ export class GameScene {
             rupee.y += rupee.height * 0.1;
             playerPanel.addChild(rupee);
 
-			data.won = (i < Globals.potData.length) ? Globals.potData[0] : data.won;
+			data.won = (i < Globals.potData.length) ? Globals.potData[i] : data.won;
             const prize = new DebugText(data.won, playerPanel.width * 0.1 + rupee.width/2, 0, "#fff", 42, "Luckiest Guy");
             prize.anchor.set(0, 0.5);
             playerPanel.addChild(prize);
