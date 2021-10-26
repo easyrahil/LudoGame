@@ -370,8 +370,8 @@ export class GameScene {
 
 
 			playerPanel.playerText = new DebugText(data.name, 0, 0, "#eaff93", 42, "Luckiest Guy");
-            playerPanel.playerText.anchor.set(0, 0.5);
-            playerPanel.playerText.x -= playerPanel.width * 0.44 ;
+            playerPanel.playerText.anchor.set(1, 0.5);
+            playerPanel.playerText.x -= 15 ;
             playerPanel.addChild(playerPanel.playerText);
 
             const divider = new DebugText(":", 0, 0, "#eaff93", 42, "Luckiest Guy");
@@ -379,6 +379,7 @@ export class GameScene {
 
             const rupee = new PIXI.Sprite(Globals.resources.rupee.texture);
             rupee.anchor.set(0, 0.5);
+			rupee.scale.set(0.75);
             rupee.x += playerPanel.width * 0.05;
             rupee.y += rupee.height * 0.1;
             playerPanel.addChild(rupee);
