@@ -285,10 +285,10 @@ export class GameScene {
 	{
 
 		const playerPotData = [
-            {name : "Player 1", won: "---"},
-            {name : "Player 2", won: "---"},
-            {name : "Player 3", won: "---"},
-            {name : "Player 4", won: "---"},
+            {name : "1st", won: "---"},
+            {name : "2nd", won: "---"},
+            {name : "3rd", won: "---"},
+            {name : "4th", won: "---"},
         ];
 
 		
