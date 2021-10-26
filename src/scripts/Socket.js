@@ -124,6 +124,8 @@ export class Socket {
 								Globals.gameData.players[plData.plId] = plData;
 							});
 
+							Globals.potData = msg.pot;
+
 
 							Globals.emitter.Call("gameStart", { turn: msg.turn });
 						} else if (msg.t == "pLeft") {

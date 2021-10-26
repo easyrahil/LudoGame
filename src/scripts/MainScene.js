@@ -4,7 +4,6 @@ import { Background } from "./Background";
 import { GameScene } from "./GameScene";
 import { Globals } from "./Globals";
 import TWEEN from "@tweenjs/tween.js";
-import { MatchmakingScene } from "./MatchmakingScene";
 import { DebugText } from "./DebugText";
 import { Socket } from "./Socket";
 import { Prompt } from "./Prompt";

@@ -19,6 +19,7 @@ export const Globals = {
     {
         sound : true
     },
-    gameEndState : GameEndStates.NONE
+    gameEndState : GameEndStates.NONE,
+    potData : []
 };
 

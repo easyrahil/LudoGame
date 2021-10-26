@@ -285,11 +285,13 @@ export class GameScene {
 	{
 
 		const playerPotData = [
-            {name : "Player 1", won: "456"},
-            {name : "Player 2", won: "23"},
-            {name : "Player 3", won: "524"},
-            {name : "Player 4", won: "123"},
+            {name : "Player 1", won: "---"},
+            {name : "Player 2", won: "---"},
+            {name : "Player 3", won: "---"},
+            {name : "Player 4", won: "---"},
         ];
+
+		
 
 		const container = new PIXI.Container();
 
@@ -312,8 +314,11 @@ export class GameScene {
 		close.anchor.set(0.5);
 	
 		potInfo.anchor.set(0.5);
-
-		this.potText = new DebugText("234", 0, 0, "#fff", 72, "Luckiest Guy");		
+		
+		const sum = Globals.potData.reduce(function(a, b){
+			return a + b;
+		}, 0);
+		this.potText = new DebugText(sum, 0, 0, "#fff", 72, "Luckiest Guy");		
 		pot.anchor.set(0.5);
 
 		pot.y = pot.height * 2;
@@ -378,6 +383,7 @@ export class GameScene {
             rupee.y += rupee.height * 0.1;
             playerPanel.addChild(rupee);
 
+			data.won = (i < Globals.potData.length) ? Globals.potData[0] : data.won;
             const prize = new DebugText(data.won, playerPanel.width * 0.1 + rupee.width/2, 0, "#fff", 42, "Luckiest Guy");
             prize.anchor.set(0, 0.5);
             playerPanel.addChild(prize);
