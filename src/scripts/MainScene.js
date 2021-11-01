@@ -25,17 +25,17 @@ export class MainScene {
 		this.createBackground();
 
 
-		this.createButton();
+		//this.createButton();
 		// global.activateScene = () =>  this.createButton();
 
 		 //this.createWaitingScreen();
 		//this.createAvatars();
-		{
-			const verText = new DebugText("Ver: 0.02", 0, 0, "#fff");
-			verText.x += verText.width/2;
-			verText.y += verText.height;
-			this.container.addChild(verText);
-		}
+		// {
+		// 	const verText = new DebugText("Ver: 0.02", 0, 0, "#fff");
+		// 	verText.x += verText.width/2;
+		// 	verText.y += verText.height;
+		// 	this.container.addChild(verText);
+		// }
 
 		this.sceneContainer.addChild(this.container);
 	}
