@@ -79,6 +79,7 @@ export const LoaderConfig = {
     potPanel : require("../sprites/New/potPanel.png"),
     potPlayerPanel : require("../sprites/New/potPlayerPanel.png"),
     
+    yellowBtn : require("../sprites/yellowBtn.png"),
     
     //spineAnimation : require("../animation/Ludo.json"),
 

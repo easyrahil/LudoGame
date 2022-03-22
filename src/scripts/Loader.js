@@ -30,7 +30,6 @@ export class Loader {
 
         //     console.log(spine);
         // });
-       
     }
 
     createLoadingPage(container)

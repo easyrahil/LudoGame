@@ -40,7 +40,7 @@ export class GameEndScene {
         this.createWonModal();
 
        
-        
+        this.addExitButton();
     }
 
     recievedMessage(msgType, msgParams)
@@ -186,7 +186,7 @@ export class GameEndScene {
         close.once("pointerdown", () => {
             this.wonBlock.destroy();
             this.gameEndText.destroy();
-            this.logo.renderable = true;
+            // this.logo.renderable = true;
         }, this);
         this.wonBlock.addChild(close);
 
@@ -194,6 +194,50 @@ export class GameEndScene {
         this.container.addChild(this.wonBlock);
         
         this.createGameEndText();
+    }
+
+    addExitButton()
+    {
+        const exitButton = new PIXI.Sprite(Globals.resources.yellowBtn.texture);
+
+        exitButton.scale.set(1.6);
+        exitButton.anchor.set(0.5);
+
+
+        exitButton.x = config.logicalWidth/2;
+        exitButton.y = config.logicalHeight - 200;
+
+        const exitBtnText = new DebugText("Exit Game", exitButton.x, exitButton.y - 5, "#fff", 42, "Luckiest Guy");
+
+        // exitBtnText.style.dropShadow = true;
+        // exitBtnText.style.dropShadowBlur = 5;
+        // exitBtnText.style.dropShadowDistance = 6;
+        exitBtnText.style.stroke = "black";
+        exitBtnText.style.strokeThickness = 5;
+
+
+
+        this.container.addChild(exitButton);
+        this.container.addChild(exitBtnText);
+
+        exitButton.interactive = true;
+        exitButton.once("pointerdown", () => {
+
+            try {
+                if (JSBridge != undefined) {
+                    
+                    JSBridge.sendMessageToNative(JSON.stringify({"t" :"Exit"}));
+                }
+            } catch {
+                console.log("JS Bridge Not Found!");
+            }
+
+            if(Globals.socket)
+                Globals.socket.socket.close();
+
+                exitButton.destroy();
+                exitBtnText.destroy();
+        });
     }
 
     createGameEndText()

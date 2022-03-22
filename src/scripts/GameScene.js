@@ -75,12 +75,12 @@ export class GameScene {
 		} else if (msgType == "turnTimer")
 		{
 			if(msgParams.id in this.players)
-				this.players[msgParams.id].updateTimer(1 - (msgParams.time/15));
+				this.players[msgParams.id].updateTimer(1 - (msgParams.time/Globals.turnTimerVal));
 
 			if(Globals.gameData.plId == msgParams.id)
 			{
 
-				this.updateProgress(1 - (msgParams.time / 15));
+				this.updateProgress(1 - (msgParams.time / Globals.turnTimerVal));
 			}
 		} else if (msgType == "rollDiceResult")
 		{

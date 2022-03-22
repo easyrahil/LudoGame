@@ -2,7 +2,7 @@ import { FinalScene } from "./FinalScene";
 import { GameEndStates, Globals } from "./Globals";
 
 export class Socket {
-	constructor(uuid, name, tableTypeID, useravatar, url = null) {
+	constructor(uuid, name, entryFee, tableTypeID, useravatar, url = null) {
 
 		console.log("Socket Created");
 
@@ -14,15 +14,14 @@ export class Socket {
 			this.socket = new WebSocket(url);
 		} else {
 
-			const data = {
+			const connectionData = {
 				playerId: uuid,
-				entryFee: "6",
-				gameId: "11",
-				tableTypeId: "2"
+				entryFee: entryFee,
+				tableTypeId: tableTypeID
 			}
 
-			const apiURL = "https://api.gamesappludo.com/api/getserver";
-			// const apiURL = "http://localhost:80/api/getserver";
+			// const apiURL = "https://api.gamesappludo.com/api/getserver";
+			const apiURL = "http://localhost:8080/api/getserver";
 
 			this.socket = null
 			fetch(apiURL, {
@@ -30,7 +29,7 @@ export class Socket {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(data),
+					body: JSON.stringify(connectionData),
 				})
 				.then(response => response.json())
 				.then(data => {
@@ -49,6 +48,7 @@ export class Socket {
 							t: "connect",
 							gid: uuid,
 							tableGameId: data.result.tableGameId,
+							tableTypeID : connectionData.tableTypeId,
 							entryFee: data.result.entryFee,
 							pName: name,
 							pImage: useravatar

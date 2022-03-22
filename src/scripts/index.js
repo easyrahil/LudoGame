@@ -19,7 +19,7 @@ global.updateFromNative = function updateFromNative(message)
 {
     const jsonData = JSON.parse(message);
 
-    Globals.socket = new Socket(jsonData.token.playerID, jsonData.username, jsonData.token.tableTypeID, jsonData.useravatar);
+    Globals.socket = new Socket(jsonData.token.playerID, jsonData.username,jsonData.entryFee, jsonData.token.tableTypeID, jsonData.useravatar);
 
     Globals.emitter.Call("socketConnection", {});
 }

@@ -25,7 +25,7 @@ export class MainScene {
 		this.createBackground();
 
 
-		//this.createButton();
+		// this.createButton();
 		// global.activateScene = () =>  this.createButton();
 
 		 //this.createWaitingScreen();
@@ -71,7 +71,7 @@ export class MainScene {
 		} else if (msgType == "socketConnection") {
 			this.triggerButtonActive();
 		}
-
+		
 	}
 
 	createWaitingScreen() {
@@ -267,7 +267,7 @@ export class MainScene {
 			button.interactive = true;
 			button.on("pointerdown", () => {
 				console.log("Clicked 1");
-				Globals.automationOn = true;
+				Globals.automationOn = false;
 				Globals.socket = new Socket(id.toString(), "Player " + i, "2", "https://cccdn.b-cdn.net/1584464368856.png");
 				this.triggerButtonActive();
 

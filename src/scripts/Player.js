@@ -159,6 +159,35 @@ export class Player
     {
         this.avatar = new PIXI.Sprite(Globals.resources.avatar.texture);
         
+        this.avatar.interactive = true;
+
+        if(this.playerID != Globals.gameData.plId)
+        {
+            this.avatar.on("pointerdown", () => {
+                try {
+                    if (JSBridge != undefined) {
+                        JSBridge.sendMessageToNative(JSON.stringify({"t" :"otherPClick"}));
+                    }
+                } catch {
+                    console.log("JS Bridge Not Found!");
+                }
+            });
+        } else
+        {
+            this.avatar.on("pointerdown", () => {
+
+                try {
+                    if (JSBridge != undefined) {
+                        JSBridge.sendMessageToNative(JSON.stringify({"t" :"selfPClick"}));
+                    }
+                } catch {
+                    console.log("JS Bridge Not Found!");
+                }
+            });
+        }
+
+
+
         this.avatarImage = PIXI.Sprite.from(Globals.gameData.players[this.playerID].pImage);
        //this.avatarImage.renderable = false;
 

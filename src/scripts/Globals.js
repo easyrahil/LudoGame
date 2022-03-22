@@ -20,6 +20,7 @@ export const Globals = {
         sound : true
     },
     gameEndState : GameEndStates.NONE,
-    potData : []
+    potData : [],
+    turnTimerVal : 8
 };
 
