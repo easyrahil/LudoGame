@@ -20,8 +20,8 @@ export class Socket {
 				tableTypeId: tableTypeID
 			}
 
-			// const apiURL = "https://api.gamesappludo.com/api/getserver";
-			const apiURL = "http://localhost:8080/api/getserver";
+			const apiURL = "https://apiuat.gamesappludo.com/api/getserver";
+			// const apiURL = "http://localhost:8080/api/getserver";
 
 			this.socket = null
 			fetch(apiURL, {
