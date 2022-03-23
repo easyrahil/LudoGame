@@ -508,13 +508,13 @@ export class Player
         this.activePawnsId = [];
         
 
-        const gridPoint = Globals.pawns[this.pawnsID[0]].currentPointIndex;
-        const pawnAtSamePlace = this.pawnsID.filter(id => Globals.pawns[id].currentPointIndex == gridPoint);
+        // const gridPoint = Globals.pawns[this.pawnsID[0]].currentPointIndex;
+        // const pawnAtSamePlace = this.pawnsID.filter(id => Globals.pawns[id].currentPointIndex == gridPoint);
 
-        if(pawnAtSamePlace.length == this.pawnsID.length || pawnsArr.length == 1)
-        {
-            this.pawnSelected(pawnsArr[0]);
-        } else
+        // if(pawnAtSamePlace.length == this.pawnsID.length || pawnsArr.length == 1)
+        // {
+        //     this.pawnSelected(pawnsArr[0]);
+        // } else
         {
             classRef.playAnimation("info2");
 
