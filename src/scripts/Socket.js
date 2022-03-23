@@ -39,6 +39,7 @@ export class Socket {
 						return;
 					}
 
+					// data.result.address = "ws://localhost:8082";
 					this.socket = new WebSocket(data.result.address);
 
 					this.socket.onopen = e => {

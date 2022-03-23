@@ -256,6 +256,9 @@ export class GameScene {
 	}
 
 	updateTimer(time) {
+
+
+
 		const seconds = Math.floor(time % 60);
 		const minutes = Math.floor(time / 60);
 		console.log(seconds, minutes, "TIMIEMIMT");
@@ -264,6 +267,22 @@ export class GameScene {
 		timeString += (seconds < 10) ? seconds.toString().padStart(2,0) : seconds;
 		console.log(timeString);
 		this.timer.text = timeString;
+
+		if(time < 3)
+		{
+			this.timer.style.fill = 0xfb6163;
+			Globals.soundResources.tick.play();
+
+			try
+			{
+				navigator.vibrate(300);
+			}
+			catch
+			{
+				console.log("Navigator blocked by device.");
+			}
+		}
+
 	}
 
 	updateVisualPerTick()
@@ -658,6 +677,11 @@ export class GameScene {
 	updateProgress(progress) {
 		
 
+		const lineColor = 0x00FF00;
+        const altLineColor = 0xd44143;
+
+		const compareVal = 1 - 3 / Globals.turnTimerVal;
+		
 		const tween = new TWEEN.Tween(this.lastProgress)
         .to({x : progress}, 999)
         .onUpdate(
@@ -665,7 +689,7 @@ export class GameScene {
 				//console.log("PROGRESS VALUE : " + value.x);
                 this.radialGraphic.clear();
 				this.radialGraphic.beginFill();
-				this.radialGraphic.lineStyle(50, 0x00FF00, 0.5);
+				this.radialGraphic.lineStyle(50,value.x <= compareVal  ? lineColor : altLineColor, 0.5);
 				this.radialGraphic.arc(0, 0, 60, 0, (Math.PI * 2) * value.x, true);
 				this.radialGraphic.endFill();
             }
@@ -674,6 +698,20 @@ export class GameScene {
             this.lastProgress = value;
         })
         .start();
+
+		if(  progress > compareVal)
+		{
+			Globals.soundResources.tick.play();
+			try
+			{
+				navigator.vibrate(300);
+			}
+			catch
+			{
+				console.log("Navigator blocked by device.");
+			}
+		}
+
 		
 	}
 

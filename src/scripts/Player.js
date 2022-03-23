@@ -161,30 +161,18 @@ export class Player
         
         this.avatar.interactive = true;
 
-        if(this.playerID != Globals.gameData.plId)
-        {
-            this.avatar.on("pointerdown", () => {
-                try {
-                    if (JSBridge != undefined) {
-                        JSBridge.sendMessageToNative(JSON.stringify({"t" :"otherPClick"}));
-                    }
-                } catch {
-                    console.log("JS Bridge Not Found!");
-                }
-            });
-        } else
-        {
-            this.avatar.on("pointerdown", () => {
 
-                try {
-                    if (JSBridge != undefined) {
-                        JSBridge.sendMessageToNative(JSON.stringify({"t" :"selfPClick"}));
-                    }
-                } catch {
-                    console.log("JS Bridge Not Found!");
+        this.avatar.on("pointerdown", () => {
+
+            
+            try {
+                if (JSBridge != undefined) {
+                    JSBridge.sendMessageToNative(JSON.stringify({"t" :"pClicked", "data":Globals.gameData.players[this.playerID].pDefaultId}));
                 }
-            });
-        }
+            } catch {
+                console.log("JS Bridge Not Found!");
+            }
+        });
 
 
 
@@ -452,7 +440,11 @@ export class Player
         console.log("Progress :" + progress);
         
 
-        
+        const lineColor = 0x32CD32;
+        const altLineColor = 0xfb6163;
+
+        const compareVal = 1 - 3/Globals.turnTimerVal;
+
         if(this.updateTimerTween != null && this.updateTimerTween != undefined && this.updateTimerTween.isPlaying)
             this.updateTimerTween.stop();    
 
@@ -462,7 +454,7 @@ export class Player
             (value) => {
                 this.graphicRadial.clear();
                 this.graphicRadial.beginFill(0xff0000, 0);
-                this.graphicRadial.lineStyle(35, 0x32CD32, 0.5);
+                this.graphicRadial.lineStyle(35, value.x <= compareVal ? lineColor : altLineColor, 0.5);
                 this.graphicRadial.arc(0, 0, 60, 2 * Math.PI , 2 * Math.PI * value.x, true);
                 this.graphicRadial.endFill();
             }

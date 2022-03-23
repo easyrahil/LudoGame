@@ -96,7 +96,8 @@ export const fontData = [
 export const LoaderSoundConfig = {
     click : require("../sounds/click.mp3"),
     dice :  require("../sounds/dice-5.mp3"),
-    hit : require("../sounds/swish.mp3")
+    hit : require("../sounds/swish.mp3"),
+    tick : require("../sounds/Timetick.mp3"),
 };
 
 export const preloaderConfig = {
